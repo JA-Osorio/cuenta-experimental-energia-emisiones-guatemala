@@ -5,6 +5,7 @@
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg?logo=python&logoColor=white)](04_reproduccion_python/instrucciones_reproduccion_python.txt)
 [![Reproducción: 47/47 controles](https://img.shields.io/badge/reproducci%C3%B3n-47%2F47%20controles-2EA44F.svg)](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt)
 [![Integridad: 22/22 SHA-256](https://img.shields.io/badge/integridad-22%2F22%20SHA--256-2EA44F.svg)](manifiesto_archivos.txt)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21924042.svg)](https://doi.org/10.5281/zenodo.21924042)
 
 Cuenta de flujos físicos de energía y emisiones al aire para Guatemala,
 con cobertura anual de 2018 a 2024. El producto organiza la oferta y la
@@ -197,9 +198,13 @@ Use la opción **Cite this repository** de GitHub o consulte
 
 > Osorio, Juan Alejandro; Villatoro, Patricia; Salguero, Noe; y Soberanis,
 > José Carlos. *Cuenta experimental de energía y emisiones al aire de
-> Guatemala, 2018–2024*, v1.0.0. CC BY 4.0.
+> Guatemala, 2018–2024*, v1.0.0. Zenodo.
+> <https://doi.org/10.5281/zenodo.21924043>. CC BY 4.0.
 
-No se consigna un DOI mientras no exista un depósito publicado que lo asigne.
+El DOI específico de la versión 1.0.0 es
+[`10.5281/zenodo.21924043`](https://doi.org/10.5281/zenodo.21924043). El DOI
+conceptual [`10.5281/zenodo.21924042`](https://doi.org/10.5281/zenodo.21924042)
+representa el conjunto de versiones y siempre dirige a la más reciente.
 
 ## Licencias
 

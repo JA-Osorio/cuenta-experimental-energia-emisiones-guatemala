@@ -88,7 +88,7 @@ RUTA | TAMAÑO_BYTES | SHA-256
 04_reproduccion_python/requirements.txt | 46 | 0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
 04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py | 23503 | aaf4fa4f0b7a214c3fbd7b59f7f846fcb8da8e068384054f550c879fe7da1d4a
 05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt | 5999 | 54b299b639b770e7c2564531097ea0d64cff34945e4a246a68a55a17a2a92c9d
-CITATION.cff | 1599 | 8977681075e690598bae2c478d80a06c6a61193b261ef1feeca86a63cf1a2a27
+CITATION.cff | 1656 | fa126e7c96e81127cd21be45e65feb63442385bfabd8d43c672cde26a523123c
 LICENSE | 2163 | 258bd8e8315b82862ff0c5e79820fd1d0d2d4705585eced43edfd9a478f504e6
 LICENSE_CODE | 1457 | 176eab08e9c28f9fe63fb83ee56683e68ade0fd67be9ec94e9731cc8680ca3ab
 codemeta.json | 1904 | 035209820d0c69c9f6088001f0e5b8e6de3b5f447f96c5a8793d81e6ada90b0b
