@@ -32,7 +32,7 @@ navegación.
 |---|---|---|
 | Juan Alejandro Osorio | Universidad Rafael Landívar | [0009-0001-4260-772X](https://orcid.org/0009-0001-4260-772X) |
 | Patricia Villatoro | Universidad Rafael Landívar | [0000-0002-5109-2393](https://orcid.org/0000-0002-5109-2393) |
-| Noe Salguero | Universidad Rafael Landívar | [0009-0004-5017-6538](https://orcid.org/0009-0004-5017-6538) |
+| [Noe Salguero](https://github.com/noesm7) | Universidad Rafael Landívar | [0009-0004-5017-6538](https://orcid.org/0009-0004-5017-6538) |
 | José Carlos Soberanis | Universidad de San Carlos de Guatemala, Centro Universitario de Occidente | [0009-0007-0279-4472](https://orcid.org/0009-0007-0279-4472) |
 
 Los roles CRediT de autoría, colaboración y revisión técnica se documentan en
