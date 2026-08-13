@@ -1,0 +1,155 @@
+INFORME DE REPRODUCCIÓN COMPUTACIONAL
+
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+Autores
+
+Juan Alejandro Osorio
+Patricia Villatoro
+Noe Salguero
+José Carlos Soberanis
+
+Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
+en creditos.txt.
+
+Fecha de verificación: 2026-08-13
+
+1. OBJETIVO
+
+Comprobar por separado la generación de los datasets y su consulta en el
+cuaderno. El script debe reconstruir las cuentas desde un único CSV de entrada,
+sin utilizar el libro de cálculo, Google Drive ni resultados previamente
+calculados. El cuaderno debe leer únicamente los dos CSV finales y presentar
+las tablas, indicadores y gráficas sin repetir el cálculo del script.
+
+2. PRUEBA DEL GENERADOR
+
+La corrida comenzó en un directorio limpio que contenía únicamente:
+
+- datos_modelo_guatemala_2018_2024.csv; y
+- reproducir_modelo_guatemala_2018_2024.py.
+
+Comando:
+
+python reproducir_modelo_guatemala_2018_2024.py
+
+Resultado:
+
+- código de salida: 0;
+- registros de entrada validados: 3 446;
+- registros PSUT generados: 617;
+- registros de emisiones generados: 374; y
+- cobertura temporal: 2018–2024.
+
+Los dos CSV de referencia se incorporaron únicamente después de la generación
+para comprobar la conformidad de los resultados. El validador independiente
+aprobó 47 de 47 controles. En el entorno de verificación descrito en el apartado
+4, y utilizando los archivos identificados por las huellas SHA-256 del apartado
+6, los dos CSV generados coincidieron byte por byte con las referencias finales.
+Esta identidad corresponde a la corrida validada y no se extrapola a entornos
+con versiones de Python, sistema operativo, codificación o convenciones de fin
+de línea diferentes. Fuera de ese entorno, la conformidad debe evaluarse
+mediante los 47 controles estructurales y numéricos del validador.
+
+3. PRUEBA DEL CUADERNO
+
+La prueba del cuaderno se realizó en otro directorio limpio que contenía
+únicamente:
+
+- psut_energia_guatemala_2018_2024.csv;
+- cuenta_emisiones_aire_guatemala_2018_2024.csv; y
+- cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb.
+
+El cuaderno no leyó datos_modelo_guatemala_2018_2024.csv, no importó el script
+de reproducción y no escribió archivos. Sus siete celdas técnicas se ejecutaron
+sin excepciones; permanecen plegadas de forma predeterminada y sus resultados
+son visibles.
+
+La auditoría confirmó:
+
+- una PSUT integrada de 22 filas conceptuales, incluido el gas natural;
+- una vista integrada de emisiones;
+- selector anual para 2018–2024;
+- ocho indicadores principales y seis complementarios;
+- once gráficas independientes;
+- presentación con un máximo de dos decimales;
+- señalización de las aproximaciones de 2023–2024;
+- distinción entre celdas vacías y ceros; y
+- ausencia de escrituras persistentes.
+
+4. ENTORNO DE VERIFICACIÓN
+
+- Sistema: Linux x86_64, glibc 2.39.
+- Python: 3.12.13.
+- Generador y validador: biblioteca estándar de Python.
+- Cuaderno: pandas 2.2.3, numpy 2.3.5 y matplotlib 3.10.8.
+- Plotly e ipywidgets: complementos opcionales; no fueron necesarios para la
+  prueba de respaldo.
+
+5. CONTROLES NUMÉRICOS
+
+Se verificaron los esquemas y el orden de columnas; claves únicas; cobertura
+2018–2024; cierre de oferta y utilización; tratamiento de NO_ASIG, NOEN y STAT;
+preservación de los registros no cuantificados; identidad del CO2 equivalente;
+exclusión del CO2 biogénico del total; totales anuales; y dependencia de
+aproximaciones en 2023–2024.
+
+La diferencia máxima de cierre fue menor que 10^-6 TJ. La diferencia máxima de
+la identidad de CO2 equivalente fue menor que 10^-9 kt.
+
+La identidad se comprobó como CO2e = CO2 fósil + 28 × CH4 + 265 × N2O. Los
+potenciales de calentamiento global corresponden al horizonte de 100 años del
+Quinto Informe de Evaluación del IPCC, sin retroalimentación clima–carbono
+(IPCC, 2013, tabla 8.7).
+
+Totales anuales cuantificados de emisiones:
+
+- 2018: 28 612,88 kt CO2e.
+- 2019: 29 730,98 kt CO2e.
+- 2020: 27 015,69 kt CO2e.
+- 2021: 29 978,96 kt CO2e.
+- 2022: 28 320,98 kt CO2e.
+- 2023: 30 852,29 kt CO2e.
+- 2024: 33 159,61 kt CO2e.
+
+Dependencia de aproximaciones en 2023–2024. Para este control se consideró
+dependiente de una aproximación todo registro con estado_factor = PRX o
+estado_resultado = PRX. En 2023, esos registros sumaron 30 852,29 kt CO2e,
+equivalentes al 100 % del total cuantificado; en 2024 sumaron 33 159,61 kt CO2e,
+también el 100 %. Los registros que no cumplen ninguna de las dos condiciones
+aportaron 0,00 kt CO2e en ambos años. En los módulos energéticos, la actividad
+conserva el año correspondiente en la PSUT y la aproximación recae en el factor;
+en agricultura, recae en el resultado prolongado mediante VAB.
+
+6. HUELLAS DIGITALES SHA-256
+
+- datos_modelo_guatemala_2018_2024.csv
+  95dbf283f05f929d6193cb708acd7139f6794676ea4955628bd665894f6aae04
+
+- reproducir_modelo_guatemala_2018_2024.py
+  fb9d52ae769403a5074a02e01b6e0584375906f41d587eec159c41a895efa2a9
+
+- validar_reproduccion_guatemala_2018_2024.py
+  aaf4fa4f0b7a214c3fbd7b59f7f846fcb8da8e068384054f550c879fe7da1d4a
+
+- requirements.txt
+  0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
+
+- cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb
+  2a130746990ca4dbe1461fcb91f91614f82d5145182e32b3cceea44588e013ab
+
+- modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx
+  1f9c2c5d614b9c26dfee4423e58e9a78adfe7fb3d36e9edb43747ab1cf74325c
+
+- psut_energia_guatemala_2018_2024.csv
+  4be0edefa6d24be0598a0c8cdbb5a7fc76211bed3dfc205083d60a18398bc071
+
+- cuenta_emisiones_aire_guatemala_2018_2024.csv
+  9c1004383e00d0d7d026eb488361d94dd6586bb583cedcf4ae0beb3fca94f15b
+
+7. RESULTADO
+
+APROBADO para el entorno descrito en el apartado 4. En esas condiciones, el
+script produjo los dos datasets con identidad byte a byte respecto de las
+referencias finales y el validador aprobó 47 de 47 controles. El cuaderno
+funcionó como visor anual y temporal sin duplicar el motor de cálculo.

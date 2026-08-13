@@ -1,0 +1,216 @@
+NOTA METODOLÓGICA NT-00
+
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+METODOLOGÍA GENERAL
+
+Autores:
+Juan Alejandro Osorio
+Patricia Villatoro
+Noe Salguero
+José Carlos Soberanis
+
+Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
+en creditos.txt.
+
+1. OBJETO Y DISEÑO METODOLÓGICO
+
+La investigación integró la información energética y de emisiones disponible para el período 2018–2024 en dos resultados relacionados: una tabla física de oferta y utilización de energía (PSUT, por sus siglas en inglés) y una cuenta experimental de emisiones al aire. El procedimiento se basó en la armonización de fuentes institucionales, la definición explícita de las fronteras contables, la conversión de los datos energéticos a una unidad común, la conciliación de la oferta y la utilización por producto y año, y la vinculación de las actividades resultantes con factores o emisiones observadas.
+
+Se adoptó un diseño de compilación contable. Los totales físicos se conservaron al nivel de desagregación publicado por la fuente principal y solo se aplicaron transformaciones reproducibles. Los valores observados, los cálculos, las aproximaciones y las categorías sin cuantificación se diferenciaron durante todo el proceso. La trazabilidad se estableció mediante identificadores que relacionan cada observación con la regla aplicada, el flujo PSUT resultante y, cuando corresponde, la emisión calculada.
+
+
+2. MARCO CONCEPTUAL Y FRONTERAS
+
+La organización de los flujos se fundamentó en el Sistema de Contabilidad Ambiental y Económica, Marco Central; el Sistema de Contabilidad Ambiental y Económica para la Energía; y las Recomendaciones Internacionales para las Estadísticas de Energía. La CIIU Rev. 4 se utilizó como referencia para interpretar las actividades económicas, sin sustituir los agregados físicos efectivamente observados en los balances energéticos.
+
+La PSUT distingue tres grupos de flujos: insumos naturales de energía, productos energéticos y residuales energéticos. Los insumos naturales registran la energía que entra desde el ambiente; los productos energéticos registran su producción, transformación, comercio, acumulación y utilización; y los residuales representan la energía que abandona el sistema económico. El ambiente se reconoce como origen de insumos naturales y receptor de residuales; el resto del mundo registra importaciones y exportaciones; y la acumulación conserva los cambios de existencias.
+
+La serie utiliza una base territorial. No se aplicó un ajuste por residencia al transporte porque las fuentes no permiten separar de forma consistente el consumo de residentes fuera del territorio, el consumo de no residentes dentro del territorio y los búnkeres internacionales. El agregado TR_BEN conserva, por tanto, la cobertura territorial informada en los Balances Energéticos Nacionales.
+
+La cuenta de emisiones comprende CO₂, CH₄ y N₂O provenientes de la combustión energética, emisiones fugitivas cuantificables y emisiones agrícolas no energéticas seleccionadas. Se excluyeron UTCUTS/LULUCF, las emisiones indirectas atribuidas al usuario de electricidad, el ciclo de vida de los productos, los gases fluorados, los residuos y los procesos industriales no incorporados. El CO₂ de la biomasa se presenta como partida informativa y no se suma al CO₂ equivalente; el CH₄ y el N₂O de su combustión sí se incluyen. Los resultados no sustituyen el Balance Energético Nacional ni el inventario nacional de gases de efecto invernadero.
+
+
+3. FUENTES Y JERARQUÍA DE EVIDENCIA
+
+Los Balances Energéticos Nacionales del Ministerio de Energía y Minas para 2018–2024 controlaron las magnitudes físicas. De ellos se obtuvieron la producción, las importaciones, las exportaciones, los cambios de existencias, los insumos y productos de transformación, los consumos sectoriales, los usos propios y las pérdidas. Ninguna fuente auxiliar modificó estos totales.
+
+Las Tablas Comunes de Reporte aportaron la actividad y las emisiones por categoría y gas para 2018–2022. Esta información permitió obtener factores implícitos anuales para la combustión y las emisiones fugitivas, además de incorporar las emisiones agrícolas observadas. Las claves de notación de la fuente se conservaron cuando una categoría no presentaba un valor numérico.
+
+El valor agregado real de Agricultura, ganadería, silvicultura y pesca, publicado por el Banco de Guatemala a precios constantes de 2013, se utilizó como indicador para estimar las emisiones agrícolas de 2023 y 2024. El estudio WISDOM de oferta y demanda de leña se empleó únicamente como contraste de la importancia del consumo residencial; no se utilizó para distribuir los totales del balance.
+
+Cuando dos fuentes diferían, se compararon el concepto, el territorio, el período, la unidad, el producto, la actividad y la etapa de la cadena energética. La fuente más próxima al concepto de la cuenta se mantuvo como control y la otra se utilizó como contraste o componente, siempre que no generara doble conteo. No se promediaron cifras de coberturas distintas.
+
+Las observaciones de los balances conservan localizadores detallados. Para los factores de emisión, los registros agrícolas, las actividades de refinación y los valores de VAB se documentaron 392 localizadores: 233 corresponden a observaciones externas con identificador de extracción, 90 a reglas internas CERO_DIRECTO y 69 a claves NO sin valor numérico. En estas últimas no se atribuyó una celda inexistente: se consignaron la tabla de referencia y la clave interna que preserva la ausencia de un factor numérico. Los identificadores se recuperaron de los registros de extracción integrados; permiten seguir la procedencia dentro del modelo, aunque la comprobación directa de la celda primaria requiere reabrir los archivos oficiales correspondientes.
+
+
+4. PREPARACIÓN Y ARMONIZACIÓN DE LA INFORMACIÓN
+
+Los datos de origen se mantuvieron sin alteración en los campos valor_original y unidad_original. Los nombres publicados se relacionaron con códigos normalizados de producto y unidad sectorial, y cada registro recibió un registro_id único. La clave_union se utilizó para relacionar observaciones y parámetros por año, categoría, grupo de factor o gas; source_record_id preservó el vínculo con la observación energética de origen.
+
+Los Balances Energéticos Nacionales expresan la energía en miles de barriles equivalentes de petróleo (kBEP). La conversión aplicada, sobre la base de poder calorífico inferior utilizada por la fuente, fue:
+
+energia_tj(r,t) = valor_kbep(r,t) × 5,81
+
+La precisión completa se conservó en los cálculos. El redondeo se aplicó únicamente a la presentación. Para datos publicados con dos decimales de kBEP, el semiancho de redondeo por celda equivale a:
+
+0,005 kBEP × 5,81 TJ/kBEP = 0,02905 TJ
+
+Se utilizaron cuatro estados metodológicos. OBS identifica un valor numérico transcrito de una fuente; CAL, un resultado obtenido mediante una identidad, conversión o fórmula reproducible; PRX, una estimación basada en un indicador o en la extensión temporal de un parámetro; y NO, una categoría informada mediante clave de notación sin valor numérico. Un cero representa una magnitud numérica nula; una celda vacía indica que el campo no aplica o que no existe un valor cuantificable. Estos estados no se sustituyeron entre sí.
+
+Estos estados metodológicos se distinguen de los controles técnicos del archivo base. En PSUT_LARGA, OK confirma que un flujo directo encontró una observación de origen, CAL identifica un flujo obtenido por identidad y FORMULA señala un cierre STAT; en QA, OK expresa que un control fue superado. OK y FORMULA no reemplazan OBS, CAL, PRX o NO ni describen por sí solos la calidad estadística del dato.
+
+
+5. MÉTODO DE ELABORACIÓN DE LA PSUT DE ENERGÍA
+
+Cada observación energética se asignó a un producto, un grupo de flujo, un lado contable, un bloque funcional y una unidad. La secuencia general fue:
+
+observación del balance → conversión a TJ → clasificación del producto → asignación a oferta o utilización → aplicación del signo → flujo PSUT
+
+Las cifras se representaron como magnitudes positivas en el lado contable correspondiente. El signo original se conservó en la base y el campo ajuste indicó si el valor se mantuvo, se cambió de signo o se tomó en valor absoluto. Esta regla evitó interpretar como cantidades físicas negativas los insumos de transformación, las exportaciones o las variaciones de existencias.
+
+La oferta de productos energéticos reúne la producción nacional y las importaciones. La utilización reúne la transformación, el consumo intermedio, el consumo final de los hogares, los usos propios, las pérdidas, los cambios de existencias y las exportaciones. Las importaciones se registraron como oferta del resto del mundo y las exportaciones como utilización por el resto del mundo. Los cambios de existencias se asignaron a ACC después de interpretar el signo publicado.
+
+Los procesos de extracción se representaron mediante la entrada de un insumo natural desde ENV, su utilización por la actividad extractiva y el suministro del producto energético correspondiente. Las actividades de generación y transformación se mantuvieron en ENER. Las pérdidas se registraron como utilización del producto energético y, cuando correspondía, como suministro de un residual por la economía y recepción del residual por ENV. Estas etapas son contablemente diferentes y no constituyen duplicación del consumo final.
+
+La clasificación sectorial siguió el rubro de la fuente. Un combustible publicado en Comercio y servicios permaneció en SERV y no se trasladó a Transporte por una asociación tecnológica. El agregado Industria se conservó en IND_BEN y no se desagregó mediante participaciones monetarias, empleo u otros ponderadores sin evidencia física compatible. TR_BEN se mantuvo como agregado territorial. La leña se registró como producto suministrado por A y como utilización en los sectores consumidores informados; la referencia WISDOM se empleó para contrastar la estructura y no para alterar las cantidades.
+
+La conciliación se realizó por producto p y año t:
+
+diferencia(p,t) = oferta_productos(p,t) − utilizacion_productos(p,t)
+
+Antes de calcular una diferencia se verificaron las unidades, los signos, el comercio exterior, las existencias, la transformación, el consumo y las pérdidas. Cuando la cantidad estaba identificada pero no la unidad compradora, se utilizó NO_ASIG. STAT se reservó para diferencias compatibles con el redondeo después de incorporar todos los flujos observados y calculados.
+
+Los usos no energéticos se trataron de forma separada. Para cada año se calculó:
+
+uso_no_energetico_aparente(t) = oferta_NOEN(t) − usos_observados_NOEN(t)
+
+El resultado se registró como utilización del producto NOEN en NO_ASIG, con estado CAL. No se asignó a STAT y se excluyó de la actividad de combustión. La ausencia de combustión no implica que sean inexistentes las emisiones de proceso, sino que estas se encuentran fuera de la cobertura cuantificada.
+
+En 2019 se identificó además un uso energético interno aparente de GAS, código que corresponde a gasolinas:
+
+uso_energetico_interno_aparente(GAS,2019) = oferta_GAS(2019) − Σ_s usos_observados(GAS,s,2019)
+
+El resultado fue 10 976,3682 TJ y se registró en NO_ASIG. Los usos observados no se reescalaron ni se atribuyó la diferencia a una actividad sin evidencia. Una vez incorporados los usos aparentes, STAT se calculó como el saldo final. La evaluación de STAT consideró el número de celdas que intervienen en el cierre y la tolerancia de 0,02905 TJ por celda; las diferencias superiores a ese margen se trataron como un problema de clasificación o fuente, no como redondeo.
+
+
+6. MÉTODO DE ELABORACIÓN DE LA CUENTA DE EMISIONES AL AIRE
+
+La cuenta de emisiones se derivó de los flujos PSUT que representan una actividad emisora. La extracción o el suministro de un producto no se interpretaron automáticamente como combustión. Cada regla identificó el flujo de origen, el módulo, la categoría IPCC, el grupo de factor y el tratamiento del CO₂. Los módulos se mantuvieron separados para combustión, emisiones fugitivas y emisiones agrícolas no energéticas.
+
+Para las categorías con actividad y emisiones observadas en las Tablas Comunes de Reporte, el factor implícito del gas g, la categoría c y el año t se calculó como:
+
+fe(g,c,t) [kg/TJ] = emision_crt(g,c,t) [kt] × 1 000 000 / actividad_crt(c,t) [TJ]
+
+Los factores anuales de 2018–2022 se aplicaron a la actividad energética del mismo año. Para 2023 y 2024 se mantuvo el factor de 2022 y se identificó como PRX:
+
+anio_factor(t) = min(t,2022)
+
+La emisión energética se obtuvo mediante:
+
+emision(g,s,p,t) [kt] = actividad_emisiones(s,p,t) [TJ] × fe(g,c,anio_factor) [kg/TJ] / 1 000 000
+
+La electricidad utilizada por hogares o actividades económicas recibió emisión directa igual a cero, porque las emisiones de los combustibles empleados para generarla permanecen en ENER. El mismo tratamiento se aplicó a las fuentes renovables sin combustión en el punto de uso. Los flujos NOEN se excluyeron de combustión.
+
+En la refinación se distinguió el petróleo crudo procesado de la actividad de combustión. Para 2018–2022 se calculó un coeficiente anual entre la actividad de combustión observada en las Tablas Comunes de Reporte y el crudo registrado en la PSUT. El coeficiente de 2022 se aplicó en 2023 y 2024 con estado PRX. Las emisiones fugitivas utilizaron factores anuales de 2018–2022 y el factor de 2022 para los dos años siguientes.
+
+El CO₂ de bagazo, biogás y leña se clasificó como BIOGENICO. Su resultado se registró en co2_biogenico_memo_kt y no en co2_directo_kt. El CH₄ y el N₂O de estas actividades se calcularon con los factores correspondientes y se incorporaron al CO₂ equivalente.
+
+El uso de gasolinas no asignado de 2019 mantuvo la actividad de 10 976,3682 TJ en NO_ASIG. Para cada gas se obtuvo un factor compuesto ponderado por los usos observados de GAS en IND_BEN, SERV y TR_BEN:
+
+fe_compuesto(g,2019) = Σ_s [actividad(GAS,s,2019) × fe(g,c_s,2019)] / Σ_s actividad(GAS,s,2019)
+
+La emisión se calculó con ese factor, se identificó como PRX y permaneció en NO_ASIG. El procedimiento conserva el consumo total sin adjudicarlo a una actividad económica no observada.
+
+Las emisiones agrícolas no energéticas de 2018–2022 se incorporaron por categoría y gas a partir de las Tablas Comunes de Reporte. Cuando una identidad oficial requirió obtener un componente como diferencia entre el total y los componentes identificados, el resultado se clasificó CAL. Las claves de notación conservaron campos numéricos vacíos.
+
+Para 2023 y 2024 se aplicó un índice de valor agregado con base 2022:
+
+indice_vab(t) = vab_agricultura(t) / vab_agricultura(2022)
+
+emision_agricola(c,g,t) = emision_agricola(c,g,2022) × indice_vab(t)
+
+Los índices aplicados fueron 1,0138653169 en 2023 y 1,0146904211 en 2024. La estimación se realizó por categoría y gas antes de agregar, y se identificó como PRX. Una categoría sin valor numérico en 2022 permaneció sin cuantificar.
+
+Para agregar los gases se utilizaron potenciales de calentamiento global a 100 años del Quinto Informe de Evaluación del IPCC (AR5), sin retroalimentación clima–carbono: 1 para CO₂, 28 para CH₄ y 265 para N₂O (IPCC, 2013, tabla 8.7):
+
+co2e_kt = co2_directo_kt + 28 × ch4_kt + 265 × n2o_kt
+
+El CO₂ biogénico informativo quedó fuera de esta identidad.
+
+
+7. TRAZABILIDAD E INTEGRACIÓN ENTRE LAS CUENTAS
+
+La trazabilidad energética sigue la cadena:
+
+fuente y localizador → registro BALANCE → source_record_id → regla MAPEO_PSUT → flujo PSUT
+
+La trazabilidad de emisiones sigue la cadena:
+
+flujo PSUT → REGLA_EMISION_ENERGIA → actividad emisora → categoría y grupo de factor → año del factor → emisión por gas → CO₂ equivalente
+
+Las uniones se realizan mediante identificadores y claves, no por la posición de las filas. El vínculo permite comprobar el valor original, la unidad, la conversión, el signo, la clasificación contable, el factor y el tratamiento del CO₂. Las emisiones agrícolas observadas conservan una ruta independiente desde la categoría y el gas de la fuente hasta el resultado anual.
+
+
+8. CORRESPONDENCIA CON EL ARCHIVO BASE
+
+La implementación de las reglas descritas se encuentra en el archivo modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx. La correspondencia que sigue permite pasar de cada decisión metodológica a las variables, fórmulas y controles que la materializan, sin sustituir la explicación de los apartados anteriores.
+
+DATOS_MODELO reúne las observaciones y las reglas declarativas. tipo_registro diferencia BALANCE, MAPEO_PSUT, REGLA_EMISION_ENERGIA, FACTOR_EMISION_OBS, EMISION_AGRICULTURA_OBS, ACTIVIDAD_REFINACION_OBS, VAB_AGRICULTURA, PARAMETRO y los catálogos. registro_id identifica cada fila; clave_union enlaza año, categoría, grupo de factor y gas; source_record_id conserva el origen energético. Los campos anio, anio_fuente, estado, fuente_id, fuente_pagina y clave_notacion documentan procedencia y tratamiento. producto, flow_group, lado, bloque, unidad_sectorial, metodo, ajuste, valor_original, unidad_original y valor_tj expresan la transformación energética. categoria_ipcc, grupo_factor, gas, valor_factor, tratamiento_co2, emision_kt_gas y valor_vab contienen los insumos de emisiones.
+
+PARAMETROS contiene las constantes y las series auxiliares empleadas en las fórmulas: factor_kbep_tj, redondeo_kbep, tolerancias, kg_por_kt, gwp_ch4 y gwp_n2o. En la misma hoja se presentan el VAB agrícola, su índice con base 2022 y el coeficiente anual que relaciona el crudo de la PSUT con la combustión de refinación.
+
+PSUT_LARGA materializa la asignación energética. registro_mapeo es la clave del flujo y source_record_id lo relaciona con DATOS_MODELO. anio, producto, flow_group, lado, bloque y unidad_sectorial fijan sus coordenadas; metodo y ajuste explican la operación; TJ contiene el valor resultante; tipo_STAT distingue redondeo de un residuo estadístico; y estado_fuente identifica flujos directos, calculados o formulados.
+
+EMISIONES_LARGA vincula la actividad con la regla y el factor. clave_emision identifica el resultado; source_record_id, psut_side, psut_block_code, unidad_origen_psut y metodo_asignacion recuperan la actividad desde PSUT_LARGA. modulo, categoria_ipcc, producto_std, grupo_factor, tratamiento_co2, anio_factor y estado_factor determinan el cálculo. actividad_base_tj, actividad_emisiones_tj, los factores por gas, co2_directo_kt, co2_biogenico_memo_kt, ch4_kt, n2o_kt y co2e_kt conservan la secuencia numérica. estado_resultado, clave_notacion, metodo_calculo, fuente_id_actividad y fuente_id_factor documentan el tratamiento final.
+
+PSUT y EMISIONES son vistas anuales de consulta derivadas, respectivamente, de PSUT_LARGA y EMISIONES_LARGA. Permiten examinar la oferta, la utilización y las emisiones de un año seleccionado, pero no introducen reglas ni valores adicionales.
+
+QA comprueba las identidades sustantivas: los usos aparentes de NOEN permanecen en NO_ASIG y no en STAT; el uso de GAS de 2019 conserva 10 976,3682 TJ en NO_ASIG y su correspondiente registro de emisiones; no existen residuos estadísticos materiales; y la identidad del CO₂ equivalente se cumple dentro de la tolerancia definida.
+
+
+9. INCERTIDUMBRE Y LIMITACIONES
+
+La resolución sectorial está condicionada por los agregados de los Balances Energéticos Nacionales. IND_BEN y TR_BEN no equivalen necesariamente a una sola actividad CIIU y no deben interpretarse con mayor detalle que el publicado. La base territorial limita la comparación directa con cuentas ajustadas por residencia.
+
+Los factores implícitos representan promedios de categorías oficiales y no factores tecnológicos de instalaciones individuales. La extensión de los factores de 2022 a 2023–2024 y el uso del VAB para las emisiones agrícolas son aproximaciones explícitas. La incertidumbre de estas decisiones no se reduce por la precisión decimal de los resultados.
+
+El control de estados mostró que el 100 % del CO₂e cuantificado en 2023 y 2024 depende de un estado_factor PRX o de un estado_resultado PRX. En los registros energéticos, la actividad corresponde al año registrado en la PSUT y la aproximación recae en el factor de 2022; en agricultura, recae en la prolongación del resultado mediante VAB. Por ello, los totales de esos años incorporan aproximaciones en toda su magnitud cuantificada, sin que esto convierta en imputadas las actividades energéticas anuales.
+
+Las categorías con clave de notación permanecen sin valor numérico. Las exclusiones de la cuenta delimitan la cobertura y no deben interpretarse como emisiones iguales a cero. Para las 69 claves NO sin observación numérica, el localizador se mantiene al nivel de tabla y regla interna; esta condición no representa un dato perdido ni autoriza sustituir la ausencia por cero.
+
+
+10. VALIDACIÓN
+
+La PSUT se validó por producto y año. Se comprobó la igualdad entre oferta y utilización después de incorporar los usos aparentes autorizados, la correspondencia entre residuales suministrados y recibidos, la ausencia de duplicación entre extracción, producción y uso, y la separación entre NO_ASIG y STAT. El umbral interno de cierre fue 0,00000001 TJ; las comparaciones de flujos utilizaron 0,000001 TJ.
+
+La cuenta de emisiones se validó mediante la correspondencia entre actividad, categoría y factor; la identificación del año del factor; la separación del CO₂ biogénico; la inclusión del CH₄ y el N₂O de biomasa en CO₂e; el tratamiento de emisión directa cero; la exclusión de NOEN de combustión; y la conservación de las claves de notación. La tolerancia numérica de comparación fue 0,000000001 kt.
+
+Los controles de QA confirmaron que los siete usos aparentes de NOEN están asignados a NO_ASIG, que no existe ningún flujo NOEN en STAT, que GAS corresponde a gasolinas en el caso de 2019 y que no se generaron residuos estadísticos materiales. Los cálculos conservaron la precisión completa; las tablas y gráficas presentan como máximo dos decimales.
+
+
+11. REFERENCIAS
+
+Eurostat. Physical Energy Flow Accounts Manual. Luxemburgo, 2014.
+
+Naciones Unidas. Sistema de Contabilidad Ambiental y Económica, Marco Central.
+
+Naciones Unidas. Sistema de Contabilidad Ambiental y Económica para la Energía.
+
+Naciones Unidas. Recomendaciones Internacionales para las Estadísticas de Energía.
+
+Naciones Unidas. Clasificación Industrial Internacional Uniforme de todas las actividades económicas, Rev. 4.
+
+IPCC. Directrices de 2006 para los inventarios nacionales de gases de efecto invernadero.
+
+IPCC. Refinamiento de 2019 de las Directrices de 2006 para los inventarios nacionales de gases de efecto invernadero.
+
+IPCC. 2013. Climate Change 2013: The Physical Science Basis. Contribution of Working Group I to the Fifth Assessment Report of the Intergovernmental Panel on Climate Change. Stocker, T. F. et al. (eds.). Cambridge University Press, Cambridge y Nueva York. Tabla 8.7.
+
+Ministerio de Energía y Minas de Guatemala. Balances Energéticos Nacionales, 2018–2024.
+
+Gobierno de Guatemala y Convención Marco de las Naciones Unidas sobre el Cambio Climático. Tablas Comunes de Reporte, información utilizada para 2018–2022.
+
+Banco de Guatemala. Producto interno bruto por actividad económica a precios constantes de 2013.
+
+FAO, IARNA-URL e INAB. Estudio de oferta y demanda de leña mediante WISDOM en Guatemala.

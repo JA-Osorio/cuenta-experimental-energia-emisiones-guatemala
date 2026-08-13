@@ -1,0 +1,29 @@
+LICENCIAMIENTO POR TIPO DE CONTENIDO
+
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+Autores: Juan Alejandro Osorio, Patricia Villatoro, Noe Salguero y José Carlos Soberanis.
+
+1. DATOS Y DOCUMENTACIÓN
+
+Salvo indicación expresa en contrario, los conjuntos de datos derivados, el diccionario de datos, la documentación, las notas, los metadatos, el libro de cálculo y las tablas y figuras originales se distribuyen bajo Creative Commons Atribución 4.0 Internacional (CC BY 4.0), identificador SPDX CC-BY-4.0.
+
+Texto oficial de la licencia:
+https://creativecommons.org/licenses/by/4.0/legalcode.es
+
+Al reutilizar este material se debe reconocer la autoría, proporcionar un enlace a la licencia e indicar si se realizaron cambios. La atribución no implica respaldo de los autores a la reutilización.
+
+Atribución sugerida:
+Osorio, Juan Alejandro; Villatoro, Patricia; Salguero, Noe; y Soberanis, José Carlos. Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024, v1.0.0. CC BY 4.0.
+
+2. CÓDIGO Y CUADERNOS
+
+El código Python y el código contenido en el cuaderno computacional se distribuyen bajo la licencia MIT. Sus condiciones se indican en LICENSE_CODE.
+
+En el cuaderno computacional, las celdas ejecutables originales se rigen por MIT; el texto explicativo, las tablas, las figuras y los resultados guardados se rigen por CC BY 4.0.
+
+3. MATERIALES EXCLUIDOS
+
+Los documentos y datos de fuente primaria no forman parte de esta distribución pública. Estas licencias tampoco relicencian obras, bases de datos, marcas, logotipos ni otros materiales procedentes de instituciones oficiales o de terceros. Esos materiales conservan sus derechos y condiciones de uso de origen. Cuando un archivo incluya un aviso propio, ese aviso prevalece para dicho archivo.
+
+La referencia a una fuente o su uso como insumo no implica propiedad, aval ni relicenciamiento. El alcance de CC BY 4.0 se limita, en la medida en que existan derechos licenciables, a las contribuciones originales del producto: selección, estructura, armonización, mapeos, transformaciones, cálculos, anotaciones y resultados derivados.

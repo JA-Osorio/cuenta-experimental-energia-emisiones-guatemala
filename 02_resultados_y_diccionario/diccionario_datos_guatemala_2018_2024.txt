@@ -1,0 +1,186 @@
+DICCIONARIO DE DATOS
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+Autores
+Juan Alejandro Osorio
+Patricia Villatoro
+Noe Salguero
+José Carlos Soberanis
+
+Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
+en creditos.txt.
+
+1. Convenciones generales
+
+- Codificación: UTF-8 sin marca de orden de bytes.
+- Separador de campos: coma.
+- Separador decimal: punto.
+- Separador de millares: no se utiliza.
+- Periodo cubierto: 2018-2024.
+- Una celda vacía significa que la variable no aplica al tipo de registro o que la fuente no proporciona un valor cuantificable.
+- El valor 0 representa un cero numérico y no equivale a una celda vacía.
+- Las variables binarias se expresan como 0 y 1.
+- Los identificadores y códigos deben leerse como texto.
+
+Estados de los datos
+
+- OBS: valor observado en una fuente.
+- CAL: valor calculado mediante una identidad o regla explícita.
+- PRX: estimación mediante una aproximación documentada.
+- NO: categoría informada sin valor numérico calculable.
+- FORMULA: valor obtenido mediante una identidad de cálculo.
+- OK: registro que supera los controles definidos.
+
+2. datos_modelo_guatemala_2018_2024.csv
+
+Función: entrada única para reproducir la PSUT de energía y la cuenta de emisiones al aire.
+Unidad de observación: un registro de datos, catálogo, mapeo, regla o parámetro.
+Registros: 3 446.
+Campos: 39.
+
+Tipos de registro
+
+- BALANCE: observaciones del balance energético nacional.
+- CATALOGO_PRODUCTO: catálogo normalizado de productos energéticos.
+- CATALOGO_UNIDAD: catálogo de unidades económicas y ambientales.
+- MAPEO_PSUT: reglas que transforman los datos del balance en flujos PSUT.
+- REGLA_EMISION_ENERGIA: correspondencias entre flujos energéticos y cálculos de emisiones.
+- FACTOR_EMISION_OBS: factores de emisión por año, gas y grupo de combustible.
+- ACTIVIDAD_REFINACION_OBS: actividad observada utilizada para la refinación.
+- EMISION_AGRICULTURA_OBS: emisiones agrícolas observadas por categoría y gas.
+- VAB_AGRICULTURA: valor agregado bruto anual utilizado para las aproximaciones agrícolas.
+- PARAMETRO: constantes y tolerancias utilizadas en los cálculos.
+
+Campos
+
+- tipo_registro: clase de información contenida en la fila.
+- registro_id: identificador único del registro.
+- clave_union: clave estable utilizada para relacionar registros.
+- anio: año al que corresponde el dato o la regla.
+- anio_fuente: año de la observación utilizada como fuente.
+- estado: condición metodológica del dato: OBS, CAL, PRX o NO.
+- fuente_id: identificador estable de la fuente.
+- titulo_fuente: nombre de la institución, publicación o criterio metodológico.
+- url_fuente: dirección pública de consulta de la fuente.
+- source_record_id: identificador del registro de origen.
+- producto: código normalizado del producto energético.
+- nombre_producto: denominación del producto o de la unidad del catálogo.
+- flow_group: grupo SEEA-Energy: Energy from natural inputs, Energy products o Energy residuals.
+- lado: lado de la PSUT: Supply o Use.
+- bloque: bloque funcional de la PSUT.
+- unidad_sectorial: código de la unidad económica, ambiental o de control.
+- metodo: regla de asignación o transformación aplicada.
+- ajuste: operación aplicada al valor de origen.
+- valor_original: valor numérico tal como se registra en la fuente.
+- unidad_original: unidad del valor original.
+- valor_tj: actividad o parámetro expresado en terajulios.
+- cero_imputado: indicador binario de un cero incorporado para completar la estructura tabular.
+- categoria_ipcc: código de la categoría del inventario de gases de efecto invernadero.
+- categoria_nombre: denominación de la categoría del inventario.
+- grupo_factor: grupo de combustible o regla utilizado para seleccionar el factor de emisión.
+- gas: CO2, CH4 o N2O.
+- valor_factor: valor numérico del factor de emisión.
+- unidad_factor: unidad del factor de emisión.
+- tratamiento_co2: tratamiento del dióxido de carbono: FOSIL, BIOGENICO, SIN_EMISION_DIRECTA o NO_APLICA.
+- emision_kt_gas: emisión observada en kilotoneladas del gas correspondiente.
+- valor_vab: valor agregado bruto anual.
+- unidad_vab: unidad monetaria y año de referencia del valor agregado bruto.
+- parametro: nombre estable de una constante o tolerancia.
+- valor_parametro: valor numérico del parámetro.
+- unidad_parametro: unidad del parámetro.
+- incluir: indicador binario que determina si la regla participa en el cálculo.
+- clave_notacion: código de notación cuando no existe un valor numérico.
+- fuente_pagina: página, tabla o localizador dentro de la fuente.
+- nota: aclaración necesaria para interpretar el registro.
+
+3. psut_energia_guatemala_2018_2024.csv
+
+Función: tabla de oferta y utilización física de energía en formato largo.
+Unidad de observación: un flujo por año, producto, lado, bloque y unidad sectorial.
+Registros: 617.
+Campos: 13.
+Unidad de medida: TJ.
+
+Campos
+
+- registro_mapeo: identificador único del flujo PSUT.
+- anio: año del flujo.
+- producto: código normalizado del producto energético.
+- flow_group: grupo SEEA-Energy del flujo.
+- lado: Supply u Use.
+- bloque: bloque funcional de la PSUT.
+- unidad_sectorial: unidad económica, ambiental o de control.
+- source_record_id: identificador del dato de origen; queda vacío cuando el flujo se calcula como saldo.
+- metodo: regla utilizada para asignar o calcular el flujo.
+- ajuste: operación aplicada al dato de origen.
+- TJ: cantidad de energía en terajulios, con precisión completa.
+- tipo_STAT: tipo de diferencia estadística; los registros conservados corresponden únicamente a redondeo.
+- estado_fuente: condición del valor: CAL, FORMULA u OK.
+
+Códigos principales de unidad_sectorial
+
+- A: agricultura, ganadería, silvicultura y pesca.
+- B: explotación de minas y canteras.
+- ENER: industrias de energía.
+- IND_BEN: industria agregada del balance energético.
+- TR_BEN: transporte agregado del balance energético.
+- SERV: comercio y servicios.
+- HH: hogares.
+- ROW: resto del mundo.
+- ENV: ambiente.
+- ACC: acumulación.
+- NO_ASIG: utilización interna cuantificada sin actividad compradora identificada.
+- STAT: diferencia atribuible al redondeo de la fuente.
+
+4. cuenta_emisiones_aire_guatemala_2018_2024.csv
+
+Función: cuenta de emisiones al aire asociada a energía, fugitivas y agricultura.
+Unidad de observación: un cálculo por año, unidad sectorial, módulo, categoría, producto o gas.
+Registros: 374.
+Campos: 34.
+Unidades principales: TJ, kg/TJ y kt.
+
+Campos
+
+- clave_emision: identificador único del cálculo de emisiones.
+- anio: año de la emisión.
+- unidad_sectorial_agregada: unidad económica o no asignada a la que se presenta el resultado.
+- modulo: AGRICULTURA, COMBUSTION o FUGITIVAS.
+- categoria_ipcc: código de la categoría del inventario cuando corresponde.
+- categoria_nombre: denominación de la categoría.
+- producto_std: código normalizado del producto energético.
+- metodo_asignacion: regla utilizada para obtener la actividad o emisión.
+- unidad_origen_psut: unidad sectorial de la que procede la actividad energética.
+- psut_side: lado de la PSUT utilizado como actividad.
+- psut_block_code: bloque PSUT utilizado como actividad.
+- source_record_id: identificador de la observación de origen.
+- actividad_base_tj: actividad energética antes de ajustes específicos de emisiones.
+- actividad_emisiones_tj: actividad energética a la que se aplica el factor de emisión.
+- grupo_factor: grupo utilizado para seleccionar el factor de emisión.
+- tratamiento_co2: tratamiento del CO2 fósil, biogénico o sin emisión directa.
+- anio_factor: año del factor de emisión aplicado.
+- estado_factor: condición metodológica del factor: OBS, CAL, PRX o NO.
+- ef_co2_kg_tj: factor de emisión de CO2 en kg/TJ.
+- ef_ch4_kg_tj: factor de emisión de CH4 en kg/TJ.
+- ef_n2o_kg_tj: factor de emisión de N2O en kg/TJ.
+- gas_fuente: gas al que corresponde una emisión observada directamente.
+- emision_fuente_kt_gas: emisión observada utilizada como dato de actividad o control, en kt del gas.
+- co2_directo_kt: emisión directa de CO2 fósil, en kt.
+- co2_biogenico_memo_kt: CO2 biogénico informado por separado y excluido del total de CO2e, en kt.
+- ch4_kt: emisión de CH4, en kt.
+- n2o_kt: emisión de N2O, en kt.
+- co2e_kt: emisión en kt de CO2 equivalente.
+- estado_resultado: condición metodológica del resultado: OBS, CAL, PRX o NO.
+- clave_notacion: código de notación cuando no se calcula una emisión.
+- metodo_calculo: fórmula o procedimiento general aplicado.
+- fuente_id_actividad: identificador de la fuente de actividad.
+- fuente_id_factor: identificador de la fuente del factor o emisión observada.
+- nota: aclaración necesaria para interpretar el resultado.
+
+5. Reglas de interpretación
+
+- Las filas con estado NO o clave_notacion NO informan que no existe una estimación numérica; no deben convertirse automáticamente en cero.
+- NO_ASIG conserva usos internos cuantificados cuya actividad compradora no puede identificarse con la fuente disponible.
+- El CO2 biogénico se informa como partida de memoria y no se suma al CO2e.
+- Los resultados deben agregarse mediante las claves y unidades declaradas; no mediante el orden físico de las filas.
+- Los cálculos reproducibles deben partir de datos_modelo_guatemala_2018_2024.csv. Los otros dos CSV son resultados de referencia para comprobar la reproducción.

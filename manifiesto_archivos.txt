@@ -1,0 +1,96 @@
+MANIFIESTO DEL PAQUETE FINAL PARA COMPARTIR
+
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+Fecha de preparación: 2026-08-13
+
+1. CONTENIDO DEL PAQUETE
+
+Este directorio contiene únicamente los archivos finales necesarios para
+consultar, citar, reproducir y verificar el producto. Se excluyeron borradores,
+versiones candidatas, previsualizaciones, registros de ejecución, archivos de
+caché, utilidades internas, notas sustituidas y copias duplicadas.
+
+Los archivos ubicados en la raíz presentan el producto, documentan los créditos
+CRediT, establecen las licencias y proporcionan los metadatos de citación y
+publicación.
+
+00_trazabilidad_fuentes
+  Registro estructurado de las fuentes utilizadas.
+
+01_metodologia
+  Metodología general, compilación de la PSUT de energía y elaboración de la
+  cuenta de emisiones al aire.
+
+02_resultados_y_diccionario
+  Dos conjuntos de resultados finales y su diccionario de datos.
+
+03_modelo_hoja_calculo
+  Versión en hoja de cálculo con fórmulas y trazabilidad.
+
+04_reproduccion_python
+  Archivo único de entrada, script generador, validador, cuaderno de consulta,
+  instrucciones y versiones de dependencias.
+
+05_verificacion
+  Informe final de reproducción computacional.
+
+2. REPRODUCCIÓN RÁPIDA
+
+Desde la raíz de este paquete, el modelo puede reproducirse con:
+
+python 04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py \
+  --entrada 04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv \
+  --salida resultados_reproducidos
+
+Los resultados pueden comprobarse con:
+
+python 04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py \
+  --generados resultados_reproducidos \
+  --referencias 02_resultados_y_diccionario
+
+El cuaderno no reconstruye las cuentas. Para consultarlo deben cargarse los dos
+CSV finales ubicados en 02_resultados_y_diccionario.
+
+3. ALCANCE DE LA DISTRIBUCIÓN
+
+Los documentos y las bases de las fuentes primarias no se distribuyen en este
+paquete. Esto comprende, entre otros, los Balances Energéticos Nacionales, las
+Tablas Comunes de Reporte y los demás materiales institucionales de origen.
+Esos materiales conservan sus propios derechos y condiciones de uso.
+
+datos_modelo_guatemala_2018_2024.csv no es una copia de las fuentes primarias:
+es el insumo derivado y estructurado que reúne los registros, parámetros,
+correspondencias y reglas necesarios para reproducir los resultados. La
+trazabilidad documental se conserva en el registro de fuentes, el diccionario
+de datos y las notas metodológicas.
+
+4. INVENTARIO DE INTEGRIDAD
+
+Las rutas son relativas a la raíz del paquete. El tamaño se expresa en bytes.
+La huella SHA-256 permite comprobar que cada archivo no cambió después de la
+preparación. Por diseño, este manifiesto no se incluye en su propio inventario,
+porque su huella cambiaría al incorporarla dentro del mismo archivo.
+
+RUTA | TAMAÑO_BYTES | SHA-256
+.zenodo.json | 1853 | cddf68af692feeee78800cb270b3b437383ad193e319311c8c03248418f8a3f8
+00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx | 41639 | 0d03385526dab461227075c188909d7c6281c595d47275b4cb0eb01830817a26
+01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt | 23873 | 2c474dfec18faf2508bc636ef91827b16ca130409377e8b08ec1111fe6d5d97b
+01_metodologia/nt_01_metodologia_psut_energia_2018_2024.txt | 33952 | d565027cb5011a2693700a23ac851ba2bfe8bba6258d8207e46e91bfd6f9373d
+01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt | 30822 | 9a9e8619e881d0c5c9dff7aee661a8e9ba1f1a5e39ae02876086948efa559458
+02_resultados_y_diccionario/cuenta_emisiones_aire_guatemala_2018_2024.csv | 110373 | 9c1004383e00d0d7d026eb488361d94dd6586bb583cedcf4ae0beb3fca94f15b
+02_resultados_y_diccionario/diccionario_datos_guatemala_2018_2024.txt | 9455 | 007578340e260ae75a700af3a6175c3450b1beea76285918547c32f1bbe57194
+02_resultados_y_diccionario/psut_energia_guatemala_2018_2024.csv | 64692 | 4be0edefa6d24be0598a0c8cdbb5a7fc76211bed3dfc205083d60a18398bc071
+03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx | 693474 | 1f9c2c5d614b9c26dfee4423e58e9a78adfe7fb3d36e9edb43747ab1cf74325c
+04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb | 549614 | 2a130746990ca4dbe1461fcb91f91614f82d5145182e32b3cceea44588e013ab
+04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv | 1183574 | 95dbf283f05f929d6193cb708acd7139f6794676ea4955628bd665894f6aae04
+04_reproduccion_python/instrucciones_reproduccion_python.txt | 3026 | 8094f7dd4358e7332206a8b75aa961f1da6db3d6b57257d909ae0880a25b54fd
+04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py | 37523 | fb9d52ae769403a5074a02e01b6e0584375906f41d587eec159c41a895efa2a9
+04_reproduccion_python/requirements.txt | 46 | 0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
+04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py | 23503 | aaf4fa4f0b7a214c3fbd7b59f7f846fcb8da8e068384054f550c879fe7da1d4a
+05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt | 5999 | 54b299b639b770e7c2564531097ea0d64cff34945e4a246a68a55a17a2a92c9d
+CITATION.cff | 1599 | 8977681075e690598bae2c478d80a06c6a61193b261ef1feeca86a63cf1a2a27
+LICENSE | 2163 | 258bd8e8315b82862ff0c5e79820fd1d0d2d4705585eced43edfd9a478f504e6
+LICENSE_CODE | 1457 | 176eab08e9c28f9fe63fb83ee56683e68ade0fd67be9ec94e9731cc8680ca3ab
+codemeta.json | 1904 | 035209820d0c69c9f6088001f0e5b8e6de3b5f447f96c5a8793d81e6ada90b0b
+creditos.txt | 2355 | 14c59501dd4b00eb492a2a0e630f5f650733fd8080455961944d93b0dbb56f98
+readme.txt | 9435 | e42d0d3e5b0b612185f16c88ee0d834d4320812b6ee21b3e11e5a9097893092f

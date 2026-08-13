@@ -1,0 +1,98 @@
+CRÉDITOS
+
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+1. AUTORÍA
+
+1.1 Juan Alejandro Osorio
+
+Universidad Rafael Landívar
+ORCID: 0009-0001-4260-772X
+Roles CRediT: Conceptualización; Metodología; Supervisión; Administración del
+proyecto; Validación; Redacción – revisión y edición.
+Contacto: jaosorio@url.edu.gt
+
+1.2 Patricia Villatoro
+
+Universidad Rafael Landívar
+ORCID: 0000-0002-5109-2393
+Roles CRediT: Análisis formal; Supervisión; Curación de datos; Validación;
+Redacción – revisión y edición.
+
+1.3 Noe Salguero
+
+Universidad Rafael Landívar
+ORCID: 0009-0004-5017-6538
+Roles CRediT: Metodología; Redacción – borrador original; Redacción – revisión
+y edición.
+
+1.4 José Carlos Soberanis
+
+Universidad de San Carlos de Guatemala, Centro Universitario de Occidente
+ORCID: 0009-0007-0279-4472
+Roles CRediT: Software; Curación de datos; Visualización; Validación; Redacción
+– revisión y edición.
+
+2. COLABORACIÓN
+
+2.1 Javier Andrés Paz Villatoro
+
+Universidad Rafael Landívar
+ORCID: 0009-0009-6858-9951
+Roles CRediT: Análisis formal; Investigación.
+
+2.2 Cintia Joana Flores Pereira
+
+Universidad Rafael Landívar
+ORCID: 0009-0005-8445-9250
+Roles CRediT: Análisis formal; Investigación.
+
+2.3 Jimena Lucía Rivas Maldonado
+
+Universidad Rafael Landívar
+ORCID: 0009-0006-3778-6053
+Roles CRediT: Análisis formal; Investigación.
+
+3. REVISIÓN TÉCNICA
+
+3.1 Sindy Marisol Castillo Álvarez
+
+Universidad Rafael Landívar
+ORCID: 0009-0004-4488-2137
+Rol CRediT: Validación.
+
+3.2 Alberto Ibrahim Cano Romero
+
+Universidad Rafael Landívar
+ORCID: 0009-0002-5349-9864
+Rol CRediT: Validación.
+
+3.3 César Augusto Sandoval García
+
+Universidad Rafael Landívar
+ORCID: 0000-0002-5856-092X
+Rol CRediT: Validación.
+
+3.4 Juan José Narciso Chúa
+
+Universidad Rafael Landívar
+ORCID: 0009-0001-3541-9974
+Rol CRediT: Validación.
+
+3.5 Rubi Denís Gordillo Franco
+
+Universidad Rafael Landívar
+ORCID: 0009-0002-5931-3880
+Rol CRediT: Validación.
+
+3.6 Gabriela Marina Enríquez Escalante
+
+Universidad Rafael Landívar
+ORCID: 0009-0005-7297-4634
+Rol CRediT: Validación.
+
+4. AUTORIZACIÓN
+
+Las personas incluidas autorizaron la publicación de sus nombres,
+identificadores ORCID y roles CRediT. En la documentación pública se presenta
+únicamente el correo indicado en la sección de autoría.

@@ -1,0 +1,39 @@
+cff-version: "1.2.0"
+message: "Si utiliza este producto de datos y código, cítelo mediante los metadatos de este archivo."
+title: "Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024"
+type: dataset
+authors:
+  - family-names: "Osorio"
+    given-names: "Juan Alejandro"
+    orcid: "https://orcid.org/0009-0001-4260-772X"
+    affiliation: "Universidad Rafael Landívar"
+    email: "jaosorio@url.edu.gt"
+  - family-names: "Villatoro"
+    given-names: "Patricia"
+    orcid: "https://orcid.org/0000-0002-5109-2393"
+    affiliation: "Universidad Rafael Landívar"
+  - family-names: "Salguero"
+    given-names: "Noe"
+    orcid: "https://orcid.org/0009-0004-5017-6538"
+    affiliation: "Universidad Rafael Landívar"
+  - family-names: "Soberanis"
+    given-names: "José Carlos"
+    orcid: "https://orcid.org/0009-0007-0279-4472"
+    affiliation: "Universidad de San Carlos de Guatemala, Centro Universitario de Occidente"
+version: 1.0.0
+abstract: >-
+  Este producto presenta una cuenta experimental de flujos físicos de energía y
+  de emisiones al aire para Guatemala durante 2018–2024. Organiza anualmente la
+  oferta y la utilización de productos energéticos, vincula los flujos con
+  sectores económicos y hogares, y estima emisiones directas por gas a partir de
+  la actividad energética observada. Los resultados tienen carácter experimental
+  y no constituyen una estadística oficial.
+keywords:
+  - "contabilidad ambiental y económica"
+  - "energía"
+  - "emisiones al aire"
+  - "PSUT"
+  - "SEEA-Energy"
+  - "Guatemala"
+  - "reproducibilidad"
+license: CC-BY-4.0

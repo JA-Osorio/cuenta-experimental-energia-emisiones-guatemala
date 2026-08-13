@@ -1,0 +1,85 @@
+REPRODUCCIÓN EN PYTHON
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+Autores
+
+Juan Alejandro Osorio
+Patricia Villatoro
+Noe Salguero
+José Carlos Soberanis
+
+Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
+en creditos.txt.
+
+1. Requisitos
+
+Python 3.10 o posterior. El script utiliza únicamente la biblioteca estándar.
+El cuaderno usa pandas y matplotlib, disponibles de forma predeterminada en
+Google Colab; no instala paquetes durante la ejecución. Las versiones empleadas
+en la prueba de reproducción se indican en requirements.txt.
+
+El selector anual permite consultar cualquiera de los años comprendidos entre
+2018 y 2024. Las celdas técnicas permanecen plegadas de forma predeterminada.
+
+2. Entrada
+
+datos_modelo_guatemala_2018_2024.csv
+
+Este CSV contiene los balances energéticos, mapeos, factores de emisión,
+parámetros, observaciones y catálogos requeridos por el cálculo. No se necesita
+el libro de cálculo ni otro archivo de datos.
+
+3. Ejecución mediante script
+
+Coloque el script y el CSV de entrada en el mismo directorio y ejecute:
+
+python reproducir_modelo_guatemala_2018_2024.py
+
+También pueden indicarse rutas explícitas:
+
+python reproducir_modelo_guatemala_2018_2024.py \
+  --entrada datos_modelo_guatemala_2018_2024.csv \
+  --salida resultados
+
+4. Exploración mediante cuaderno
+
+Abra cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb y cargue estos
+dos archivos cuando se soliciten:
+
+- psut_energia_guatemala_2018_2024.csv; y
+- cuenta_emisiones_aire_guatemala_2018_2024.csv.
+
+El cuaderno consulta los resultados producidos por el script. Permite
+seleccionar cualquier año entre 2018 y 2024, examinar la PSUT integrada y la
+cuenta de emisiones, y explorar indicadores y tendencias del período. No
+reconstruye las cuentas ni lee datos_modelo_guatemala_2018_2024.csv.
+
+Las celdas de código permanecen ocultas de forma predeterminada. El contenido
+se organiza en secciones independientes para indicadores, PSUT, emisiones y
+gráficas. El código puede desplegarse únicamente cuando se requiera auditar la
+lógica de consulta.
+
+El cuaderno no necesita el script ni escribe archivos de resultados. Para
+generar nuevamente los dos CSV se utiliza el script descrito en la sección 3.
+
+5. Resultados
+
+psut_energia_guatemala_2018_2024.csv
+cuenta_emisiones_aire_guatemala_2018_2024.csv
+
+La PSUT contiene 617 registros. La cuenta de emisiones al aire contiene 374
+registros. Ambos resultados cubren 2018–2024 y conservan la precisión numérica
+completa.
+
+6. Comprobación independiente
+
+El programa validar_reproduccion_guatemala_2018_2024.py compara los resultados
+generados con los CSV de referencia y verifica estructura, claves, cobertura
+temporal, cierres de energía, tratamiento de usos no asignados, identidad de
+CO2 equivalente y totales anuales.
+
+python validar_reproduccion_guatemala_2018_2024.py \
+  --generados resultados \
+  --referencias referencias
+
+Una reproducción conforme devuelve el código de salida 0.

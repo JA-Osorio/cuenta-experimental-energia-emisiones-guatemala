@@ -1,0 +1,57 @@
+{
+  "@context": "https://w3id.org/codemeta/3.1",
+  "type": "SoftwareSourceCode",
+  "name": "Código para reproducir la cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024",
+  "description": "Código Python y cuaderno computacional para reconstruir la tabla física de oferta y utilización de energía y la cuenta de emisiones al aire de Guatemala para 2018–2024 a partir de un único archivo CSV de entrada.",
+  "version": "1.0.0",
+  "author": [
+    {
+      "type": "Person",
+      "givenName": "Juan Alejandro",
+      "familyName": "Osorio",
+      "id": "https://orcid.org/0009-0001-4260-772X",
+      "position": 1
+    },
+    {
+      "type": "Person",
+      "givenName": "Patricia",
+      "familyName": "Villatoro",
+      "id": "https://orcid.org/0000-0002-5109-2393",
+      "position": 2
+    },
+    {
+      "type": "Person",
+      "givenName": "Noe",
+      "familyName": "Salguero",
+      "id": "https://orcid.org/0009-0004-5017-6538",
+      "position": 3
+    },
+    {
+      "type": "Person",
+      "givenName": "José Carlos",
+      "familyName": "Soberanis",
+      "id": "https://orcid.org/0009-0007-0279-4472",
+      "position": 4
+    }
+  ],
+  "programmingLanguage": "Python",
+  "runtimePlatform": "Python 3.10 or later",
+  "schema:inLanguage": "es",
+  "applicationCategory": "Environmental accounting",
+  "operatingSystem": "Platform independent",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "keywords": [
+    "contabilidad ambiental y económica",
+    "energía",
+    "emisiones al aire",
+    "PSUT",
+    "SEEA-Energy",
+    "Guatemala",
+    "reproducibilidad"
+  ],
+  "hasPart": {
+    "type": "schema:Dataset",
+    "name": "Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024",
+    "description": "Datos de energía y emisiones al aire para Guatemala durante 2018–2024 utilizados y generados por el código de reproducción."
+  }
+}

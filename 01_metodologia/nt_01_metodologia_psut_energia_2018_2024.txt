@@ -1,0 +1,1038 @@
+NOTA METODOLÓGICA NT-01
+
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+METODOLOGÍA DE COMPILACIÓN
+
+Autores:
+Juan Alejandro Osorio
+Patricia Villatoro
+Noe Salguero
+José Carlos Soberanis
+
+Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
+en creditos.txt.
+
+1. OBJETO Y RESULTADO
+
+Esta nota documenta el procedimiento aplicado para obtener la tabla física de
+oferta y utilización de energía (PSUT) de 2018–2024 a partir de los balances
+energéticos nacionales publicados por el Ministerio de Energía y Minas. Describe
+la extracción y homologación de los datos, su conversión a terajulios, las reglas
+de clasificación y mapeo, los flujos calculados y los controles utilizados para
+comprobar la trazabilidad y el cierre contable.
+
+El resultado principal es una tabla larga de 617 flujos. Cada fila identifica el
+año, producto, grupo de flujo, lado contable, bloque, unidad sectorial, registro
+de origen, método, ajuste y valor en terajulios. La misma tabla alimenta la matriz
+anual de consulta y proporciona la actividad energética empleada posteriormente
+en la cuenta de emisiones al aire.
+
+Las cantidades físicas proceden de los balances energéticos nacionales. Las
+fuentes complementarias se utilizaron para interpretar tratamientos específicos
+o comprobar su coherencia, pero no sustituyeron los totales del balance ni se
+emplearon para crear desagregaciones físicas no observadas.
+
+
+2. FUENTE FÍSICA Y COBERTURA
+
+2.1 Fuente de control
+
+La fuente de control para la energía es el Balance Energético Nacional (BEN) de
+cada año. Se incorporaron las operaciones publicadas de producción, importación,
+exportación, transformación, autoproducción, consumo propio, pérdidas, consumo
+final y variación de existencias. La unidad original es el millar de barriles
+equivalentes de petróleo (kBEP).
+
+Se conservó la base territorial del BEN. El consumo de Transporte corresponde al
+consumo observado dentro del territorio. No se aplicó un ajuste de residencia ni
+se separaron búnkeres internacionales porque la serie disponible no permite
+cuantificar esas partidas de forma homogénea para todos los años.
+
+2.2 Cobertura temporal
+
+La cuenta comprende siete años calendario: 2018, 2019, 2020, 2021, 2022, 2023 y
+2024. La estructura contable es común a toda la serie, aunque la presencia de un
+producto o una operación depende de lo publicado en cada BEN.
+
+2.3 Frontera de productos
+
+La frontera incluye los productos energéticos y los usos no energéticos que
+forman parte del BEN. No incorpora materiales sin contenido energético por el
+solo hecho de que pertenezcan a una actividad económica incluida en la frontera
+del Sistema de Contabilidad Ambiental y Económica.
+
+
+3. EXTRACCIÓN Y HOMOLOGACIÓN DE LOS BEN
+
+3.1 Unidad de extracción
+
+Cada celda energética pertinente del BEN se transformó en un registro. No se
+agregaron celdas antes de asignarles un identificador y no se modificó el signo
+publicado. La normalización produjo 1 778 registros de tipo BALANCE, distribuidos
+así:
+
+- 2018: 238 registros;
+- 2019: 252 registros;
+- 2020: 238 registros;
+- 2021: 252 registros;
+- 2022: 266 registros;
+- 2023: 266 registros; y
+- 2024: 266 registros.
+
+Todos los registros BALANCE conservan estado OBS y unidad_original = kBEP.
+
+3.2 Campos conservados
+
+La homologación retiene, como mínimo:
+
+- anio: período de la observación;
+- registro_id y source_record_id: identificador estable de la celda normalizada;
+- producto y nombre_producto: código y denominación homologados;
+- valor_original: cantidad con el signo publicado;
+- unidad_original: kBEP;
+- cero_imputado: indicador de un cero incorporado al normalizar la estructura;
+- fuente_id, titulo_fuente y url_fuente: procedencia documental;
+- fuente_pagina: página o indicación de fuente tabular; y
+- nota: aclaración de homologación o tratamiento.
+
+Los identificadores de las observaciones siguen la secuencia BEV2_00001 a
+BEV2_01778. El identificador no reemplaza la cita: permite localizar de manera
+unívoca la observación que sustenta un flujo.
+
+3.3 Homologación de productos
+
+Se utilizaron los siguientes códigos:
+
+- BCANA: bagazo de caña;
+- BIOGAS: biogás;
+- COQUE: coque;
+- CRBN: carbón;
+- DOIL: diésel o gas oil;
+- ELEC: electricidad;
+- EOLICA: energía eólica;
+- FOIL: fuel oil;
+- GAS: gasolinas;
+- GEOE: geoenergía o geotermia;
+- GLP: gas licuado de petróleo;
+- GN: gas natural;
+- HYDR: energía hídrica;
+- KER: keroseno;
+- LENA: leña;
+- NOEN: usos no energéticos;
+- PETR: petróleo crudo; y
+- SOLAR: energía solar.
+
+ORIM, orimulsión, permanece en el catálogo de entrada para reproducir la
+estructura de la fuente, pero no genera un flujo en la PSUT porque las
+observaciones disponibles son nulas y no existe un mapeo que deba materializarse
+en la salida.
+
+El código GAS identifica gasolinas. GN identifica gas natural. Esta distinción es
+obligatoria en el tratamiento de la diferencia no asignada de 2019.
+
+3.4 Ceros, vacíos y combinaciones ausentes
+
+Un cero se conserva cuando la fuente registra una cantidad numérica nula. El
+campo cero_imputado distingue los 16 ceros incorporados durante la normalización
+de la matriz de origen de los ceros observados. Un campo vacío significa que el
+atributo no corresponde al tipo de registro o que no existe un valor
+cuantificable; no se convierte en cero. La ausencia de una combinación en la
+salida significa que no existe una regla sustentada para producirla.
+
+
+4. ESTRUCTURA CONTABLE DE LA PSUT
+
+4.1 Grupos de flujo
+
+La cuenta utiliza tres grupos:
+
+- Energy from natural inputs: energía que pasa del ambiente a la economía;
+- Energy products: productos que se suministran y utilizan dentro de la economía
+  o entre la economía y el resto del mundo; y
+- Energy residuals: energía que deja de estar disponible como producto y se
+  devuelve al ambiente.
+
+4.2 Lados contables
+
+Cada flujo se registra en uno de dos lados:
+
+- Supply: suministro u oferta; y
+- Use: utilización o uso.
+
+Para cada producto p y año t se exige:
+
+oferta_total(p,t) = utilizacion_total(p,t)
+
+Los insumos naturales y los residuales tienen identidades propias. El suministro
+ambiental de un insumo natural debe tener una utilización económica equivalente.
+El suministro de un residual debe tener una recepción equivalente por otra
+unidad o por el ambiente.
+
+4.3 Bloques
+
+El bloque identifica la función contable de la fila:
+
+- A: suministro de insumos naturales por el ambiente;
+- B: utilización de insumos naturales por unidades económicas;
+- C: suministro de productos por unidades residentes;
+- D: suministro de productos mediante importaciones;
+- E: utilización intermedia, transformación, consumo propio y otros usos
+  internos;
+- F: consumo final de los hogares;
+- G: acumulación o cambio de existencias;
+- H: exportaciones;
+- I: suministro de residuales energéticos;
+- Q: recepción de residuales por el ambiente; y
+- SD: diferencia estadística atribuible al redondeo.
+
+El bloque F pertenece al eje contable de la PSUT y designa exclusivamente el
+consumo final de los hogares.
+
+4.4 Unidades que reciben flujos
+
+- A: Agricultura, ganadería, silvicultura y pesca;
+- B: Explotación de minas y canteras;
+- ENER: industrias de energía;
+- IND_BEN: agregado Industria del BEN;
+- TR_BEN: agregado Transporte del BEN;
+- SERV: Comercio y servicios;
+- HH: hogares;
+- ROW: resto del mundo;
+- ENV: ambiente;
+- ACC: acumulación o existencias;
+- NO_ASIG: utilización interna cuantificada sin unidad compradora identificada; y
+- STAT: diferencia de cierre compatible con el redondeo de la fuente.
+
+IND_BEN conserva íntegramente el agregado físico Industria. No se desagrega
+mediante PIB, valor agregado, empleo, número de establecimientos u otros
+ponderadores externos. ENER es una unidad funcional: agrupa refinación,
+generación central, autoproducción, consumo propio y pérdidas porque el BEN
+identifica esas funciones técnicas.
+
+
+5. CONVERSIÓN A TERAJULIOS Y TRATAMIENTO DE SIGNOS
+
+5.1 Conversión
+
+La conversión aplicada a toda observación energética es:
+
+1 kBEP = 5,81 TJ
+
+Para una observación r:
+
+valor_tj(r) = valor_original_kbep(r) x 5,81
+
+La conversión se realiza antes de agregar. La precisión completa se conserva en
+los cálculos; el formato de dos decimales afecta únicamente la presentación.
+
+En la hoja DATOS_MODELO, valor_original está en la columna S, unidad_original en
+T y valor_tj en U. La fórmula implementada en U para los registros BALANCE es:
+
+SI(valor_original está vacío o falta el parámetro, vacío,
+   valor_original x PARAMETROS!B4)
+
+PARAMETROS!B4 contiene factor_kbep_tj = 5,81. La fórmula visible en el libro
+equivale a:
+
+=IF(OR(S2="",PARAMETROS!$B$4=""),"",S2*PARAMETROS!$B$4)
+
+5.2 Signos
+
+El sentido contable se define mediante lado y bloque; el signo de la fuente se
+trata de acuerdo con la regla de mapeo:
+
+a) sin ajuste
+
+TJ = valor_tj
+
+Se aplica cuando el signo del BEN ya corresponde al flujo registrado.
+
+b) valor absoluto
+
+TJ = abs(valor_tj)
+
+Se aplica a entradas de transformación publicadas con signo negativo, como los
+combustibles utilizados en generación, autoproducción y el petróleo crudo
+procesado en refinería. La utilización se presenta positiva porque la dirección
+ya está expresada por lado = Use.
+
+c) cambio de signo
+
+TJ = -valor_tj
+
+Se aplica al cambio de existencias para traducir la convención del BEN a la
+convención de acumulación de la PSUT. El resultado puede ser positivo o negativo.
+
+d) discrepancia estadística
+
+El signo se obtiene de oferta menos utilización. Un valor positivo añade un uso;
+un valor negativo corrige una utilización ligeramente superior a la oferta.
+
+
+6. REGLAS DE MAPEO Y TRAZABILIDAD
+
+6.1 Registro de la regla
+
+Cada flujo tiene un registro MAPEO_PSUT. La regla especifica:
+
+- registro_id: identificador MAP_####;
+- clave_union: combinación que impide duplicidades;
+- anio;
+- source_record_id;
+- producto;
+- flow_group;
+- lado;
+- bloque;
+- unidad_sectorial;
+- metodo;
+- ajuste; y
+- nota metodológica.
+
+La clave de unión es:
+
+anio | source_record_id | lado | bloque | unidad_sectorial | metodo
+
+Una observación puede originar más de un flujo cuando cada fila pertenece a una
+etapa contable distinta. La producción nacional de un recurso fósil, por ejemplo,
+origina dos registros de insumos naturales y uno de producto energético.
+
+6.2 Comprobaciones previas
+
+Antes de calcular se verifica que:
+
+- registro_id sea único;
+- source_record_id sea único entre los registros BALANCE;
+- clave_union sea única entre los registros MAPEO_PSUT;
+- año y producto coincidan entre la regla y su observación;
+- todo producto y unidad estén catalogados;
+- cada regla directa encuentre exactamente una observación de origen; y
+- ninguna unión dependa de la posición de una fila, del color o del orden de una
+  hoja.
+
+6.3 Métodos aplicados
+
+La salida contiene los siguientes métodos y números de filas:
+
+- COMERCIO_EXTERIOR: 118;
+- GENERACION_CENTRAL: 75;
+- CAMBIO_EXISTENCIAS: 64;
+- EXTRACCION_B: 54;
+- USO_IND_BEN: 45;
+- saldo oferta menos uso por producto: 38;
+- AUTOPRODUCCION: 36;
+- USO_SERV: 31;
+- USO_TR_BEN: 30;
+- INSUMO_NATURAL_RENOVABLE: 28;
+- USO_HH: 24;
+- PERDIDAS_TRIPLE: 21;
+- TRANSFORMACION_REFINERIA: 15;
+- USO_ENER: 9;
+- FRONTERA_BAGAZO_IND: 7;
+- FRONTERA_BIOGAS_ENER: 7;
+- FRONTERA_LENA_A: 7;
+- USO_NO_ENERGETICO_APARENTE: 7; y
+- USO_ENERGETICO_INTERNO_APARENTE: 1.
+
+La suma es 617 filas.
+
+
+7. EXTRACCIÓN NACIONAL DE RECURSOS FÓSILES
+
+La producción nacional de petróleo crudo, gas natural y carbón se representa con
+EXTRACCION_B. Cada observación incluida produce tres flujos del mismo valor:
+
+1. suministro del insumo natural por el ambiente:
+
+flow_group = Energy from natural inputs
+lado = Supply
+bloque = A
+unidad_sectorial = ENV
+
+2. utilización del insumo natural por la actividad extractiva:
+
+flow_group = Energy from natural inputs
+lado = Use
+bloque = B
+unidad_sectorial = B
+
+3. suministro del producto energético:
+
+flow_group = Energy products
+lado = Supply
+bloque = C
+unidad_sectorial = B
+
+Para producto p y año t:
+
+extraccion_tj(p,t) = produccion_ben_kbep(p,t) x 5,81
+
+suministro_insumo_ENV(p,t) = extraccion_tj(p,t)
+uso_insumo_B(p,t) = extraccion_tj(p,t)
+suministro_producto_B(p,t) = extraccion_tj(p,t)
+
+La triple representación no triplica el valor dentro de una misma identidad: los
+dos primeros flujos pertenecen a insumos naturales y el tercero a productos
+energéticos. Los ceros observados se conservan. El consumo operativo de
+combustibles no se deriva de la extracción y permanece en el agregado del BEN
+cuando la fuente no lo identifica por separado.
+
+En DATOS_MODELO, las tres reglas comparten source_record_id y se distinguen por
+flow_group, lado, bloque y unidad_sectorial. PSUT_LARGA recupera una sola vez el
+valor_tj de origen para cada regla.
+
+
+8. INSUMOS NATURALES RENOVABLES
+
+La energía hídrica, solar, eólica y geotérmica se registra mediante
+INSUMO_NATURAL_RENOVABLE como suministro del ambiente:
+
+flow_group = Energy from natural inputs
+lado = Supply
+bloque = A
+unidad_sectorial = ENV
+ajuste = sin ajuste
+
+suministro_renovable_ENV(p,t) = produccion_ben_kbep(p,t) x 5,81
+
+La captación observada en generación central se registra como uso del insumo
+natural por ENER, bloque B, mediante GENERACION_CENTRAL y valor absoluto. Cuando
+el BEN identifica autoproducción hidroeléctrica, la captación se registra con
+AUTOPRODUCCION bajo la misma unidad funcional.
+
+La suma de las captaciones debe conciliarse con el suministro ambiental del
+mismo insumo. La electricidad resultante se registra por separado como producto
+energético suministrado por ENER.
+
+
+9. BIOMASA ENERGÉTICA
+
+9.1 Leña
+
+La producción de leña se registra con FRONTERA_LENA_A:
+
+flow_group = Energy products
+lado = Supply
+bloque = C
+unidad_sectorial = A
+ajuste = sin ajuste
+
+suministro_lena_A(t) = produccion_lena_ben_kbep(t) x 5,81
+
+No se crea una contrapartida de insumo natural porque las fuentes disponibles no
+separan cuantitativamente la extracción de bosque natural, las plantaciones, los
+residuos de aprovechamiento, los residuos de primera transformación y la
+recolección doméstica. El estudio WISDOM se utilizó para comprobar la coherencia
+del consumo doméstico, no para reemplazar el total del BEN ni redistribuirlo.
+
+9.2 Bagazo de caña
+
+La producción de bagazo se registra mediante FRONTERA_BAGAZO_IND:
+
+flow_group = Energy products
+lado = Supply
+bloque = C
+unidad_sectorial = IND_BEN
+ajuste = sin ajuste
+
+El bagazo se trata como subproducto agroindustrial disponible después del
+procesamiento de la caña. Su origen agrícola no determina la unidad que suministra
+el producto energético.
+
+9.3 Biogás
+
+La producción de biogás se registra mediante FRONTERA_BIOGAS_ENER:
+
+flow_group = Energy products
+lado = Supply
+bloque = C
+unidad_sectorial = ENER
+ajuste = sin ajuste
+
+La asignación se limita al módulo energético observado. La serie no identifica
+de forma compatible la actividad productora del biogás procedente de tratamiento
+de residuos, agricultura o industria.
+
+
+10. INDUSTRIAS DE ENERGÍA
+
+10.1 Generación central
+
+Los combustibles utilizados por las plantas centrales se registran como:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = ENER
+metodo = GENERACION_CENTRAL
+ajuste = valor absoluto
+
+Los insumos observados según el año comprenden bagazo, biogás, coque, carbón,
+diésel, fuel oil y gas natural. Las fuentes hídrica, solar, eólica y geotérmica
+se registran como usos de insumos naturales, no como productos energéticos.
+
+La electricidad obtenida se registra como:
+
+flow_group = Energy products
+lado = Supply
+bloque = C
+unidad_sectorial = ENER
+metodo = GENERACION_CENTRAL
+ajuste = sin ajuste
+
+No se impone una eficiencia externa. Se conservan los insumos y la producción de
+electricidad publicados en el BEN.
+
+10.2 Autoproducción
+
+AUTOPRODUCCION registra en ENER los insumos y la electricidad producida. Los
+combustibles son usos de productos energéticos en bloque E; la captación
+hidroeléctrica es uso de un insumo natural en bloque B; la electricidad es
+suministro de un producto energético en bloque C.
+
+La función permanece en ENER porque el BEN identifica la función técnica, pero no
+la actividad económica principal de cada autoproductor. No se redistribuyeron los
+flujos mediante supuestos sectoriales.
+
+10.3 Refinación
+
+El petróleo crudo procesado se registra mediante TRANSFORMACION_REFINERIA:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = ENER
+producto = PETR
+ajuste = valor absoluto
+
+uso_crudo_refineria(t) = abs(crudo_procesado_ben_kbep(t) x 5,81)
+
+Los productos de salida informados se registran como suministro de ENER, bloque
+C, sin ajuste. La serie identifica DOIL en 2018 y NOEN en todos los años. No se
+completaron productos de salida mediante rendimientos teóricos.
+
+El crudo transformado no equivale a combustible quemado por la refinería. Esa
+distinción se conserva para evitar que la transformación física se interprete
+como emisión de combustión.
+
+10.4 Consumo propio
+
+USO_ENER registra los consumos propios observados:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = ENER
+ajuste = sin ajuste
+
+Comprende electricidad durante toda la serie y, en 2018, coque y diésel. No se
+crearon combinaciones ausentes para completar una matriz rectangular.
+
+
+11. PÉRDIDAS Y RESIDUALES ENERGÉTICOS
+
+Las pérdidas de electricidad se representan mediante PERDIDAS_TRIPLE. Cada
+observación produce tres flujos iguales:
+
+1. utilización del producto perdido:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = ENER
+
+2. suministro del residual:
+
+flow_group = Energy residuals
+lado = Supply
+bloque = I
+unidad_sectorial = ENER
+
+3. recepción del residual:
+
+flow_group = Energy residuals
+lado = Use
+bloque = Q
+unidad_sectorial = ENV
+
+Para cada año t:
+
+perdida_tj(t) = perdida_electricidad_ben_kbep(t) x 5,81
+
+uso_producto_perdido_ENER(t) = perdida_tj(t)
+suministro_residual_ENER(t) = perdida_tj(t)
+uso_residual_ENV(t) = perdida_tj(t)
+
+El primer flujo cierra el producto ELEC. Los dos últimos cierran el grupo de
+residuales. No representan tres consumos distintos y no reciben un factor de
+emisión directo por el hecho de ser pérdidas.
+
+
+12. COMERCIO EXTERIOR Y EXISTENCIAS
+
+12.1 Importaciones y exportaciones
+
+COMERCIO_EXTERIOR registra las importaciones como suministro del resto del mundo:
+
+flow_group = Energy products
+lado = Supply
+bloque = D
+unidad_sectorial = ROW
+
+importacion_psut(p,t) = importacion_ben(p,t) x 5,81
+
+Las exportaciones se registran como utilización por el resto del mundo:
+
+flow_group = Energy products
+lado = Use
+bloque = H
+unidad_sectorial = ROW
+
+exportacion_psut(p,t) = exportacion_ben(p,t) x 5,81
+
+ROW es una contrapartida contable y no una actividad residente.
+
+12.2 Cambios de existencias
+
+CAMBIO_EXISTENCIAS asigna la variación de existencias a ACC:
+
+flow_group = Energy products
+lado = Use
+bloque = G
+unidad_sectorial = ACC
+ajuste = cambio de signo
+
+cambio_existencias_psut(p,t) = -cambio_existencias_ben(p,t) x 5,81
+
+Una acumulación positiva absorbe oferta del período. Una disminución de
+existencias aporta producto y puede aparecer como valor negativo en el lado de
+utilización. El signo no se reemplaza por cero ni por valor absoluto.
+
+
+13. USOS FINALES E INTERMEDIOS OBSERVADOS
+
+13.1 Hogares
+
+El rubro Residencial se asigna a HH mediante USO_HH:
+
+flow_group = Energy products
+lado = Use
+bloque = F
+unidad_sectorial = HH
+ajuste = sin ajuste
+
+uso_hh(p,t) = consumo_residencial_ben(p,t) x 5,81
+
+Los productos observados son electricidad, GLP, keroseno y leña. La electricidad
+utilizada por HH no constituye combustión directa en los hogares; la generación
+permanece en ENER.
+
+13.2 Comercio y servicios
+
+USO_SERV asigna el rubro Comercio y servicios a SERV:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = SERV
+ajuste = sin ajuste
+
+La clasificación sigue el rubro publicado. Una gasolina registrada en Comercio
+y servicios permanece en SERV y no se traslada a Transporte por una presunción
+tecnológica.
+
+13.3 Industria
+
+USO_IND_BEN conserva el rubro Industria como IND_BEN:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = IND_BEN
+ajuste = sin ajuste
+
+uso_ind_ben(p,t) = consumo_industria_ben(p,t) x 5,81
+
+IND_BEN es un agregado de publicación. No se asigna íntegramente a una rama
+económica ni se divide mediante indicadores monetarios. La electricidad se
+registra como utilización del producto; su generación permanece en ENER.
+
+13.4 Transporte
+
+USO_TR_BEN conserva el rubro Transporte como TR_BEN:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = TR_BEN
+ajuste = sin ajuste
+
+uso_tr_ben(p,t) = consumo_transporte_ben(p,t) x 5,81
+
+TR_BEN es un agregado funcional y territorial. No separa modos, propietario,
+transporte por cuenta propia ni residencia cuando la fuente no publica esa
+apertura.
+
+13.5 Agricultura como unidad usuaria
+
+El BEN no publica un rubro separado y comparable de consumo final energético de
+Agricultura, ganadería, silvicultura y pesca para todo el período. A recibe el
+suministro de leña observado, pero no una utilización imputada de combustibles.
+El suministro de leña no se utiliza como sustituto del consumo energético de la
+actividad.
+
+
+14. USOS NO ENERGÉTICOS APARENTES
+
+NOEN representa los usos no energéticos publicados dentro del sistema de
+productos del BEN. Su oferta puede incluir importaciones y salidas de refinería;
+los usos observados incluyen exportaciones y existencias. La fuente no identifica
+la unidad compradora del uso interno restante.
+
+Para cada año se calcula:
+
+oferta_noen_observada(t) = suma de NOEN en Supply,
+                            excluyendo STAT y flujos aparentes
+
+uso_noen_observado(t) = suma de NOEN en Use,
+                         excluyendo STAT y flujos aparentes
+
+uso_noen_aparente(t) = oferta_noen_observada(t)
+                        - uso_noen_observado(t)
+
+El resultado se registra como:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = NO_ASIG
+metodo = USO_NO_ENERGETICO_APARENTE
+source_record_id = NOEN_APARENTE_{anio}
+estado_fuente = CAL
+
+Los valores con precisión completa son:
+
+- 2018: 2 573,7138 TJ;
+- 2019: 3 820,4817 TJ;
+- 2020: 1 961,8627 TJ;
+- 2021: 1 992,4814 TJ;
+- 2022: 2 440,9553 TJ;
+- 2023: 3 485,7676 TJ; y
+- 2024: 1 217,0207 TJ.
+
+Los siete valores se recalculan en cada ejecución. NO_ASIG indica que la
+utilización está cuantificada por identidad pero no puede asignarse a una unidad
+compradora. NOEN se excluye de la combustión.
+
+
+15. GASOLINAS DE 2019 SIN UNIDAD COMPRADORA IDENTIFICADA
+
+En 2019, la oferta de gasolinas excede los usos observados después de considerar
+comercio exterior y existencias. La magnitud excede el margen atribuible al
+redondeo y no se asigna a STAT.
+
+El flujo se calcula como:
+
+oferta_gas_observada(2019) = suma de GAS en Supply,
+                              excluyendo STAT y flujos aparentes
+
+uso_gas_observado(2019) = suma de GAS en Use,
+                           excluyendo STAT y flujos aparentes
+
+uso_gas_interno_aparente(2019) = oferta_gas_observada(2019)
+                                  - uso_gas_observado(2019)
+
+Con los datos publicados:
+
+uso_gas_interno_aparente(2019)
+= (13 456,25 - 11 567,03) kBEP x 5,81 TJ/kBEP
+= 10 976,3682 TJ
+
+El resultado se registra como:
+
+flow_group = Energy products
+lado = Use
+bloque = E
+unidad_sectorial = NO_ASIG
+metodo = USO_ENERGETICO_INTERNO_APARENTE
+source_record_id = GAS_USO_INTERNO_APARENTE_2019
+estado_fuente = CAL
+
+La regla se aplica únicamente a GAS en 2019. El valor no se redistribuye entre
+TR_BEN, IND_BEN o SERV. A diferencia de NOEN, GAS es un producto energético y se
+trata de forma específica al estimar emisiones.
+
+
+16. STAT Y CIERRE POR PRODUCTO
+
+Después de incorporar flujos directos y usos aparentes se calcula, para cada
+producto p y año t:
+
+diferencia_previa(p,t) = oferta_sin_STAT(p,t)
+                          - utilizacion_sin_STAT(p,t)
+
+La diferencia se registra como:
+
+flow_group = Energy products
+lado = Use
+bloque = SD
+unidad_sectorial = STAT
+metodo = saldo oferta menos uso por producto
+ajuste = discrepancia estadística
+source_record_id = STAT_{anio}_{producto}
+TJ = diferencia_previa(p,t)
+estado_fuente = FORMULA
+
+Los BEN publican dos decimales de kBEP. El semiancho de redondeo de una celda es:
+
+0,005 kBEP x 5,81 TJ/kBEP = 0,02905 TJ
+
+Para clasificar una fila STAT se compara su valor absoluto con el número de
+celdas no STAT del mismo producto y año multiplicado por 0,02905 TJ. Los 38
+flujos STAT cumplen ese criterio y se clasifican como redondeo; no permanece
+ningún residuo estadístico material.
+
+STAT se calcula después de NOEN y del uso aparente de GAS 2019. Este orden impide
+que una utilización interna cuantificada pero no asignada quede oculta como
+diferencia estadística.
+
+Al incorporar STAT:
+
+oferta_total(p,t) - utilizacion_total(p,t) = 0
+
+La tolerancia de cierre posterior a STAT es 0,00000001 TJ. El control general de
+la PSUT utiliza una tolerancia de 0,000001 TJ.
+
+
+17. CORRESPONDENCIA CON EL ARCHIVO BASE
+
+El archivo modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx materializa las
+reglas anteriores. El libro constituye evidencia de implementación: muestra la
+procedencia, las fórmulas y los controles, sin sustituir las definiciones
+conceptuales de esta nota.
+
+La correspondencia es la siguiente:
+
+Componente | Hoja | Campos o celdas | Regla verificable
+
+Observación BEN | DATOS_MODELO | A, B, C, D, F–L, S–V, AL–AM | Las filas con
+tipo_registro = BALANCE conservan identificador, año, fuente, producto, valor y
+signo originales. U convierte S mediante PARAMETROS!B4. V identifica los ceros
+incorporados durante la homologación.
+
+Parámetros | PARAMETROS | A4:B12 | B4 recupera factor_kbep_tj = 5,81 desde
+DATOS_MODELO; B5 contiene redondeo_kbep = 0,005; B6 calcula 0,02905 TJ; B7
+contiene la tolerancia de cierre de 0,00000001 TJ; B11 contiene la tolerancia de
+comparación PSUT de 0,000001 TJ.
+
+Regla de mapeo | DATOS_MODELO | filas con tipo_registro = MAPEO_PSUT; B–D,
+J–R y AM | Cada una de las 617 reglas identifica source_record_id, producto,
+grupo, lado, bloque, unidad, método, ajuste y nota. C conserva la clave compuesta
+de unión.
+
+Flujo directo | PSUT_LARGA | A–K | A–J reproducen la identidad de la regla. K
+busca source_record_id en DATOS_MODELO!B2:B3447, recupera valor_tj de
+DATOS_MODELO!U2:U3447 y aplica sin ajuste, valor absoluto o cambio de signo según
+J.
+
+Flujo aparente | PSUT_LARGA | K | Cuando metodo es
+USO_NO_ENERGETICO_APARENTE o USO_ENERGETICO_INTERNO_APARENTE, K calcula oferta
+menos utilización del mismo producto y año, excluye STAT y evita incluir otros
+flujos aparentes. El resultado se redondea internamente a diez decimales.
+
+Cierre STAT | PSUT_LARGA | K–M | Si source_record_id comienza con STAT_, K
+calcula oferta menos utilización excluyendo STAT. L clasifica redondeo o
+residuo_estadistico con PARAMETROS!B6. M asigna FORMULA. Los flujos aparentes se
+identifican CAL y los directos se marcan OK cuando encuentran exactamente una
+observación de origen.
+
+Matriz anual | PSUT | B3; secciones Energy from natural inputs, Energy products
+y Energy residuals | B3 selecciona el año. Las celdas utilizan COUNTIFS para
+distinguir ausencia de flujo y SUMIFS sobre PSUT_LARGA por año, producto, grupo,
+lado y unidad. Los totales de oferta y utilización se calculan por fila; el saldo
+es oferta menos utilización.
+
+Controles | QA | A6:D13 | Se verifican las 617 filas, los conteos anuales, STAT,
+los siete usos NOEN, el valor NOEN 2024, la ausencia de NOEN en STAT, el uso GAS
+2019 y la ausencia de residuos estadísticos.
+
+18. FÓRMULAS DE PSUT_LARGA
+
+18.1 Flujos con observación directa
+
+Para una fila i cuyo source_record_id corresponde a una observación BALANCE:
+
+base_i = valor_tj(source_record_id_i)
+
+si ajuste_i = sin ajuste:
+    TJ_i = base_i
+
+si ajuste_i = valor absoluto:
+    TJ_i = abs(base_i)
+
+si ajuste_i = cambio de signo:
+    TJ_i = -base_i
+
+La búsqueda se realiza por identificador exacto. No se utiliza el número físico
+de fila como clave metodológica.
+
+18.2 Flujos aparentes
+
+Para NOEN o GAS 2019:
+
+TJ_i = ROUND(
+       suma(Supply del producto y año, sin STAT)
+       - suma(Use del producto y año, sin STAT ni aparentes),
+       10)
+
+18.3 STAT
+
+Para una fila STAT:
+
+TJ_i = ROUND(
+       suma(Supply del producto y año, sin STAT)
+       - suma(Use del producto y año, sin STAT),
+       10)
+
+tipo_STAT_i = redondeo
+si abs(TJ_i) <= n_celdas_no_STAT(p,t) x 0,02905 TJ
+
+En caso contrario, tipo_STAT_i = residuo_estadistico y la fila requiere revisión.
+
+
+19. CONTROLES DE CALIDAD
+
+19.1 Integridad de la entrada
+
+- 1 778 registros BALANCE;
+- 617 registros MAPEO_PSUT;
+- 19 productos catalogados;
+- 8 parámetros en el archivo integrado;
+- registro_id sin duplicados;
+- source_record_id único para BALANCE;
+- clave_union única para MAPEO_PSUT;
+- años restringidos a 2018–2024; y
+- valores numéricos finitos.
+
+19.2 Conversión y trazabilidad
+
+- toda observación mapeada utiliza kBEP o una conversión explícita;
+- 5,81 se aplica una sola vez;
+- cada flujo directo encuentra una observación de origen;
+- año y producto coinciden entre origen y regla;
+- los flujos calculados utilizan claves descriptivas; y
+- la precisión de cálculo no se reemplaza por el formato de presentación.
+
+19.3 Controles por tratamiento
+
+- extracción fósil: suministro ENV = uso B = suministro del producto por B;
+- renovables: suministro ENV = captación total observada;
+- generación y autoproducción: entradas, salidas y grupos de flujo separados;
+- refinación: crudo utilizado y productos suministrados vinculados a sus propios
+  registros;
+- pérdidas: utilización de ELEC = suministro residual = recepción ENV;
+- comercio: importaciones en Supply-D-ROW y exportaciones en Use-H-ROW;
+- existencias: cambio de signo conservado;
+- NOEN: exactamente un uso aparente por año y ninguna fila NOEN en STAT;
+- GAS: un solo uso interno aparente, correspondiente a 2019; y
+- STAT: 38 filas clasificadas como redondeo.
+
+19.4 Cierre
+
+Para cada producto y año:
+
+abs(oferta_total - utilizacion_total)
+<= tolerancia_cierre_modelo_tj
+
+Para residuales eléctricos:
+
+suministro_residual_ENER = uso_residual_ENV
+
+
+20. RESULTADOS DE LA VERIFICACIÓN FINAL
+
+La comprobación del archivo base produjo los siguientes resultados:
+
+- DATOS_MODELO contiene 3 446 registros y 39 campos, con conteos coherentes por
+  tipo de registro;
+- PSUT_LARGA contiene 617 filas y 13 campos;
+- las 617 filas de PSUT_LARGA tienen fórmula en TJ, tipo_STAT y estado_fuente;
+- 571 flujos tienen estado OK, 8 estado CAL y 38 estado FORMULA;
+- 579 filas no son STAT y 38 se clasifican como redondeo;
+- no se detectaron fórmulas con errores ni resultados almacenados con errores;
+- QA registra 617 filas PSUT_LARGA, 86 filas para 2024, dos STAT en 2024, siete
+  usos aparentes NOEN, 1 217,0207 TJ de NOEN aparente en 2024, cero filas NOEN en
+  STAT, 10 976,3682 TJ de GAS no asignado en 2019 y cero residuos estadísticos;
+  y
+- todos los controles anteriores presentan estado OK.
+
+Los flujos por año son 94 en 2018, 86 en 2019, 86 en 2020, 88 en 2021, 90 en
+2022, 87 en 2023 y 86 en 2024. Las diferencias en el número de filas reflejan la
+presencia efectiva de productos y operaciones, no una estructura completada con
+filas sin evidencia.
+
+
+21. SECUENCIA DE REPRODUCCIÓN
+
+La reproducción sustantiva de la cuenta sigue este orden:
+
+1. incorporar los BEN de 2018–2024 y registrar su procedencia;
+2. transformar cada celda energética pertinente en una observación identificada;
+3. homologar productos, años, unidades y signos sin alterar valor_original;
+4. convertir kBEP a TJ mediante el parámetro 5,81;
+5. validar catálogos, identificadores y claves de unión;
+6. aplicar las reglas directas de extracción, suministro, transformación,
+   comercio, existencias y utilización;
+7. calcular los siete usos aparentes de NOEN;
+8. calcular el uso aparente de GAS de 2019;
+9. calcular STAT por producto y año;
+10. clasificar cada STAT según la precisión de publicación;
+11. comprobar identidades de productos, insumos naturales y residuales;
+12. verificar la unicidad, trazabilidad y cierre de PSUT_LARGA; y
+13. presentar la matriz anual a partir de la tabla larga.
+
+El orden de los pasos 7, 8 y 9 es sustantivo. Cambiarlo introduciría circularidad
+o convertiría una utilización material en una diferencia estadística.
+
+
+22. ALCANCE INTERPRETATIVO
+
+La PSUT permite determinar:
+
+- qué productos energéticos entran a la economía;
+- qué productos se producen internamente;
+- qué insumos naturales se extraen o captan;
+- qué productos se transforman;
+- qué unidades agregadas utilizan cada producto;
+- cuánto se importa, exporta o acumula; y
+- qué pérdidas energéticas se registran.
+
+La PSUT no permite determinar sin información adicional:
+
+- el consumo de cada rama dentro del agregado Industria;
+- el consumo operativo de las actividades mineras por separado;
+- la distribución del transporte por modo o residencia;
+- la tecnología específica de cada unidad consumidora; ni
+- el origen natural, cultivado o residual de cada unidad de leña.
+
+Estas fronteras derivan del nivel de detalle de la evidencia física y no de la
+omisión accidental de resultados.
+
+
+23. FUENTES Y REFERENCIAS METODOLÓGICAS
+
+Ministerio de Energía y Minas de Guatemala. Balances energéticos nacionales,
+2018–2024.
+
+FAO, IARNA-URL e INAB. Estudio de oferta y demanda de leña mediante WISDOM en
+Guatemala.
+
+Naciones Unidas. Sistema de Contabilidad Ambiental y Económica, Marco Central.
+
+Naciones Unidas. Sistema de Contabilidad Ambiental y Económica para la Energía.
+
+Naciones Unidas. Recomendaciones Internacionales para las Estadísticas de
+Energía.
+
+Naciones Unidas. Clasificación Industrial Internacional Uniforme de todas las
+actividades económicas, Revisión 4.

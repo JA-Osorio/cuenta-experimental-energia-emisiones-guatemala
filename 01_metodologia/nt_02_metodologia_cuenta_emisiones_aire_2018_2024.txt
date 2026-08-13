@@ -1,0 +1,871 @@
+NOTA METODOLÓGICA NT-02
+
+Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+
+METODOLOGÍA DE ELABORACIÓN
+
+Autores:
+
+Juan Alejandro Osorio
+Patricia Villatoro
+Noe Salguero
+José Carlos Soberanis
+
+Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
+en creditos.txt.
+
+PRESENTACIÓN
+
+La cuenta experimental de emisiones al aire enlaza la tabla física de oferta y
+utilización de energía (PSUT) con emisiones directas de CO2, CH4 y N2O. La
+actividad energética procede del balance energético incorporado a la PSUT; las
+correspondencias, factores y datos complementarios proceden del archivo base; y
+los resultados se calculan por registro antes de agregarse por año y unidad.
+
+La cobertura comprende 2018–2024. Para 2018–2022 se emplean datos anuales de las
+Tablas Comunes de Reporte (CRT). Para 2023 y 2024 se aplican reglas explícitas de
+prolongación cuando la fuente utilizada no aporta observaciones para esos años.
+La cuenta distingue valores observados, cálculos, aproximaciones y claves de
+notación, y conserva la relación entre cada resultado, su actividad y su factor o
+emisión de origen.
+
+La cuenta no sustituye el inventario nacional de gases de efecto invernadero. Su
+función es organizar, con una frontera contable común, las emisiones que pueden
+vincularse de forma verificable con los flujos energéticos de la PSUT y con los
+procesos agrícolas incorporados.
+
+
+1. OBJETO, COBERTURA Y FRONTERA
+
+1.1 Objeto
+
+El objeto es obtener una serie anual de emisiones directas que permita identificar:
+
+- la unidad que utiliza el producto energético o realiza el proceso emisor;
+- la actividad física o el valor oficial que sustenta el resultado;
+- la categoría IPCC y el grupo de factor aplicados;
+- el tratamiento del CO2 fósil y biogénico;
+- el año y el estado del factor; y
+- el carácter observado, calculado, aproximado o no cuantificado del resultado.
+
+1.2 Gases y módulos
+
+Se incluyen:
+
+- CO2 fósil directo;
+- CO2 de biomasa como partida informativa separada;
+- CH4;
+- N2O; y
+- CO2 equivalente calculado con una métrica común.
+
+Los registros se distribuyen en tres módulos mutuamente excluyentes:
+
+- COMBUSTION: uso energético de combustibles;
+- FUGITIVAS: extracción o producción de productos energéticos; y
+- AGRICULTURA: emisiones no energéticas de las categorías 3.A–3.J incorporadas.
+
+1.3 Exclusiones
+
+No se incluyen:
+
+- emisiones indirectas atribuidas al consumo de electricidad;
+- emisiones de ciclo de vida o incorporadas en importaciones;
+- UTCUTS/LULUCF y cambios en existencias de carbono;
+- residuos;
+- procesos industriales no incorporados expresamente;
+- gases fluorados; ni
+- NOx, CO y otros contaminantes atmosféricos.
+
+Una categoría sin valor numérico permanece sin cuantificación. La ausencia de un
+valor no se interpreta como emisión física igual a cero.
+
+
+2. FUENTES Y FUNCIÓN DE CADA INSUMO
+
+La elaboración utiliza cuatro fuentes principales:
+
+a) los balances energéticos nacionales del Ministerio de Energía y Minas (MEM),
+   que proporcionan los flujos físicos anuales de 2018–2024;
+
+b) las Tablas Comunes de Reporte, identificadas como UNFCCC_GTM_CRT_2024, que
+   proporcionan actividad, emisiones, factores implícitos y claves de notación
+   para 2018–2022;
+
+c) el valor agregado bruto real de Agricultura, ganadería, silvicultura y pesca,
+   publicado por el Banco de Guatemala a precios constantes de 2013, que se usa
+   como indicador de prolongación de las emisiones agrícolas; y
+
+d) el SCAE, el SCAE–Energía y las Directrices del IPCC, que sustentan la frontera
+   contable y las correspondencias conceptuales.
+
+La precedencia metodológica es: dato oficial del mismo año; operación reproducible
+sobre datos oficiales; aproximación identificada; y conservación de la clave de
+notación cuando no existe base numérica suficiente.
+
+
+3. CORRESPONDENCIA CON EL ARCHIVO BASE
+
+El archivo modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx conserva la
+cadena actividad → factor → resultado. DATOS_MODELO integra fuentes y reglas;
+PARAMETROS recupera constantes, VAB y coeficientes; PSUT_LARGA proporciona la
+actividad; EMISIONES_LARGA vincula cada actividad con su factor o emisión fuente y
+calcula el resultado; EMISIONES agrega los registros para consulta; y QA verifica
+conteos e identidades. La separación impide confundir valores fuente, operaciones
+intermedias y resultados agregados.
+
+3.1 DATOS_MODELO
+
+DATOS_MODELO es la tabla integrada del archivo base. Contiene 3 446 registros y
+39 campos. El campo tipo_registro distingue:
+
+- BALANCE;
+- MAPEO_PSUT;
+- REGLA_EMISION_ENERGIA;
+- FACTOR_EMISION_OBS;
+- ACTIVIDAD_REFINACION_OBS;
+- EMISION_AGRICULTURA_OBS;
+- VAB_AGRICULTURA;
+- PARAMETRO;
+- CATALOGO_PRODUCTO; y
+- CATALOGO_UNIDAD.
+
+Los campos registro_id y clave_union identifican cada registro y su clave de
+enlace. Los campos anio, anio_fuente y estado conservan la referencia temporal y
+la condición del dato. fuente_id, titulo_fuente, url_fuente, fuente_pagina y nota
+documentan su procedencia.
+
+Los registros energéticos utilizan producto, nombre_producto, lado, bloque,
+unidad_sectorial, metodo, ajuste, valor_original, unidad_original y valor_tj. Los
+registros de emisiones añaden categoria_ipcc, categoria_nombre, grupo_factor,
+gas, valor_factor, unidad_factor, tratamiento_co2 y emision_kt_gas. Los registros
+económicos y de parámetros utilizan valor_vab, unidad_vab, parametro,
+valor_parametro y unidad_parametro. incluir y clave_notacion determinan si existe
+una base numérica aplicable.
+
+En los registros BALANCE, valor_tj se calcula a partir de valor_original mediante:
+
+valor_tj = valor_original x 5,81 TJ/kBEP
+
+El valor 5,81 se obtiene de PARAMETROS y no se escribe nuevamente en cada fórmula.
+Los valores originales y los valores convertidos se conservan simultáneamente.
+
+3.2 PARAMETROS
+
+PARAMETROS reúne, mediante fórmulas, los valores utilizados por el cálculo:
+
+- factor_kbep_tj = 5,81 TJ/kBEP;
+- redondeo_kbep = 0,005 kBEP;
+- tolerancia de redondeo por celda = 0,02905 TJ;
+- tolerancia de cierre del modelo = 0,00000001 TJ;
+- kg_por_kt = 1 000 000;
+- GWP_CH4 = 28;
+- GWP_N2O = 265;
+- tolerancia QA de la PSUT = 0,000001 TJ; y
+- tolerancia QA de emisiones = 0,000000001 kt.
+
+Las filas 16–23 contienen el VAB agrícola de 2018–2024 y su índice con 2022 = 1.
+Las filas 26–33 contienen, para cada año, el petróleo crudo procesado en la PSUT y
+el coeficiente de actividad de refinación. PARAMETROS no reemplaza a las fuentes:
+recupera de DATOS_MODELO los valores que intervienen en las fórmulas.
+
+3.3 PSUT_LARGA
+
+PSUT_LARGA contiene 617 registros de actividad física. Cada fila conserva:
+
+- registro_mapeo;
+- anio;
+- producto;
+- flow_group;
+- lado;
+- bloque;
+- unidad_sectorial;
+- source_record_id;
+- metodo;
+- ajuste;
+- TJ;
+- tipo_STAT; y
+- estado_fuente.
+
+Esta tabla es la fuente inmediata de la actividad energética empleada en la
+cuenta. Los campos que identifican la actividad no se sustituyen por la posición
+de una celda.
+
+3.4 EMISIONES_LARGA
+
+EMISIONES_LARGA contiene 374 registros: 265 de combustión, 18 de fugitivas y 91
+de agricultura. Cada fila representa una combinación única de año, módulo,
+unidad, categoría y producto o gas de origen.
+
+Sus campos A:AH son:
+
+- clave_emision;
+- anio;
+- unidad_sectorial_agregada;
+- modulo;
+- categoria_ipcc;
+- categoria_nombre;
+- producto_std;
+- metodo_asignacion;
+- unidad_origen_psut;
+- psut_side;
+- psut_block_code;
+- source_record_id;
+- actividad_base_tj;
+- actividad_emisiones_tj;
+- grupo_factor;
+- tratamiento_co2;
+- anio_factor;
+- estado_factor;
+- ef_co2_kg_tj;
+- ef_ch4_kg_tj;
+- ef_n2o_kg_tj;
+- gas_fuente;
+- emision_fuente_kt_gas;
+- co2_directo_kt;
+- co2_biogenico_memo_kt;
+- ch4_kt;
+- n2o_kt;
+- co2e_kt;
+- estado_resultado;
+- clave_notacion;
+- metodo_calculo;
+- fuente_id_actividad;
+- fuente_id_factor; y
+- nota.
+
+La actividad, los factores y las emisiones se obtienen mediante fórmulas. Los
+resultados agregados no se pegan sobre esta tabla.
+
+3.5 EMISIONES y QA
+
+EMISIONES es una vista de consulta. El año se elige en B3; las filas 7–13
+presentan actividad y emisiones por unidad; y las filas 18–24 presentan la serie
+anual comparable. Las celdas de resultado agregan EMISIONES_LARGA mediante sumas
+condicionadas.
+
+QA contiene los controles de integridad, conteo e identidad. No introduce datos
+ni resultados adicionales: verifica la cadena de cálculo.
+
+
+4. CORRESPONDENCIA ENTRE LA PSUT Y LAS CATEGORÍAS DE EMISIÓN
+
+Los registros REGLA_EMISION_ENERGIA de DATOS_MODELO establecen la correspondencia
+entre cada flujo de la PSUT y su tratamiento en la cuenta. La unión se realiza
+con source_record_id y se verifica con anio, lado, bloque, unidad_sectorial y
+metodo. La regla aporta categoria_ipcc, grupo_factor, tratamiento_co2, incluir y,
+cuando corresponde, clave_notacion.
+
+La correspondencia principal es:
+
+- ENER, generación: 1.A.1.a.i;
+- ENER, refinación: 1.A.1.b;
+- ENER, otras industrias de la energía: 1.A.1.c cuando existe actividad aplicable;
+- IND_BEN: 1.A.2;
+- TR_BEN: 1.A.3;
+- SERV: 1.A.4.a;
+- HH: 1.A.4.b;
+- A, combustión: 1.A.4.c, conservada con clave NO;
+- B, fugitivas de carbón: 1.B.1.a;
+- B, fugitivas de petróleo: 1.B.2.a.ii; y
+- B, fugitivas de gas natural: 1.B.2.b.ii.
+
+La etiqueta oficial fuente “1.A.2 — Industrias manufactureras y construcción” se
+aplica al agregado IND_BEN. No constituye una desagregación adicional de la PSUT.
+
+Los grupos de factor separan BIOMASS, SOLID_FUELS, LIQUID_FUELS, GASEOUS_FUELS,
+FOSSIL_AGG, CERO_DIRECTO, FUGITIVA_PETROLEO y GAS_COMPUESTO_2019, entre otros.
+La asignación depende conjuntamente de la categoría y del producto; no se aplica
+un factor por semejanza del nombre del combustible.
+
+
+5. DETERMINACIÓN DE LA ACTIVIDAD ENERGÉTICA
+
+5.1 Conversión y selección
+
+La actividad de combustión procede, como regla general, del lado Use de
+PSUT_LARGA. Se seleccionan únicamente los registros cuyo método y regla indican
+un uso energético susceptible de combustión. Producción, importación, variación
+de existencias, pérdidas, usos no energéticos y diferencias estadísticas no se
+tratan automáticamente como actividad emisora.
+
+Para cada fila de EMISIONES_LARGA, actividad_base_tj se calcula como:
+
+actividad_base_tj
+  = SUMA(PSUT_LARGA.TJ)
+
+sujeta simultáneamente a:
+
+- PSUT_LARGA.anio = EMISIONES_LARGA.anio;
+- PSUT_LARGA.source_record_id = EMISIONES_LARGA.source_record_id;
+- PSUT_LARGA.lado = EMISIONES_LARGA.psut_side;
+- PSUT_LARGA.bloque = EMISIONES_LARGA.psut_block_code;
+- PSUT_LARGA.unidad_sectorial = EMISIONES_LARGA.unidad_origen_psut; y
+- PSUT_LARGA.metodo = EMISIONES_LARGA.metodo_asignacion.
+
+La combinación de estos seis criterios impide que un identificador repetido en
+otro lado, bloque o método sea incorporado por error.
+
+5.2 Actividad base y actividad de emisiones
+
+En los registros ordinarios:
+
+actividad_emisiones_tj = actividad_base_tj
+
+En refinación, actividad_emisiones_tj resulta de aplicar el coeficiente descrito
+en la sección 10. Las emisiones agrícolas utilizan emision_fuente_kt_gas y no una
+actividad energética de PSUT_LARGA.
+
+La extracción utilizada en FUGITIVAS procede del lado Supply, bloque A, unidad de
+origen ENV y método EXTRACCION_B. La unidad agregada de presentación es B. Esta
+actividad no se incorpora a COMBUSTION.
+
+
+6. FACTORES DE EMISIÓN DE 2018–2022
+
+Los registros FACTOR_EMISION_OBS de DATOS_MODELO se identifican por:
+
+anio | categoria_ipcc | grupo_factor | gas
+
+El valor se conserva en valor_factor, la unidad en unidad_factor y la referencia
+en fuente_id. Para cada año t, categoría c, grupo f y gas g, el factor implícito
+responde a:
+
+FE(g,c,f,t) [kg/TJ]
+  = emisión_CRT(g,c,f,t) [kt] x 1 000 000
+    / actividad_CRT(c,f,t) [TJ]
+
+Solo se emplea un factor cuando la actividad y la emisión se refieren al mismo
+año, categoría, grupo de combustible y frontera. No se divide entre cero ni se
+obtiene un factor numérico de una clave de notación.
+
+EMISIONES_LARGA recupera los factores en ef_co2_kg_tj, ef_ch4_kg_tj y
+ef_n2o_kg_tj mediante la clave de cuatro componentes. En 2018–2022:
+
+anio_factor = anio de la actividad
+
+estado_factor = OBS
+
+Los factores CERO_DIRECTO se generan como ceros metodológicos y se identifican
+como CAL. Las combinaciones sin factor numérico se identifican como NO y mantienen
+vacíos los campos de factor.
+
+
+7. REGLA TEMPORAL PARA 2023 Y 2024
+
+Las CRT utilizadas cubren hasta 2022. Para los registros energéticos con factor
+positivo derivado de las CRT se mantiene el último factor disponible:
+
+FE_aplicado(g,c,f,t) = FE(g,c,f,t), para 2018 <= t <= 2022
+
+FE_aplicado(g,c,f,t) = FE(g,c,f,2022), para t = 2023 o 2024
+
+Por ello, en esos registros EMISIONES_LARGA consigna anio_factor = 2022 y
+estado_factor = PRX en 2023–2024. La actividad sigue correspondiendo al año
+registrado en la PSUT; solo el factor se prolonga. Los ceros metodológicos
+CERO_DIRECTO permanecen identificados como CAL.
+
+La regla supone que la intensidad media representada por el factor agregado de
+2022 permanece aplicable durante los dos años siguientes. No convierte los
+resultados en observaciones del inventario.
+
+
+8. CÁLCULO POR REGISTRO
+
+Para cada registro energético con actividad y factor numéricos:
+
+CO2_calculado_kt
+  = actividad_emisiones_tj x ef_co2_kg_tj / 1 000 000
+
+CH4_kt
+  = actividad_emisiones_tj x ef_ch4_kg_tj / 1 000 000
+
+N2O_kt
+  = actividad_emisiones_tj x ef_n2o_kg_tj / 1 000 000
+
+El campo tratamiento_co2 determina el destino del CO2 calculado:
+
+- FOSIL: se registra en co2_directo_kt;
+- BIOGENICO: se registra en co2_biogenico_memo_kt y co2_directo_kt = 0;
+- SIN_EMISION_DIRECTA: los tres gases directos son 0; y
+- NO_APLICA: no se fuerza un resultado de CO2.
+
+La precisión completa se conserva en las fórmulas y en los archivos tabulares. El
+máximo de dos decimales corresponde a la presentación, no a la sustitución de los
+valores calculados.
+
+
+9. ELECTRICIDAD Y FUENTES SIN COMBUSTIÓN DIRECTA
+
+El consumo final de electricidad se asocia con CERO_DIRECTO. Para la unidad
+consumidora:
+
+CO2_directo = CH4 = N2O = 0
+
+Las emisiones de los combustibles utilizados para generar la electricidad se
+mantienen en ENER. No se aplica un factor de red a los consumidores, porque ello
+duplicaría las emisiones ya atribuidas a la generación.
+
+La energía hídrica, eólica, solar y la geoenergía tampoco reciben emisiones de
+combustión directa en esta cuenta. El cero indica la ausencia de combustión en el
+flujo tratado; no representa una evaluación de ciclo de vida.
+
+
+10. BIOMASA Y CO2 BIOGÉNICO
+
+Bagazo de caña, biogás y leña se asocian con BIOMASS y tratamiento BIOGENICO. El
+CO2 se calcula con el factor correspondiente, pero se informa por separado:
+
+CO2_biogenico_memo_kt
+  = actividad_emisiones_tj x ef_co2_kg_tj / 1 000 000
+
+co2_directo_kt = 0
+
+El CH4 y el N2O de la combustión de biomasa sí se incluyen:
+
+CH4_kt = actividad_emisiones_tj x ef_ch4_kg_tj / 1 000 000
+
+N2O_kt = actividad_emisiones_tj x ef_n2o_kg_tj / 1 000 000
+
+El CO2 biogénico no se suma a CO2e. Su separación no equivale a afirmar
+neutralidad de carbono; los cambios de existencias y UTCUTS/LULUCF se encuentran
+fuera de la frontera.
+
+La oferta de leña de A no se interpreta como combustión. Las emisiones se
+reconocen cuando la leña aparece como utilización energética de una unidad
+identificada.
+
+
+11. REFINACIÓN DE PETRÓLEO
+
+El petróleo crudo procesado es un insumo de transformación, no la cantidad de
+combustible quemado por la refinería. Para evitar aplicar el factor de 1.A.1.b a
+todo el crudo, PARAMETROS calcula un coeficiente anual.
+
+En las filas 26–33 de PARAMETROS:
+
+crudo_PSUT(t)
+  = SUMA(PSUT_LARGA.TJ)
+
+con anio = t, producto = PETR, lado = Use y
+metodo = TRANSFORMACION_REFINERIA.
+
+Para 2018–2022:
+
+coef_refineria(t)
+  = actividad_refinacion_CRT(t) / crudo_PSUT(t)
+
+La actividad CRT procede de los registros ACTIVIDAD_REFINACION_OBS de
+DATOS_MODELO, campo valor_tj, categoría 1.A.1.b. En 2023 y 2024 se mantiene el
+coeficiente de 2022:
+
+coef_refineria_aplicado(t) = coef_refineria(t), para 2018 <= t <= 2022
+
+coef_refineria_aplicado(t) = coef_refineria(2022), para t = 2023 o 2024
+
+En EMISIONES_LARGA:
+
+actividad_emisiones_tj
+  = actividad_base_tj x coef_refineria_aplicado(t)
+
+Las emisiones se obtienen después con los factores LIQUID_FUELS de 1.A.1.b. En
+2024, actividad_base_tj = 2 930,0992 TJ, el coeficiente aplicado es
+0,00477647962852211 y actividad_emisiones_tj = 13,9955591383489 TJ. El CO2e
+resultante es 1,0145952154877 kt.
+
+
+12. USOS NO ENERGÉTICOS
+
+NOEN corresponde a usos no energéticos. En la PSUT, la utilización interna
+aparente se calcula como:
+
+uso_NOEN_aparente(t)
+  = oferta_NOEN(t) - usos_NOEN_observados(t)
+
+Los registros REGLA_EMISION_ENERGIA asociados con NOEN tienen incluir = 0. En
+consecuencia, el flujo se conserva en PSUT_LARGA para el cierre físico, pero no se
+convierte en actividad de combustión ni aparece entre los registros cuantificados
+de EMISIONES_LARGA.
+
+La exclusión no implica que todos los usos de materias primas carezcan de
+emisiones de proceso. Significa que esas emisiones no se incorporan sin una
+actividad y una correspondencia propias.
+
+
+13. GASOLINAS NO ASIGNADAS EN 2019
+
+El código GAS corresponde a gasolinas; GN corresponde a gas natural. Esta
+distinción se mantiene en producto_std y en las claves de unión.
+
+En 2019, el total de control de GAS es 13 456,25 kBEP y los usos observados de
+TR_BEN, IND_BEN y SERV suman 11 567,03 kBEP. La diferencia es:
+
+uso_GAS_no_asignado_2019
+  = 13 456,25 - 11 567,03
+  = 1 889,22 kBEP
+  = 10 976,3682 TJ
+
+El registro se conserva en NO_ASIG con método USO_ENERGETICO_INTERNO_APARENTE. No
+se distribuye entre las unidades observadas ni se clasifica como diferencia de
+redondeo.
+
+Los factores GAS_COMPUESTO_2019 se calculan, para cada gas, mediante:
+
+FE_compuesto(g,2019)
+  = [suma_s actividad_GAS(s,2019) x FE(g,c_s,2019)]
+    / [suma_s actividad_GAS(s,2019)]
+
+donde s pertenece a {TR_BEN, IND_BEN, SERV}. En EMISIONES_LARGA las fórmulas
+ponderan las tres actividades observadas y sus factores correspondientes. Los
+resultados son:
+
+- CO2: 69 827,9121313056 kg/TJ;
+- CH4: 17,0631285460481 kg/TJ; y
+- N2O: 3,37365746315288 kg/TJ.
+
+El factor se identifica como PRX porque depende de una ponderación de usos
+observados y no de una categoría sectorial identificada para la diferencia. Las
+emisiones son:
+
+- CO2: 766,456874190458 kt;
+- CH4: 0,187291181565355 kt;
+- N2O: 0,037030506496244 kt; y
+- CO2e: 781,514111495792 kt.
+
+
+14. EMISIONES FUGITIVAS
+
+Las emisiones fugitivas se calculan sobre la extracción registrada en
+PSUT_LARGA, no sobre la combustión ni sobre la oferta total. Las correspondencias
+son:
+
+- CRBN: 1.B.1.a, grupo NO;
+- PETR: 1.B.2.a.ii, grupo FUGITIVA_PETROLEO; y
+- GN: 1.B.2.b.ii, grupo NO.
+
+Para una categoría c, producto p, gas g y año t con datos numéricos:
+
+FE_fugitivo(g,c,p,t) [kg/TJ]
+  = emisión_fugitiva_CRT(g,c,t) [kt] x 1 000 000
+    / extracción_PSUT(p,t) [TJ]
+
+emisión_fugitiva_kt(g,p,t)
+  = actividad_emisiones_tj(p,t) x FE_fugitivo(g,c,p,t) / 1 000 000
+
+Para 2018–2022 se utiliza el factor anual y para 2023–2024 el factor de 2022 con
+estado PRX. Solo PETR dispone de valores numéricos positivos suficientes para
+cuantificar CO2 y CH4. CRBN y GN mantienen estado NO y campos de emisiones vacíos;
+no se sustituyen por ceros ni por factores por defecto.
+
+Como control, en 2024 PETR presenta 10 735,3113 TJ de actividad, factores de
+0,00676909343060816 kg CO2/TJ y 0,0928778003966022 kg CH4/TJ, y un resultado de
+0,0279906871284664 kt de CO2e.
+
+
+15. EMISIONES AGRÍCOLAS DE 2018–2022
+
+Los registros EMISION_AGRICULTURA_OBS de DATOS_MODELO conservan anio,
+categoria_ipcc, gas, emision_kt_gas, estado, clave_notacion y fuente_id. En
+EMISIONES_LARGA se asignan a la unidad A y al módulo AGRICULTURA. No se obtienen de
+PSUT_LARGA ni se mezclan con 1.A.4.c.
+
+Se incorporan las categorías siguientes:
+
+- 3.A Fermentación entérica: CH4;
+- 3.B Gestión del estiércol: CH4 y N2O;
+- 3.C Cultivo de arroz: CH4;
+- 3.D Suelos agrícolas: N2O;
+- 3.E Quema prescrita de sabanas: CH4 y N2O;
+- 3.F Quema de residuos agrícolas en el campo: CH4 y N2O;
+- 3.G Encalado: clave NO;
+- 3.H Aplicación de urea: CO2;
+- 3.I Otros fertilizantes que contienen carbono: clave NO; y
+- 3.J Otros: clave NO.
+
+Los valores numéricos de 3.A–3.E se incorporan por categoría, gas y año con
+estado OBS.
+
+15.1 Residual de 3.F
+
+La fuente no aporta 3.F como un valor independiente utilizable. Para cada año de
+2018–2022 y para g en {CH4, N2O}, se calcula:
+
+E(3.F,g,t)
+  = E(3,g,t)
+    - [E(3.A,g,t) + E(3.B,g,t) + E(3.C,g,t)
+       + E(3.D,g,t) + E(3.E,g,t)]
+
+Se restan únicamente los componentes numéricos aplicables a cada gas. El resultado
+se registra con estado CAL y método TOTAL_SECTOR_MENOS_COMPONENTES. Debe ser no
+negativo y restaurar el total del sector 3 dentro de la precisión de la fuente.
+
+En 2022, los residuales son 4,44306595293898 kt de CH4 y
+0,1151905987799 kt de N2O.
+
+15.2 Tratamiento de 3.H
+
+El CO2 numérico del sector 3 se asigna a 3.H porque 3.G y 3.I mantienen clave NO y
+no existe otro componente numérico de CO2 que deba separarse en la fuente
+utilizada. EMISIONES_LARGA recupera el total sectorial de CO2 de DATOS_MODELO y lo
+registra con método EMISION_OBSERVADA_CRT.
+
+La asignación depende de la estructura observada en las CRT. En 2022, 3.H registra
+32,3869824 kt de CO2. Las filas 3.G, 3.I y 3.J permanecen sin valor numérico.
+
+
+16. PROLONGACIÓN AGRÍCOLA MEDIANTE VAB
+
+DATOS_MODELO contiene un registro VAB_AGRICULTURA por año, identificado con
+BANGUAT_SCN_2013. PARAMETROS recupera los valores y calcula:
+
+indice_VAB_A(t) = VAB_A(t) / VAB_A(2022)
+
+Los valores empleados son:
+
+- 2022: 52 956,7041104915; índice 1;
+- 2023: 53 690,9655963475; índice 1,01386531692614; y
+- 2024: 53 734,6603947955; índice 1,0146904211161.
+
+Para cada categoría y gas con valor numérico en 2022:
+
+E_PRX(c,g,t) = E(c,g,2022) x indice_VAB_A(t)
+
+La fórmula se aplica a cada registro de 2022. El residual 3.F de 2023 y 2024 parte
+del residual calculado de 2022; 3.H parte del CO2 de 3.H de 2022. Los resultados
+numéricos se identifican como PRX.
+
+Las categorías con clave NO en 2022 permanecen sin valor en 2023 y 2024. No se
+multiplica la clave ni se sustituye por cero.
+
+El VAB representa una aproximación agregada: supone que las emisiones de cada
+registro varían en la misma proporción que la actividad económica agrícola real,
+manteniendo la composición y la intensidad de 2022. Por ello, no equivale a una
+observación de ganado, fertilizantes, arroz, suelos o quema para esos años.
+
+
+17. CO2 EQUIVALENTE, ESTADOS Y CLAVE NO
+
+17.1 Conversión a CO2 equivalente
+
+PARAMETROS establece kg_por_kt = 1 000 000. Para agregar los gases se utilizaron
+potenciales de calentamiento global a 100 años del Quinto Informe de Evaluación
+del IPCC (AR5), sin retroalimentación clima–carbono: 1 para CO2, 28 para CH4 y
+265 para N2O (IPCC, 2013, tabla 8.7). Para cada registro:
+
+co2e_kt
+  = co2_directo_kt + 28 x ch4_kt + 265 x n2o_kt
+
+El CO2 biogénico informativo no interviene en la ecuación.
+
+17.2 Estados
+
+Se utilizan cuatro estados:
+
+OBS
+  Valor numérico procedente de la fuente para el año correspondiente.
+
+CAL
+  Valor obtenido mediante una conversión, suma, diferencia, cociente o producto
+  reproducible.
+
+PRX
+  Valor o factor obtenido mediante una prolongación o ponderación explícita.
+
+NO
+  Clave de notación que indica ausencia de un valor numérico aplicable. NO no es
+  el gas monóxido de nitrógeno y no equivale a cero.
+
+estado_factor y estado_resultado se conservan por separado. Un resultado puede
+ser CAL porque la multiplicación es exacta y, al mismo tiempo, depender de un
+factor PRX. Un cero directo definido por la correspondencia se registra como CAL;
+una ausencia comunicada por la fuente permanece NO.
+
+
+18. VISTAS DE RESULTADOS
+
+18.1 Vista por año y unidad
+
+EMISIONES utiliza el año seleccionado en B3. Las filas 8–13 suman
+EMISIONES_LARGA por anio y unidad_sectorial_agregada:
+
+- fila 8: actividad_emisiones_tj;
+- fila 9: co2_directo_kt;
+- fila 10: co2_biogenico_memo_kt;
+- fila 11: ch4_kt;
+- fila 12: n2o_kt; y
+- fila 13: co2e_kt.
+
+La columna J presenta el total del año. Una celda vacía conserva la ausencia de
+valor; no se rellena automáticamente con cero.
+
+18.2 Serie anual
+
+Las filas 18–24 presentan, para 2018–2024:
+
+- CO2e del módulo energético, definido como modulo distinto de AGRICULTURA;
+- CO2e del módulo AGRICULTURA;
+- CO2e total;
+- CO2 directo;
+- CO2 biogénico informativo;
+- CH4; y
+- N2O.
+
+Cada cifra procede de EMISIONES_LARGA mediante sumas condicionadas. La vista no
+contiene resultados independientes de la tabla larga.
+
+
+19. CONTROLES DE CALIDAD
+
+Los controles se ejecutan sobre las tablas con precisión completa.
+
+19.1 Integridad estructural
+
+- DATOS_MODELO contiene 3 446 registros y 39 campos.
+- PSUT_LARGA contiene 617 registros.
+- EMISIONES_LARGA contiene 374 registros.
+- La cuenta contiene siete años, de 2018 a 2024.
+- Cada clave_emision es única.
+- No existen errores de referencia, división entre cero, nombre o valor en las
+  fórmulas del libro.
+
+19.2 Controles de actividad
+
+QA comprueba:
+
+- 617 filas en PSUT_LARGA;
+- 86 filas de PSUT para 2024;
+- dos registros STAT en 2024;
+- siete registros NO_ASIG de NOEN en 2018–2024;
+- 1 217,0207 TJ de uso aparente de NOEN en 2024;
+- ausencia de registros NOEN dentro de STAT;
+- 10 976,3682 TJ de GAS sin asignación en 2019; y
+- ausencia de residuos estadísticos distintos de cero.
+
+19.3 Controles de emisiones
+
+QA comprueba:
+
+- 374 filas en EMISIONES_LARGA;
+- un único registro de GAS sin asignación en 2019;
+- siete años con emisiones; y
+- la identidad de CO2e dentro de 0,000000001 kt.
+
+La identidad se evalúa como:
+
+diferencia_CO2e
+  = co2e_kt
+    - (co2_directo_kt + 28 x ch4_kt + 265 x n2o_kt)
+
+El control general exige además que:
+
+- la actividad y el factor tengan categorías, años y unidades compatibles;
+- NOEN no reciba factores de combustión;
+- la electricidad de uso final tenga emisión directa cero;
+- el uso GAS no asignado de 2019 aparezca una sola vez;
+- la extracción no se duplique en COMBUSTION y FUGITIVAS;
+- 3.F reproduzca el total agrícola por gas;
+- 3.G, 3.I y 3.J permanezcan sin valores numéricos;
+- el CO2 biogénico no se sume al CO2 directo ni al CO2e; y
+- cada resultado conserve fuente_id_actividad y fuente_id_factor.
+
+19.4 Valores de control
+
+El total anual de CO2e es:
+
+- 2018: 28 612,8775533491 kt;
+- 2019: 29 730,9837653987 kt;
+- 2020: 27 015,6898353380 kt;
+- 2021: 29 978,9646732626 kt;
+- 2022: 28 320,9846840887 kt;
+- 2023: 30 852,2910573021 kt; y
+- 2024: 33 159,6071488939 kt.
+
+En 2023 y 2024, todos los registros con co2e_kt positivo cumplen al menos una
+de estas condiciones: estado_factor = PRX o estado_resultado = PRX. La suma de
+esos registros equivale al 100 % del CO2e cuantificado de cada año. En
+combustión y fugitivas, la actividad pertenece al año corriente de la PSUT y el
+factor prolongado desde 2022 es PRX; en agricultura, el resultado prolongado
+mediante VAB es PRX. Por esta razón, un registro energético puede conservar
+estado_resultado = CAL —la multiplicación es reproducible— y depender al mismo
+tiempo de estado_factor = PRX. Los ceros directos y las claves NO no aportan
+magnitud al total cuantificado y no alteran este porcentaje.
+
+Para 2024, los valores de control por gas son:
+
+- CO2 directo: 22 834,2454727240 kt;
+- CO2 biogénico informativo: 46 107,3104363208 kt;
+- CH4: 301,372719031487 kt;
+- N2O: 7,1204737482575 kt; y
+- CO2e: 33 159,6071488939 kt.
+
+Las diferencias visibles al mostrar dos decimales no se corrigen alterando los
+datos. Los controles utilizan los valores sin redondear.
+
+
+20. TRAZABILIDAD E INCERTIDUMBRE
+
+La trazabilidad depende de conservar en cada registro:
+
+- clave_emision y source_record_id;
+- año de la actividad y año del factor;
+- lado, bloque, unidad de origen y método de asignación;
+- categoría IPCC, grupo de factor y tratamiento del CO2;
+- estado del factor, estado del resultado y clave de notación;
+- fuente de actividad y fuente de factor o emisión; y
+- valores intermedios de actividad y factores.
+
+Los campos fuente_pagina y source_record_id documentan 392 localizadores de los
+insumos de emisiones: 233 observaciones externas con identificador de
+extracción, 90 reglas internas CERO_DIRECTO y 69 claves NO sin valor numérico.
+Las observaciones externas conservan tabla, año, categoría, gas e identificador.
+Los ceros metodológicos remiten a la regla interna y no a una celda CRT. En las
+claves NO, la localización permanece a nivel de tabla porque no existe un valor
+numérico externo que identificar. Los localizadores se recuperaron de los
+registros de extracción integrados; la comprobación directa de la celda primaria
+requiere reabrir los archivos oficiales correspondientes.
+
+Las principales fuentes de incertidumbre son:
+
+- la agregación sectorial del balance energético;
+- el uso de factores medios de categoría;
+- las diferencias de frontera entre el balance y las CRT;
+- la prolongación de factores de 2022 a 2023–2024;
+- el coeficiente de actividad de refinación;
+- los factores fugitivos por unidad de extracción;
+- la ponderación del uso de gasolinas no asignado en 2019;
+- la obtención residual de 3.F;
+- la asignación del CO2 sectorial a 3.H; y
+- la prolongación agrícola mediante VAB.
+
+Los estados CAL y PRX no son equivalentes. CAL informa que el valor procede de
+una fórmula reproducible; PRX informa que la fórmula incorpora una hipótesis de
+aproximación. La interpretación de la tendencia 2023–2024 debe mantener visible
+esa diferencia.
+
+
+21. REFERENCIAS METODOLÓGICAS
+
+Naciones Unidas. Sistema de Contabilidad Ambiental y Económica, Marco Central.
+
+Naciones Unidas. Sistema de Contabilidad Ambiental y Económica para la Energía.
+
+IPCC. Directrices de 2006 para los inventarios nacionales de gases de efecto
+invernadero.
+
+IPCC. Refinamiento de 2019 de las Directrices de 2006 para los inventarios
+nacionales de gases de efecto invernadero.
+
+IPCC. 2013. Climate Change 2013: The Physical Science Basis. Contribution of
+Working Group I to the Fifth Assessment Report of the Intergovernmental Panel
+on Climate Change. Stocker, T. F. et al. (eds.). Cambridge University Press,
+Cambridge y Nueva York. Tabla 8.7.
+
+Gobierno de Guatemala y Convención Marco de las Naciones Unidas sobre el Cambio
+Climático. Tablas Comunes de Reporte de Guatemala.
+
+Ministerio de Energía y Minas. Balances energéticos nacionales, 2018–2024.
+
+Banco de Guatemala. Producto interno bruto por actividad económica a precios
+constantes de 2013.
+
+United Nations Statistics Division. Clasificación Industrial Internacional
+Uniforme de todas las actividades económicas, Revisión 4.
