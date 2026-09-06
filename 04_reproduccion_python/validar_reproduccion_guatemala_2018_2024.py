@@ -16,14 +16,17 @@ Ejemplo:
 
     python validar_reproduccion_guatemala_2018_2024.py \
         --generados ./salida \
-        --referencias ../datasets_finales
+        --referencias ../02_resultados_y_diccionario
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
+import posixpath
 import sys
+import xml.etree.ElementTree as ET
+import zipfile
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
@@ -105,6 +108,8 @@ CAMPOS_NUMERICOS_EMISIONES = {
 
 GWP_CH4 = Decimal("28")
 GWP_N2O = Decimal("265")
+# Precisión del BEN documentada en NT-01: 0,005 kBEP × 5,81 TJ/kBEP.
+REDONDEO_CELDA_TJ = Decimal("0.02905")
 MAXIMO_EJEMPLOS = 10
 
 
@@ -437,6 +442,30 @@ def validar_psut(
         detalle_elementos(residuos),
     )
 
+    cantidades = Counter(
+        (fila.get("anio"), fila.get("producto"))
+        for fila in registros
+        if fila.get("flow_group") == "Energy products"
+        and fila.get("unidad_sectorial") != "STAT"
+    )
+    errores_stat = []
+    for fila in registros:
+        if fila.get("unidad_sectorial") != "STAT":
+            continue
+        limite = cantidades[(fila.get("anio"), fila.get("producto"))] * REDONDEO_CELDA_TJ
+        try:
+            valor = a_decimal(fila.get("TJ", ""), f"STAT/{fila.get('registro_mapeo', '')}")
+            correcto = abs(valor) <= limite and fila.get("tipo_STAT") == "redondeo"
+        except ValueError:
+            correcto = False
+        if not correcto:
+            errores_stat.append((fila.get("registro_mapeo"), fila.get("TJ"), str(limite)))
+    informe.comprobar(
+        not errores_stat,
+        f"PSUT {etiqueta}: STAT respeta el limite de redondeo antes del cierre",
+        detalle_elementos(errores_stat),
+    )
+
 
 def validar_emisiones(
     etiqueta: str,
@@ -445,7 +474,7 @@ def validar_emisiones(
     tolerancia_emisiones: Decimal,
     informe: Informe,
 ) -> dict[str, Decimal]:
-    """Comprueba estructura, cobertura e identidad de CO2e sin CO2 biogenico."""
+    """Comprueba gases, disponibilidad y subtotal CO2e sin CO2 biogenico."""
 
     validar_esquema(
         f"Emisiones {etiqueta}", encabezado, COLUMNAS_EMISIONES, informe
@@ -478,6 +507,9 @@ def validar_emisiones(
     errores_presencia: list[str] = []
     errores_numericos: list[str] = []
     errores_identidad: list[tuple[str, Decimal]] = []
+    errores_factores: list[str] = []
+    errores_estados: list[str] = []
+    errores_ceros: list[str] = []
     totales_co2e = {anio: Decimal(0) for anio in ANIOS_ESPERADOS}
     totales_componentes = {
         anio: {
@@ -492,28 +524,83 @@ def validar_emisiones(
     for fila in registros:
         clave = fila.get("clave_emision", "")
         anio = fila.get("anio", "")
-        presentes = [fila.get(campo, "") != "" for campo in campos_identidad]
-        if any(presentes) and not all(presentes):
-            if len(errores_presencia) < MAXIMO_EJEMPLOS:
-                errores_presencia.append(clave)
-            continue
-        if not any(presentes):
-            continue
         try:
-            co2_directo = a_decimal(
-                fila["co2_directo_kt"], f"Emisiones/{clave}/co2_directo_kt"
-            )
-            co2_biogenico = a_decimal(
-                fila["co2_biogenico_memo_kt"],
-                f"Emisiones/{clave}/co2_biogenico_memo_kt",
-            )
-            ch4 = a_decimal(fila["ch4_kt"], f"Emisiones/{clave}/ch4_kt")
-            n2o = a_decimal(fila["n2o_kt"], f"Emisiones/{clave}/n2o_kt")
-            co2e = a_decimal(fila["co2e_kt"], f"Emisiones/{clave}/co2e_kt")
+            valores = {
+                campo: None if fila.get(campo, "") == "" else a_decimal(fila[campo], f"Emisiones/{clave}/{campo}")
+                for campo in campos_identidad
+            }
+            if fila.get("modulo") != "AGRICULTURA":
+                actividad = a_decimal(fila.get("actividad_emisiones_tj", ""), f"Emisiones/{clave}/actividad")
+                factores = {
+                    gas: None if fila.get(f"ef_{gas.lower()}_kg_tj", "") == "" else a_decimal(
+                        fila[f"ef_{gas.lower()}_kg_tj"], f"Emisiones/{clave}/factor_{gas}"
+                    ) for gas in ("CO2", "CH4", "N2O")
+                }
+                ausentes = [gas for gas, factor in factores.items() if factor is None]
+                esperados = {
+                    gas: None if factor is None else actividad * factor / Decimal("1000000")
+                    for gas, factor in factores.items()
+                }
+                biogenico = fila.get("tratamiento_co2") == "BIOGENICO"
+                campos_gas = {
+                    "co2_directo_kt": None if esperados["CO2"] is None else (Decimal(0) if biogenico else esperados["CO2"]),
+                    "co2_biogenico_memo_kt": None if esperados["CO2"] is None else (esperados["CO2"] if biogenico else Decimal(0)),
+                    "ch4_kt": esperados["CH4"], "n2o_kt": esperados["N2O"],
+                }
+                for campo, esperado in campos_gas.items():
+                    obtenido = valores[campo]
+                    if esperado is None or obtenido is None:
+                        correcto = esperado is None and obtenido is None
+                    else:
+                        correcto = son_cercanos(obtenido, esperado, tolerancia_emisiones, Decimal("1e-12"))
+                    if not correcto:
+                        errores_factores.append(f"{clave}/{campo}: valor={obtenido}, actividad x factor={esperado}")
+                hay_factores = len(ausentes) < 3
+                if (valores["co2e_kt"] is not None) != hay_factores:
+                    errores_presencia.append(clave)
+                if ausentes:
+                    estado_esperado = "PARCIAL" if hay_factores else "SIN_DATO"
+                    codigos = ";".join(f"{gas}:SIN_DATO" for gas in ausentes)
+                    if (
+                        fila.get("estado_resultado") != estado_esperado
+                        or fila.get("clave_notacion") != codigos
+                        or "código interno" not in fila.get("nota", "")
+                        or (hay_factores and "subtotal" not in fila.get("nota", "").lower())
+                        or (not hay_factores and (
+                            fila.get("estado_factor") != "SIN_DATO"
+                            or fila.get("metodo_calculo") != "SIN_CALCULO_SIN_DATO"
+                        ))
+                    ):
+                        errores_estados.append(clave)
+                elif fila.get("estado_resultado") in {"PARCIAL", "SIN_DATO"}:
+                    errores_estados.append(clave)
+                if fila.get("grupo_factor") == "CERO_DIRECTO":
+                    if (
+                        any(valor != 0 for valor in factores.values())
+                        or any(valor != 0 for valor in valores.values())
+                        or fila.get("fuente_id_factor") != "METODO_EMISIONES"
+                        or fila.get("estado_factor") != "CAL"
+                        or fila.get("estado_resultado") != "CAL"
+                        or fila.get("metodo_calculo") != "CERO_DIRECTO"
+                    ):
+                        errores_ceros.append(clave)
+            else:
+                presentes = [valor is not None for valor in valores.values()]
+                if any(presentes) and not all(presentes):
+                    errores_presencia.append(clave)
         except ValueError as exc:
             if len(errores_numericos) < MAXIMO_EJEMPLOS:
                 errores_numericos.append(str(exc))
             continue
+
+        if valores["co2e_kt"] is None:
+            continue
+        # Solo para sumar el subtotal: no se rellenan los campos publicados.
+        co2_directo = valores["co2_directo_kt"] or Decimal(0)
+        co2_biogenico = valores["co2_biogenico_memo_kt"] or Decimal(0)
+        ch4 = valores["ch4_kt"] or Decimal(0)
+        n2o = valores["n2o_kt"] or Decimal(0)
+        co2e = valores["co2e_kt"]
 
         # El CO2 biogenico se mantiene como partida informativa y no entra en CO2e.
         co2e_calculado = co2_directo + GWP_CH4 * ch4 + GWP_N2O * n2o
@@ -529,13 +616,28 @@ def validar_emisiones(
 
     informe.comprobar(
         not errores_presencia,
-        f"Emisiones {etiqueta}: componentes de la identidad completos o todos vacios",
+        f"Emisiones {etiqueta}: subtotal presente solo con componentes cuantificados",
         detalle_elementos(errores_presencia),
     )
     informe.comprobar(
         not errores_numericos,
         f"Emisiones {etiqueta}: valores de la identidad validos y finitos",
         "; ".join(errores_numericos),
+    )
+    informe.comprobar(
+        not errores_factores,
+        f"Emisiones {etiqueta}: cada gas respeta actividad por factor y ausencia de dato",
+        detalle_elementos(errores_factores),
+    )
+    informe.comprobar(
+        not errores_estados,
+        f"Emisiones {etiqueta}: subtotales y ausencias identificados por gas",
+        detalle_elementos(errores_estados),
+    )
+    informe.comprobar(
+        not errores_ceros,
+        f"Emisiones {etiqueta}: ceros metodologicos trazados a METODO_EMISIONES",
+        detalle_elementos(errores_ceros),
     )
     errores_identidad.sort(key=lambda elemento: abs(elemento[1]), reverse=True)
     informe.comprobar(
@@ -583,6 +685,102 @@ def comparar_totales_anuales(
     )
 
 
+def validar_gas_natural_excel(
+    ruta: Path,
+    psut: Sequence[Mapping[str, str]],
+    tolerancia: Decimal,
+    informe: Informe,
+) -> None:
+    """Coteja solo GN en la vista PSUT anual con los CSV, sin recalcular Excel."""
+
+    ns = {"s": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+    relacion_id = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
+    with zipfile.ZipFile(ruta) as archivo:
+        relaciones = {
+            item.attrib["Id"]: item.attrib["Target"]
+            for item in ET.fromstring(archivo.read("xl/_rels/workbook.xml.rels"))
+        }
+        libro = ET.fromstring(archivo.read("xl/workbook.xml"))
+        hojas = libro.find("s:sheets", ns)
+        hoja = next((item for item in hojas if item.attrib.get("name") == "PSUT"), None) if hojas is not None else None
+        if hoja is None:
+            raise ValueError("El libro no contiene una hoja PSUT.")
+        destino = relaciones[hoja.attrib[relacion_id]]
+        destino = destino.lstrip("/") if destino.startswith("/") else posixpath.normpath("xl/" + destino)
+        cadenas = []
+        if "xl/sharedStrings.xml" in archivo.namelist():
+            cadenas = [
+                "".join(nodo.itertext())
+                for nodo in ET.fromstring(archivo.read("xl/sharedStrings.xml"))
+            ]
+        raiz = ET.fromstring(archivo.read(destino))
+        valores: dict[str, str] = {}
+        formulas: dict[str, str] = {}
+        for celda in raiz.findall(".//s:c", ns):
+            coordenada = celda.attrib["r"]
+            valor = celda.findtext("s:v", "", ns)
+            if celda.attrib.get("t") == "s":
+                valor = cadenas[int(valor)]
+            elif celda.find("s:is", ns) is not None:
+                valor = "".join(celda.find("s:is", ns).itertext())
+            valores[coordenada] = valor
+            formulas[coordenada] = celda.findtext("s:f", "", ns)
+
+    filas_gn = [
+        int(coordenada[1:])
+        for coordenada, valor in valores.items()
+        if coordenada.startswith("A") and coordenada[1:].isdigit() and valor == "GN"
+        and any(
+            "Energy products" in formula and celda.rstrip("0123456789") != celda
+            and celda[len(celda.rstrip("0123456789")):] == coordenada[1:]
+            for celda, formula in formulas.items()
+        )
+    ]
+    informe.comprobar(
+        len(filas_gn) == 1,
+        "Excel PSUT: GN aparece una vez entre los productos energeticos",
+        f"filas={filas_gn}",
+    )
+    if len(filas_gn) != 1:
+        return
+    fila_gn = filas_gn[0]
+    anio = valores.get("B3", "")
+    cabeceras = [
+        int(coordenada[1:]) for coordenada, valor in valores.items()
+        if coordenada.startswith("A") and coordenada[1:].isdigit()
+        and valor == "Código" and int(coordenada[1:]) < fila_gn
+    ]
+    if not cabeceras or anio not in ANIOS_ESPERADOS:
+        raise ValueError("La vista PSUT no identifica el año o las unidades de GN.")
+    fila_cabecera = max(cabeceras)
+    diferencias = []
+    # Columnas de suministro y utilización del formato publicado del libro.
+    for lado, columnas in (("Supply", "CDEFGH"), ("Use", "JKLMNOPQRSTU")):
+        for columna in columnas:
+            unidad = valores.get(f"{columna}{fila_cabecera}", "")
+            filas = [
+                item for item in psut
+                if item.get("anio") == anio and item.get("producto") == "GN"
+                and item.get("flow_group") == "Energy products"
+                and item.get("lado") == lado and item.get("unidad_sectorial") == unidad
+            ]
+            celda = f"{columna}{fila_gn}"
+            obtenido = valores.get(celda, "")
+            if not filas:
+                correcto = obtenido == ""
+                esperado = None
+            else:
+                esperado = sum((a_decimal(item["TJ"], "PSUT/GN") for item in filas), Decimal(0))
+                correcto = obtenido != "" and abs(a_decimal(obtenido, f"Excel/{celda}") - esperado) <= tolerancia
+            if not correcto:
+                diferencias.append((celda, obtenido, esperado))
+    informe.comprobar(
+        not diferencias,
+        "Excel PSUT: valores almacenados de GN coinciden con el CSV del año seleccionado",
+        detalle_elementos(diferencias),
+    )
+
+
 def crear_argumentos() -> argparse.ArgumentParser:
     directorio_script = Path(__file__).resolve().parent
     analizador = argparse.ArgumentParser(
@@ -600,8 +798,12 @@ def crear_argumentos() -> argparse.ArgumentParser:
     analizador.add_argument(
         "--referencias",
         type=Path,
-        default=directorio_script.parent / "datasets_finales",
+        default=directorio_script.parent / "02_resultados_y_diccionario",
         help="directorio que contiene los dos CSV finales de referencia",
+    )
+    analizador.add_argument(
+        "--modelo-excel", type=Path,
+        help="opcional: coteja GN en la vista PSUT del XLSX mediante sus valores almacenados",
     )
     analizador.add_argument(
         "--tolerancia-campos",
@@ -711,6 +913,10 @@ def ejecutar(argumentos: argparse.Namespace) -> int:
         argumentos.tolerancia_emisiones_kt,
         informe,
     )
+    if argumentos.modelo_excel is not None:
+        validar_gas_natural_excel(
+            argumentos.modelo_excel, psut_gen, argumentos.tolerancia_cierre_tj, informe
+        )
 
     print("Totales anuales reproducidos de CO2e (kt):")
     for anio in sorted(ANIOS_ESPERADOS):
@@ -725,7 +931,7 @@ def main() -> int:
     argumentos = analizador.parse_args()
     try:
         return ejecutar(argumentos)
-    except (FileNotFoundError, OSError, ValueError, csv.Error) as exc:
+    except (FileNotFoundError, OSError, ValueError, csv.Error, zipfile.BadZipFile, ET.ParseError) as exc:
         print(f"ERROR DE VALIDACION: {exc}", file=sys.stderr)
         return 2
 

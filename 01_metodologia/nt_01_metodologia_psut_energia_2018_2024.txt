@@ -762,6 +762,16 @@ La regla se aplica únicamente a GAS en 2019. El valor no se redistribuye entre
 TR_BEN, IND_BEN o SERV. A diferencia de NOEN, GAS es un producto energético y se
 trata de forma específica al estimar emisiones.
 
+El cotejo del BEN 2019 confirma una contradicción entre sus presentaciones.
+La tabla 2, página impresa 7 (posición PDF 8), reporta 13 456,25 kBEP de oferta
+y 11 567,03 kBEP de usos sectoriales. La tabla 5, página impresa 10 (posición
+PDF 11), reporta 13 456,25 kBEP como consumo de gasolinas. Sus subtotales suman
+94 034,94 kBEP, pero el total impreso es 92 145,72 kBEP: la diferencia coincide
+con los 1 889,22 kBEP no asignados. La extracción reproduce el original; la
+conciliación adoptada conserva una elección entre tablas incompatibles. No
+identifica por sí sola al consumidor ni resuelve la contradicción. El presente
+ajuste técnico mantiene esa elección, pendiente de aclaración de la fuente.
+
 
 16. STAT Y CIERRE POR PRODUCTO
 
@@ -791,6 +801,12 @@ Para clasificar una fila STAT se compara su valor absoluto con el número de
 celdas no STAT del mismo producto y año multiplicado por 0,02905 TJ. Los 38
 flujos STAT cumplen ese criterio y se clasifican como redondeo; no permanece
 ningún residuo estadístico material.
+
+El generador aplica esta comparación antes de aceptar los resultados. Si una
+diferencia supera el margen, detiene la generación e identifica producto, año,
+saldo y tolerancia; no publica esa diferencia como redondeo. La clasificación
+visible de Excel distingue redondeo y residuo_estadistico, y el control de QA
+exige que no queden residuos materiales.
 
 STAT se calcula después de NOEN y del uso aparente de GAS 2019. Este orden impide
 que una utilización interna cuantificada pero no asignada quede oculta como
@@ -852,9 +868,17 @@ distinguir ausencia de flujo y SUMIFS sobre PSUT_LARGA por año, producto, grupo
 lado y unidad. Los totales de oferta y utilización se calculan por fila; el saldo
 es oferta menos utilización.
 
-Controles | QA | A6:D13 | Se verifican las 617 filas, los conteos anuales, STAT,
+El bloque de productos incluye GN además de su presentación como insumo
+natural. El control de cobertura de la vista se contrasta con los productos de
+PSUT_LARGA; un cierre de las filas visibles no basta para demostrar que la vista
+contiene todas las filas necesarias.
+
+Controles | QA | A6:D21 | Se verifican las 617 filas, los conteos anuales, STAT,
 los siete usos NOEN, el valor NOEN 2024, la ausencia de NOEN en STAT, el uso GAS
-2019 y la ausencia de residuos estadísticos.
+2019 y la ausencia de residuos estadísticos. Los controles adicionales incluyen
+la cobertura de productos de la vista y la disponibilidad y procedencia de las
+emisiones. La indicación FILAS OK se refiere a los flujos representados y no
+certifica la completitud del marco ni el balance de cada unidad económica.
 
 18. FÓRMULAS DE PSUT_LARGA
 

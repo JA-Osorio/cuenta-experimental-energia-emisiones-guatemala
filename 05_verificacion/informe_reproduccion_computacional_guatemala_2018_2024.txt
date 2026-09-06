@@ -12,144 +12,185 @@ José Carlos Soberanis
 Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
 en creditos.txt.
 
-Fecha de verificación: 2026-08-13
+Fecha de verificación: 2026-09-06
+Base comparada: commit 5508c559b078d00114cca9c0545cbdf11690b814 de main.
 
-1. OBJETIVO
+1. ALCANCE DE LA CORRECCIÓN
 
-Comprobar por separado la generación de los datasets y su consulta en el
-cuaderno. El script debe reconstruir las cuentas desde un único CSV de entrada,
-sin utilizar el libro de cálculo, Google Drive ni resultados previamente
-calculados. El cuaderno debe leer únicamente los dos CSV finales y presentar
-las tablas, indicadores y gráficas sin repetir el cálculo del script.
+Se corrigieron la disponibilidad de emisiones por gas, la atribución de ceros
+metodológicos, la guarda de diferencias estadísticas, la cobertura de GN en
+la vista Excel y las rutas y dependencias del cuaderno. Se incorporó además
+trazabilidad comprobada directamente en los balances y CRT originales.
 
-2. PRUEBA DEL GENERADOR
+Se conservaron las actividades energéticas, los factores numéricos, las reglas
+de asignación y los supuestos de gasolina 2019, transporte, refinación y
+prolongación agrícola. No se completaron mediante imputaciones las entradas
+de biomasa ni los residuales pendientes de la PSUT. La corrección no convierte
+la cuenta experimental en una cuenta completa por ramas y residentes.
 
-La corrida comenzó en un directorio limpio que contenía únicamente:
+2. GENERADOR Y RESULTADOS
 
-- datos_modelo_guatemala_2018_2024.csv; y
-- reproducir_modelo_guatemala_2018_2024.py.
+El generador se ejecutó desde el CSV de entrada actualizado, sin consultar
+Excel, Drive ni los resultados finales durante el cálculo. Utiliza únicamente
+la biblioteca estándar de Python. Después se incorporaron las referencias
+para comparar las salidas.
 
-Comando:
-
-python reproducir_modelo_guatemala_2018_2024.py
-
-Resultado:
+Resultado de la generación:
 
 - código de salida: 0;
-- registros de entrada validados: 3 446;
-- registros PSUT generados: 617;
-- registros de emisiones generados: 374; y
-- cobertura temporal: 2018–2024.
+- registros de entrada: 3 446, con 39 columnas;
+- filas PSUT: 617, con 13 columnas;
+- filas de emisiones: 374, con 34 columnas; y
+- cobertura: 2018–2024.
 
-Los dos CSV de referencia se incorporaron únicamente después de la generación
-para comprobar la conformidad de los resultados. El validador independiente
-aprobó 47 de 47 controles. En el entorno de verificación descrito en el apartado
-4, y utilizando los archivos identificados por las huellas SHA-256 del apartado
-6, los dos CSV generados coincidieron byte por byte con las referencias finales.
-Esta identidad corresponde a la corrida validada y no se extrapola a entornos
-con versiones de Python, sistema operativo, codificación o convenciones de fin
-de línea diferentes. Fuera de ese entorno, la conformidad debe evaluarse
-mediante los 47 controles estructurales y numéricos del validador.
+Los dos CSV generados son idénticos byte por byte a las referencias corregidas.
+Frente a la base anterior, el CSV PSUT permanece idéntico. En emisiones, los
+únicos cambios en campos numéricos son siete celdas n2o_kt de fugitivas de
+petróleo: pasan de 0 a vacío. Todos los valores co2e_kt, fila por fila, conservan
+exactamente su representación numérica anterior.
 
-3. PRUEBA DEL CUADERNO
+La salida identifica siete filas PARCIAL, veinte SIN_DATO y 79 procedencias
+CERO_DIRECTO como METODO_EMISIONES. Las 91 filas agrícolas conservan sus datos
+y tratamiento. PARCIAL indica que el CO2e es un subtotal de gases cuantificados;
+SIN_DATO identifica falta de factores numéricos. Ninguno de estos códigos se
+atribuye a la notación literal de las CRT.
 
-La prueba del cuaderno se realizó en otro directorio limpio que contenía
-únicamente:
+Totales anuales cuantificados de CO2e, sin variación respecto a la base:
 
-- psut_energia_guatemala_2018_2024.csv;
-- cuenta_emisiones_aire_guatemala_2018_2024.csv; y
-- cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb.
+- 2018: 28 612,88 kt.
+- 2019: 29 730,98 kt.
+- 2020: 27 015,69 kt.
+- 2021: 29 978,96 kt.
+- 2022: 28 320,98 kt.
+- 2023: 30 852,29 kt.
+- 2024: 33 159,61 kt.
 
-El cuaderno no leyó datos_modelo_guatemala_2018_2024.csv, no importó el script
-de reproducción y no escribió archivos. Sus siete celdas técnicas se ejecutaron
-sin excepciones; permanecen plegadas de forma predeterminada y sus resultados
-son visibles.
+El CO2 biogénico continúa separado. La suma cuantificada utiliza CO2 fósil +
+28 × CH4 + 265 × N2O; un gas sin dato permanece vacío. Los factores disponibles
+de 2023–2024 conservan PRX aunque el resultado sea PARCIAL. El 100 % del CO2e
+positivo de esos dos años sigue dependiendo de alguna aproximación.
 
-La auditoría confirmó:
+3. CONTROLES Y CONTRAPRUEBAS
 
-- una PSUT integrada de 22 filas conceptuales, incluido el gas natural;
-- una vista integrada de emisiones;
-- selector anual para 2018–2024;
-- ocho indicadores principales y seis complementarios;
-- once gráficas independientes;
-- presentación con un máximo de dos decimales;
-- señalización de las aproximaciones de 2023–2024;
-- distinción entre celdas vacías y ceros; y
-- ausencia de escrituras persistentes.
+El validador aprobó 55 controles ordinarios. Con --modelo-excel aprobó 57,
+incluidas dos comprobaciones de GN en la vista PSUT del año seleccionado.
+Los controles ordinarios abarcan esquemas, claves, cobertura anual, cierres,
+STAT compatible con redondeo, disponibilidad por gas, actividad por factor,
+procedencia de los ceros metodológicos y subtotales de CO2 equivalente.
 
-4. ENTORNO DE VERIFICACIÓN
+Comandos desde la raíz del repositorio:
+
+python3 04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py \
+  --entrada 04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv \
+  --salida resultados_reproducidos
+
+python3 04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py \
+  --generados resultados_reproducidos \
+  --referencias 02_resultados_y_diccionario \
+  --modelo-excel 03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx
+
+En copias temporales se realizaron trece contrapruebas: restituir N2O ausente
+a cero; multiplicar un factor por diez; atribuir CERO_DIRECTO a una fuente
+externa; presentar un subtotal PARCIAL como completo; introducir un STAT
+material manteniendo cierre; perturbar la entrada energética del generador;
+suprimir por separado CO2, CH4, N2O o todos los factores; y suprimir cada gas
+en un componente de la ponderación de gasolina 2019. Los errores se rechazaron
+o las ausencias se propagaron según correspondía. La perturbación de entrada
+produjo 58 100,0581 TJ de saldo frente a un límite de 0,17430 TJ, y el generador
+detuvo la ejecución. No se alteraron los datos publicados para estas pruebas.
+
+4. MODELO EXCEL Y CUADERNO
+
+El modelo Excel se recalculó integralmente con LibreOffice. Después se
+contrastaron los valores almacenados de las tablas largas con los CSV del
+generador: 8 021 campos de PSUT_LARGA y 12 716 de EMISIONES_LARGA. Se comprobaron
+también las ausencias y los estados de resultado. No se detectaron errores
+de fórmula en los valores almacenados del libro. La vista incorpora GN en
+productos energéticos y conserva las presentaciones existentes.
+
+La opción --modelo-excel del validador consulta valores almacenados y comprueba
+GN; no ejecuta por sí misma un recálculo ni certifica todas las hojas. El cotejo
+integral descrito arriba corresponde a esta verificación de la corrección.
+
+Las siete celdas técnicas del cuaderno se ejecutaron directamente con IPython
+e ipywidgets. Se probaron la carga desde la raíz y desde la subcarpeta, los
+callbacks del selector en 2018 y 2024 y la conservación de valores ausentes.
+Se regeneraron las vistas almacenadas de 2024 y se conservaron once figuras,
+el código plegado y la presentación con dos decimales. Se revisó visualmente
+que los rótulos de subtotal y los datos no quedaran recortados.
+
+El entorno impidió abrir sockets para un kernel Jupyter. La ejecución directa
+permitió verificar las celdas y los callbacks; no se probó el clic del selector
+en el navegador de Google Colab. El cuaderno no duplica el motor de cálculo.
+
+5. TRAZABILIDAD PRIMARIA
+
+Se cotejaron los siete BEN 2018–2024 y los cinco archivos CRT 2018–2022,
+identificados internamente como GTM-CRT-2024-V0.3. Se registraron los nombres
+de archivo, versiones, hojas o tablas, celdas, unidades y SHA-256 pertinentes.
+Las fuentes primarias no se redistribuyen.
+
+En el CSV integrado se modificaron 275 registros y 776 campos, exclusivamente
+fuente_pagina, nota y url_fuente. Los restantes campos, incluidos todos los
+valores y factores numéricos, permanecen idénticos. El catálogo contiene 33
+fuentes y 439 localizadores; todos los fuente_id del CSV tienen correspondencia.
+
+El cotejo incluye 156 factores externos de combustión, cinco actividades de
+refinación, diez factores fugitivos y cinco ausencias de N2O, cincuenta
+observaciones agrícolas y 47 celdas BEN. Estas últimas comprenden la muestra
+dirigida de 42 celdas (seis por año) y cinco celdas adicionales de gasolina
+2019. Dos reglas de la partida no asignada incorporan la explicación de la
+contradicción entre tablas oficiales. En los factores verificados se conservan
+los componentes actividad/emisión del cociente.
+
+Las 47 celdas no constituyen una verificación exhaustiva de las 1 778
+observaciones BEN. La agricultura se cotejó contra la serie histórica del
+archivo CRT 2022; no se certifican todas las tablas de cada inventario ni la
+transcripción del VAB. La fidelidad de extracción tampoco resuelve las
+limitaciones de frontera y agregación de los factores de transporte.
+
+6. ENTORNO DE VERIFICACIÓN
 
 - Sistema: Linux x86_64, glibc 2.39.
-- Python: 3.12.13.
-- Generador y validador: biblioteca estándar de Python.
-- Cuaderno: pandas 2.2.3, numpy 2.3.5 y matplotlib 3.10.8.
-- Plotly e ipywidgets: complementos opcionales; no fueron necesarios para la
-  prueba de respaldo.
+- Python del generador y validador: 3.12.13, biblioteca estándar.
+- Cuaderno: pandas 2.2.3, numpy 2.3.5, matplotlib 3.10.8, ipywidgets 8.1.9.
+- Libro de cálculo: recálculo integral con LibreOffice; contraste posterior
+  de valores almacenados y fórmulas.
 
-5. CONTROLES NUMÉRICOS
+La identidad binaria de los CSV corresponde a este entorno y esta ejecución.
+En otros entornos, la conformidad debe comprobarse con las tolerancias del
+validador; no se afirma identidad binaria universal ni validación científica
+completa por el mero cumplimiento de controles computacionales.
 
-Se verificaron los esquemas y el orden de columnas; claves únicas; cobertura
-2018–2024; cierre de oferta y utilización; tratamiento de NO_ASIG, NOEN y STAT;
-preservación de los registros no cuantificados; identidad del CO2 equivalente;
-exclusión del CO2 biogénico del total; totales anuales; y dependencia de
-aproximaciones en 2023–2024.
-
-La diferencia máxima de cierre fue menor que 10^-6 TJ. La diferencia máxima de
-la identidad de CO2 equivalente fue menor que 10^-9 kt.
-
-La identidad se comprobó como CO2e = CO2 fósil + 28 × CH4 + 265 × N2O. Los
-potenciales de calentamiento global corresponden al horizonte de 100 años del
-Quinto Informe de Evaluación del IPCC, sin retroalimentación clima–carbono
-(IPCC, 2013, tabla 8.7).
-
-Totales anuales cuantificados de emisiones:
-
-- 2018: 28 612,88 kt CO2e.
-- 2019: 29 730,98 kt CO2e.
-- 2020: 27 015,69 kt CO2e.
-- 2021: 29 978,96 kt CO2e.
-- 2022: 28 320,98 kt CO2e.
-- 2023: 30 852,29 kt CO2e.
-- 2024: 33 159,61 kt CO2e.
-
-Dependencia de aproximaciones en 2023–2024. Para este control se consideró
-dependiente de una aproximación todo registro con estado_factor = PRX o
-estado_resultado = PRX. En 2023, esos registros sumaron 30 852,29 kt CO2e,
-equivalentes al 100 % del total cuantificado; en 2024 sumaron 33 159,61 kt CO2e,
-también el 100 %. Los registros que no cumplen ninguna de las dos condiciones
-aportaron 0,00 kt CO2e en ambos años. En los módulos energéticos, la actividad
-conserva el año correspondiente en la PSUT y la aproximación recae en el factor;
-en agricultura, recae en el resultado prolongado mediante VAB.
-
-6. HUELLAS DIGITALES SHA-256
+7. HUELLAS DIGITALES SHA-256
 
 - datos_modelo_guatemala_2018_2024.csv
-  95dbf283f05f929d6193cb708acd7139f6794676ea4955628bd665894f6aae04
+  fd6b3cf990678fb73dc24b6fe878e1749f3881b8d66c8066d96a5d485d894371
 
 - reproducir_modelo_guatemala_2018_2024.py
-  fb9d52ae769403a5074a02e01b6e0584375906f41d587eec159c41a895efa2a9
+  4ac48118acb97d3a7451f4bdc4b1ce54c22788737e8b4ea9e5bc5f19ada9f3ab
 
 - validar_reproduccion_guatemala_2018_2024.py
-  aaf4fa4f0b7a214c3fbd7b59f7f846fcb8da8e068384054f550c879fe7da1d4a
+  147944fae606c5fc58226a5cafd2b187d9c4ae0d914671dc90fd7911cba3026b
 
 - requirements.txt
-  0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
+  3dedbe57b447a460daefaf22a22c999a4126af68f3da02ccf09b0426f434ee70
 
 - cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb
-  2a130746990ca4dbe1461fcb91f91614f82d5145182e32b3cceea44588e013ab
+  2db2dd52e04c8e667075ece24da56c8983e8cac5f8ee23fb11475bece34c8aa7
 
 - modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx
-  1f9c2c5d614b9c26dfee4423e58e9a78adfe7fb3d36e9edb43747ab1cf74325c
+  0c37929bbc8cd504dc07e830cb86a5f24f8cd99e89074eddf6e161f1b174fc79
 
 - psut_energia_guatemala_2018_2024.csv
   4be0edefa6d24be0598a0c8cdbb5a7fc76211bed3dfc205083d60a18398bc071
 
 - cuenta_emisiones_aire_guatemala_2018_2024.csv
-  9c1004383e00d0d7d026eb488361d94dd6586bb583cedcf4ae0beb3fca94f15b
+  b18cbd03b12e7a157ef98910480090e1ba6b984afa9da2bf5e1fbfc19fa86f15
 
-7. RESULTADO
+8. RESULTADO
 
-APROBADO para el entorno descrito en el apartado 4. En esas condiciones, el
-script produjo los dos datasets con identidad byte a byte respecto de las
-referencias finales y el validador aprobó 47 de 47 controles. El cuaderno
-funcionó como visor anual y temporal sin duplicar el motor de cálculo.
+APROBADO para el alcance técnico y el entorno descritos. La PSUT conserva su
+CSV original y las emisiones conservan todos sus subtotales cuantificados.
+Se corrige la representación de ausencias, la procedencia, los controles y
+la presentación, sin adoptar nuevos factores ni supuestos científicos.

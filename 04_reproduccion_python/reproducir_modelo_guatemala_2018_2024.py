@@ -223,6 +223,7 @@ def obtener_parametros(filas: Sequence[Mapping[str, str]]) -> dict[str, Decimal]
         parametros[nombre] = decimal_obligatorio(fila["valor_parametro"], f"parámetro {nombre}")
     exigir(set(parametros) == esperados, "El conjunto de parámetros es incompleto o contiene nombres inesperados.")
     exigir(parametros["factor_kbep_tj"] > 0, "El factor de conversión debe ser positivo.")
+    exigir(parametros["redondeo_kbep"] > 0, "El semiancho de redondeo debe ser positivo.")
     exigir(parametros["kg_por_kt"] == Decimal("1000000"), "La conversión de kg a kt es inconsistente.")
     exigir(parametros["gwp_ch4"] > 0 and parametros["gwp_n2o"] > 0, "Los potenciales de calentamiento deben ser positivos.")
     return parametros
@@ -312,6 +313,20 @@ def construir_psut(
             oferta_calculo = suma_grupo_calculo(mapeo["anio"], mapeo["producto"], "Supply", False)
             uso_calculo = suma_grupo_calculo(mapeo["anio"], mapeo["producto"], "Use", False)
             valores_calculo[indice] = round(oferta_calculo - uso_calculo, 10)
+            # NT-01, sección 16: un cierre material no es redondeo.
+            cantidad_celdas = sum(
+                f["anio"] == mapeo["anio"]
+                and f["producto"] == mapeo["producto"]
+                and f["flow_group"] == "Energy products"
+                and f["unidad_sectorial"] != "STAT"
+                for f in mapeos
+            )
+            limite_redondeo = cantidad_celdas * parametros["redondeo_kbep"] * factor
+            exigir(
+                abs(valores[indice]) <= limite_redondeo,
+                f"Discrepancia estadística material en {mapeo['source_record_id']}: "
+                f"{valores[indice]} TJ; límite de redondeo {limite_redondeo} TJ.",
+            )
 
     exigir(all(valor is not None for valor in valores), "No se calcularon todos los flujos PSUT.")
     exigir(all(valor is not None for valor in valores_calculo), "No se prepararon todos los flujos para el cálculo de emisiones.")
@@ -431,10 +446,13 @@ def construir_emisiones(
 
         año_factor = min(año, 2022)
         valores_factor: dict[str, float | None] = {}
+        fuentes_factor: set[str] = set()
         for gas in ("CO2", "CH4", "N2O"):
             clave_factor = (str(año_factor), regla["categoria_ipcc"], regla["grupo_factor"], gas)
             exigir(clave_factor in factores, f"Falta el factor {'|'.join(clave_factor)}.")
             fila_factor = factores[clave_factor]
+            exigir(bool(fila_factor["fuente_id"]), f"Falta la procedencia de {'|'.join(clave_factor)}.")
+            fuentes_factor.add(fila_factor["fuente_id"])
             unidad_esperada = f"kg {gas}/TJ"
             exigir(fila_factor["unidad_factor"] == unidad_esperada, f"Unidad de factor inconsistente en {'|'.join(clave_factor)}.")
             valores_factor[gas] = flotante_opcional(fila_factor["valor_factor"], f"factor {'|'.join(clave_factor)}")
@@ -444,20 +462,33 @@ def construir_emisiones(
             )
 
         disponible = any(valor is not None for valor in valores_factor.values())
+        gases_ausentes = [gas for gas, valor in valores_factor.items() if valor is None]
         if disponible:
-            ef_co2 = valores_factor["CO2"] or 0.0
-            ef_ch4 = valores_factor["CH4"] or 0.0
-            ef_n2o = valores_factor["N2O"] or 0.0
-            co2 = 0.0 if regla["tratamiento_co2"] == "BIOGENICO" else actividad * ef_co2 / kg_por_kt
-            biogenico = actividad * ef_co2 / kg_por_kt if regla["tratamiento_co2"] == "BIOGENICO" else 0.0
-            ch4 = actividad * ef_ch4 / kg_por_kt
-            n2o = actividad * ef_n2o / kg_por_kt
-            co2e = co2 + ch4 * gwp_ch4 + n2o * gwp_n2o
+            por_gas = {
+                gas: None if valor is None else actividad * valor / kg_por_kt
+                for gas, valor in valores_factor.items()
+            }
+            co2 = None if por_gas["CO2"] is None else (
+                0.0 if regla["tratamiento_co2"] == "BIOGENICO" else por_gas["CO2"]
+            )
+            biogenico = None if por_gas["CO2"] is None else (
+                por_gas["CO2"] if regla["tratamiento_co2"] == "BIOGENICO" else 0.0
+            )
+            ch4, n2o = por_gas["CH4"], por_gas["N2O"]
+            # La suma es un subtotal de componentes disponibles: los campos
+            # ausentes permanecen vacíos y no adquieren el significado de cero.
+            co2e = (co2 or 0.0) + (ch4 or 0.0) * gwp_ch4 + (n2o or 0.0) * gwp_n2o
         else:
             co2 = biogenico = ch4 = n2o = co2e = None
-        estado_factor = "NO" if not disponible else (
+        estado_factor = "SIN_DATO" if not disponible else (
             "CAL" if regla["grupo_factor"] == "CERO_DIRECTO" else ("OBS" if año <= 2022 else "PRX")
         )
+        nota = ""
+        if gases_ausentes:
+            nota = (
+                "Subtotal de los gases cuantificados; no es un total completo. "
+                if disponible else "Sin cálculo: no hay factores numéricos disponibles. "
+            ) + "Los gases sin factor permanecen vacíos. SIN_DATO es un código interno, no una clave de notación CRT."
         calculos.append({
             "clave_emision": f"EM|{año}|{regla['source_record_id']}",
             "anio": año,
@@ -487,14 +518,14 @@ def construir_emisiones(
             "ch4": ch4,
             "n2o": n2o,
             "co2e": co2e,
-            "estado_resultado": "CAL" if disponible else "NO",
-            "clave_notacion": regla["clave_notacion"],
-            "metodo_calculo": "SIN_CALCULO_NO" if not disponible else (
+            "estado_resultado": ("PARCIAL" if gases_ausentes else "CAL") if disponible else "SIN_DATO",
+            "clave_notacion": ";".join(f"{gas}:SIN_DATO" for gas in gases_ausentes) if gases_ausentes else regla["clave_notacion"],
+            "metodo_calculo": "SIN_CALCULO_SIN_DATO" if not disponible else (
                 "CERO_DIRECTO" if regla["grupo_factor"] == "CERO_DIRECTO" else "ACTIVIDAD_X_FE"
             ),
             "fuente_actividad": "MEM_BEN",
-            "fuente_factor": "UNFCCC_GTM_CRT_2024",
-            "nota": "",
+            "fuente_factor": ";".join(sorted(fuentes_factor)),
+            "nota": nota,
         })
 
     referencias_gas = [
@@ -509,7 +540,10 @@ def construir_emisiones(
     total_actividad_gas = sum(float(c["actividad"]) for c in referencias_gas)
     exigir(total_actividad_gas > 0, "La actividad de referencia del gas debe ser positiva.")
     factores_compuestos = {
-        gas: sum(float(c["actividad"]) * float(c[f"ef_{gas}"]) for c in referencias_gas) / total_actividad_gas
+        gas: (
+            None if any(c[f"ef_{gas}"] is None for c in referencias_gas)
+            else sum(float(c["actividad"]) * float(c[f"ef_{gas}"]) for c in referencias_gas) / total_actividad_gas
+        )
         for gas in ("co2", "ch4", "n2o")
     }
     regla_gas = next((f for f in reglas if f["metodo"] == METODO_GAS_NO_ASIGNADO), None)
@@ -519,8 +553,21 @@ def construir_emisiones(
         regla_gas["bloque"], regla_gas["unidad_sectorial"], regla_gas["metodo"],
     )
     actividad_gas = psut[clave_gas]
-    emisiones_gas = {gas: actividad_gas * factor / kg_por_kt for gas, factor in factores_compuestos.items()}
-    co2e_gas = emisiones_gas["co2"] + emisiones_gas["ch4"] * gwp_ch4 + emisiones_gas["n2o"] * gwp_n2o
+    emisiones_gas = {
+        gas: None if factor is None else actividad_gas * factor / kg_por_kt
+        for gas, factor in factores_compuestos.items()
+    }
+    ausentes_compuesto = [gas.upper() for gas, valor in factores_compuestos.items() if valor is None]
+    disponible_compuesto = len(ausentes_compuesto) < 3
+    co2e_gas = None if not disponible_compuesto else (
+        (emisiones_gas["co2"] or 0.0) + (emisiones_gas["ch4"] or 0.0) * gwp_ch4 + (emisiones_gas["n2o"] or 0.0) * gwp_n2o
+    )
+    nota_compuesto = "Factor ponderado por los usos observados de GAS en transporte, industria y servicios."
+    if ausentes_compuesto:
+        nota_compuesto += (
+            " Subtotal de los gases cuantificados; no es un total completo."
+            if disponible_compuesto else " Sin cálculo: no hay factores numéricos disponibles."
+        ) + " Los gases sin factor permanecen vacíos. SIN_DATO es un código interno, no una clave de notación CRT."
     calculos.append({
         "clave_emision": "EM|2019|GAS_USO_INTERNO_APARENTE_2019",
         "anio": 2019,
@@ -539,23 +586,23 @@ def construir_emisiones(
         "grupo": GRUPO_GAS_COMPUESTO,
         "tratamiento": "FOSIL",
         "anio_factor": 2019,
-        "estado_factor": "PRX",
+        "estado_factor": "PRX" if disponible_compuesto else "SIN_DATO",
         "ef_co2": factores_compuestos["co2"],
         "ef_ch4": factores_compuestos["ch4"],
         "ef_n2o": factores_compuestos["n2o"],
         "gas_fuente": None,
         "emision_fuente": None,
         "co2": emisiones_gas["co2"],
-        "biogenico": 0.0,
+        "biogenico": 0.0 if emisiones_gas["co2"] is not None else None,
         "ch4": emisiones_gas["ch4"],
         "n2o": emisiones_gas["n2o"],
         "co2e": co2e_gas,
-        "estado_resultado": "PRX",
-        "clave_notacion": "",
-        "metodo_calculo": "ACTIVIDAD_X_FE_PONDERADO_USOS_OBSERVADOS_2019",
+        "estado_resultado": ("PARCIAL" if ausentes_compuesto else "PRX") if disponible_compuesto else "SIN_DATO",
+        "clave_notacion": ";".join(f"{gas}:SIN_DATO" for gas in ausentes_compuesto),
+        "metodo_calculo": "ACTIVIDAD_X_FE_PONDERADO_USOS_OBSERVADOS_2019" if disponible_compuesto else "SIN_CALCULO_SIN_DATO",
         "fuente_actividad": "MEM_BEN",
-        "fuente_factor": "UNFCCC_GTM_CRT_2024",
-        "nota": "Factor ponderado por los usos observados de GAS en transporte, industria y servicios.",
+        "fuente_factor": ";".join(sorted({str(c["fuente_factor"]) for c in referencias_gas})),
+        "nota": nota_compuesto,
     })
 
     emisiones_observadas_filas = [f for f in filas if f["tipo_registro"] == "EMISION_AGRICULTURA_OBS"]
@@ -701,9 +748,9 @@ def construir_emisiones(
     for fila in salida:
         if fila["co2e_kt"] == "":
             continue
-        co2 = float(fila["co2_directo_kt"])
-        ch4 = float(fila["ch4_kt"])
-        n2o = float(fila["n2o_kt"])
+        co2 = float(fila["co2_directo_kt"] or 0)
+        ch4 = float(fila["ch4_kt"] or 0)
+        n2o = float(fila["n2o_kt"] or 0)
         co2e = float(fila["co2e_kt"])
         diferencia = abs(co2 + ch4 * gwp_ch4 + n2o * gwp_n2o - co2e)
         exigir(diferencia <= max(tolerancia, 5e-9), f"La identidad de CO2e no se cumple en {fila['clave_emision']}.")

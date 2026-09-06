@@ -71,6 +71,14 @@ Para agregar los gases se utilizaron potenciales de calentamiento global a 100 a
 
 CO₂e [kt] = CO₂ fósil [kt] + 28 × CH₄ [kt] + 265 × N₂O [kt]
 
+La ecuación se aplica a los gases cuantificados. Un factor energético ausente
+conserva vacía la emisión correspondiente. Cuando hay otros gases cuantificados,
+el CO₂e es su subtotal y estado_resultado es PARCIAL; clave_notacion identifica
+el gas ausente, por ejemplo N2O:SIN_DATO. Si no hay factores numéricos disponibles,
+las emisiones permanecen vacías y se utiliza SIN_DATO. Son códigos internos de
+disponibilidad, no notaciones atribuidas a las CRT. Los totales cuantificados
+conservan su valor; no representan emisiones completas de los gases sin dato.
+
 Los balances de oferta y uso, las asignaciones sectoriales y las emisiones se verifican mediante conciliaciones numéricas y reglas metodológicas explícitas.
 
 5. ESTRUCTURA DE LOS DATOS
@@ -109,6 +117,11 @@ El cuaderno utiliza psut_energia_guatemala_2018_2024.csv y
 cuenta_emisiones_aire_guatemala_2018_2024.csv. No requiere el archivo de entrada
 del modelo ni genera nuevamente las cuentas.
 
+La vista Excel incluye el gas natural en los productos energéticos. El generador
+comprueba que las diferencias STAT sean compatibles con el margen de redondeo
+antes de aceptarlas, y los ceros metodológicos conservan METODO_EMISIONES como
+fuente. El cuaderno local encuentra los CSV en 02_resultados_y_diccionario.
+
 La identidad byte a byte documentada en el informe de reproducción corresponde
 exclusivamente al entorno y a las versiones allí consignados. En otros entornos,
 la equivalencia debe comprobarse con el validador mediante controles
@@ -124,7 +137,7 @@ estructurales y numéricos; no se afirma una identidad binaria general.
 - Las emisiones de biomasa distinguen el CO₂ biogénico de los gases incluidos en el indicador de CO₂ equivalente.
 - Las cifras deben interpretarse conforme a las definiciones y alcances de cada tabla.
 
-El alcance de esta publicación se limita a la compilación validada para
+El alcance de esta publicación se limita a la compilación experimental para
 2018–2024; no establece un calendario ni un compromiso de actualización.
 
 8. LICENCIA Y CITACIÓN
