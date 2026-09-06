@@ -186,9 +186,11 @@ identifica la versión 1.0.0; el DOI conceptual
 [`10.5281/zenodo.21924042`](https://doi.org/10.5281/zenodo.21924042) dirige
 siempre a la versión más reciente.
 
-La corrección técnica del 6 de septiembre de 2026 se documenta en el informe
-de reproducción y en el historial de GitHub. No modifica los archivos de la
-versión 1.0.0 ya depositada en Zenodo.
+La versión bibliográfica se mantiene en 1.0.0. La corrección técnica del 6 de
+septiembre de 2026 se documenta en el informe de reproducción y en el historial
+de GitHub. Los archivos de GitHub y Zenodo se actualizan por separado; el
+contenido y el estado del depósito se consultan en el
+[registro de Zenodo](https://zenodo.org/records/21924043).
 
 ## Licencias
 
