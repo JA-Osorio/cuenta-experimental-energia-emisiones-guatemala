@@ -13,10 +13,16 @@ en creditos.txt.
 
 1. Requisitos
 
-Python 3.10 o posterior. El script utiliza únicamente la biblioteca estándar.
-El cuaderno usa pandas y matplotlib, disponibles de forma predeterminada en
-Google Colab; no instala paquetes durante la ejecución. Las versiones empleadas
-en la prueba de reproducción se indican en requirements.txt.
+El script requiere Python 3.10 o posterior y utiliza únicamente la biblioteca
+estándar. Para el cuaderno con las dependencias de requirements.txt, utilice
+Python 3.11 o posterior e instale los paquetes en el entorno del cuaderno:
+
+python -m pip install -r requirements.txt
+
+El cuaderno usa pandas, numpy y matplotlib; el selector anual requiere
+ipywidgets. Plotly es opcional: si está disponible, las figuras son interactivas;
+en caso contrario, se utiliza la presentación estática en matplotlib. El
+cuaderno no instala paquetes durante la ejecución.
 
 El selector anual permite consultar cualquiera de los años comprendidos entre
 2018 y 2024. Las celdas técnicas permanecen plegadas de forma predeterminada.
@@ -43,11 +49,23 @@ python reproducir_modelo_guatemala_2018_2024.py \
 
 4. Exploración mediante cuaderno
 
-Abra cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb y cargue estos
-dos archivos cuando se soliciten:
+Abra cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb. El cuaderno busca
+primero estos dos archivos en el mismo directorio de resultados:
 
 - psut_energia_guatemala_2018_2024.csv; y
 - cuenta_emisiones_aire_guatemala_2018_2024.csv.
+
+Puede ejecutarse desde la raíz del repositorio o desde 04_reproduccion_python:
+reconoce los CSV del directorio actual, resultados, 04_reproduccion_python y
+02_resultados_y_diccionario, en ese orden. Se utiliza siempre un par de archivos
+del mismo directorio. También conserva la búsqueda en datasets_finales y
+outputs/datasets_finales para copias de trabajo anteriores.
+
+En Google Colab, si los archivos no están disponibles localmente, se solicita
+su carga conservando los nombres originales. Si ipywidgets no está instalado,
+se muestra el año indicado por ANIO_INICIAL, cuyo valor predeterminado es 2024;
+para cambiar de año con el selector, instale las dependencias y reinicie la
+ejecución del cuaderno.
 
 El cuaderno consulta los resultados producidos por el script. Permite
 seleccionar cualquier año entre 2018 y 2024, examinar la PSUT integrada y la
@@ -58,6 +76,11 @@ Las celdas de código permanecen ocultas de forma predeterminada. El contenido
 se organiza en secciones independientes para indicadores, PSUT, emisiones y
 gráficas. El código puede desplegarse únicamente cuando se requiera auditar la
 lógica de consulta.
+
+Las celdas de emisiones sin valor numérico permanecen vacías. Los agregados de
+CO2 equivalente se presentan como subtotales de los componentes cuantificados;
+un gas sin dato no se convierte en cero. En particular, el N2O de las emisiones
+fugitivas permanece sin cuantificar cuando no existe factor.
 
 El cuaderno no necesita el script ni escribe archivos de resultados. Para
 generar nuevamente los dos CSV se utiliza el script descrito en la sección 3.
@@ -83,3 +106,18 @@ python validar_reproduccion_guatemala_2018_2024.py \
   --referencias referencias
 
 Una reproducción conforme devuelve el código de salida 0.
+
+La ejecución ordinaria comprueba 55 controles. Si se omite --referencias,
+el validador utiliza 02_resultados_y_diccionario junto al directorio del script,
+independientemente del directorio de trabajo actual.
+
+Para añadir dos comprobaciones de GN en la vista PSUT del libro, desde la raíz
+del repositorio ejecute:
+
+python 04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py \
+  --generados resultados \
+  --modelo-excel 03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx
+
+Esta opción lee los valores almacenados del año seleccionado; no recalcula
+Excel ni certifica todas sus hojas. El informe documenta por separado el
+recálculo integral y el cotejo de las tablas largas realizado para esta versión.

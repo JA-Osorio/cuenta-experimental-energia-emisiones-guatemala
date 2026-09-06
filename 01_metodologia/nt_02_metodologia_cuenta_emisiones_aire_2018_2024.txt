@@ -264,7 +264,7 @@ La correspondencia principal es:
 - TR_BEN: 1.A.3;
 - SERV: 1.A.4.a;
 - HH: 1.A.4.b;
-- A, combustión: 1.A.4.c, conservada con clave NO;
+- A, combustión: 1.A.4.c, sin factores numéricos y conservada como SIN_DATO;
 - B, fugitivas de carbón: 1.B.1.a;
 - B, fugitivas de petróleo: 1.B.2.a.ii; y
 - B, fugitivas de gas natural: 1.B.2.b.ii.
@@ -334,9 +334,10 @@ FE(g,c,f,t) [kg/TJ]
   = emisión_CRT(g,c,f,t) [kt] x 1 000 000
     / actividad_CRT(c,f,t) [TJ]
 
-Solo se emplea un factor cuando la actividad y la emisión se refieren al mismo
-año, categoría, grupo de combustible y frontera. No se divide entre cero ni se
-obtiene un factor numérico de una clave de notación.
+Los factores se relacionan mediante año, categoría y grupo de combustible.
+Su interpretación requiere además comprobar la compatibilidad de fronteras y
+mezclas entre actividad y emisiones. No se divide entre cero ni se obtiene un
+factor numérico de una clave de notación.
 
 EMISIONES_LARGA recupera los factores en ef_co2_kg_tj, ef_ch4_kg_tj y
 ef_n2o_kg_tj mediante la clave de cuatro componentes. En 2018–2022:
@@ -346,8 +347,19 @@ anio_factor = anio de la actividad
 estado_factor = OBS
 
 Los factores CERO_DIRECTO se generan como ceros metodológicos y se identifican
-como CAL. Las combinaciones sin factor numérico se identifican como NO y mantienen
+como CAL. Las combinaciones sin factor numérico se identifican como SIN_DATO y mantienen
 vacíos los campos de factor.
+
+La revisión de 156 factores externos de combustión reconstruyó los cocientes
+desde las celdas CRT sin discrepancias superiores a la precisión numérica. Esto
+confirma la extracción, no la equivalencia entre un promedio de categoría y un
+factor específico de combustible. En particular, Table1.A(a)s3 de 2019–2022
+incluye actividad positiva de queroseno de aviación en C18 y emisiones vacías
+en H18:J18; esa actividad entra en el denominador agregado C10. La aplicación
+del promedio a los productos del BEN mantiene esa limitación de cobertura.
+La presente corrección técnica conserva los factores publicados. La adopción
+de factores de carretera por combustible requiere resolver su correspondencia
+modal y documentar por separado el tratamiento del queroseno.
 
 
 7. REGLA TEMPORAL PARA 2023 Y 2024
@@ -472,6 +484,11 @@ Las emisiones se obtienen después con los factores LIQUID_FUELS de 1.A.1.b. En
 0,00477647962852211 y actividad_emisiones_tj = 13,9955591383489 TJ. El CO2e
 resultante es 1,0145952154877 kt.
 
+Las actividades y emisiones de 2018–2022 se cotejaron directamente con las CRT,
+hoja Table1.A(a)s1, celdas C38:C39 y H38:J39. La caída de actividad de 2 077,9477
+TJ en 2018 a 7,5121 TJ en 2019 está en los originales. El cotejo acredita su
+extracción; no explica si la variación refleja cambios reales o de cobertura.
+
 
 12. USOS NO ENERGÉTICOS
 
@@ -553,8 +570,13 @@ emisión_fugitiva_kt(g,p,t)
 
 Para 2018–2022 se utiliza el factor anual y para 2023–2024 el factor de 2022 con
 estado PRX. Solo PETR dispone de valores numéricos positivos suficientes para
-cuantificar CO2 y CH4. CRBN y GN mantienen estado NO y campos de emisiones vacíos;
+cuantificar CO2 y CH4. CRBN y GN mantienen estado SIN_DATO y campos de emisiones vacíos;
 no se sustituyen por ceros ni por factores por defecto.
+
+En PETR, el factor y la emisión de N2O permanecen vacíos. Table1.B.2!K12 está
+vacío en los cinco originales 2018–2022; no contiene la notación literal NO.
+La fila se identifica como PARCIAL y N2O:SIN_DATO, y su CO2e es el subtotal de
+CO2 y CH4 cuantificados. Estos códigos describen disponibilidad en el modelo.
 
 Como control, en 2024 PETR presenta 10 735,3113 TJ de actividad, factores de
 0,00676909343060816 kg CO2/TJ y 0,0928778003966022 kg CH4/TJ, y un resultado de
@@ -586,8 +608,8 @@ estado OBS.
 
 15.1 Residual de 3.F
 
-La fuente no aporta 3.F como un valor independiente utilizable. Para cada año de
-2018–2022 y para g en {CH4, N2O}, se calcula:
+El insumo integrado calcula 3.F por diferencia. Para cada año de 2018–2022 y
+para g en {CH4, N2O}, se calcula:
 
 E(3.F,g,t)
   = E(3,g,t)
@@ -601,6 +623,12 @@ negativo y restaurar el total del sector 3 dentro de la precisión de la fuente.
 En 2022, los residuales son 4,44306595293898 kt de CH4 y
 0,1151905987799 kt de N2O.
 
+El cotejo posterior con la CRT 2022 confirma que la categoría también se
+reporta directamente en la fila 36 de Table10s3 y Table10s4, columnas AG:AK
+para 2018–2022. Los diez valores coinciden con los residuales calculados. Se
+conserva el procedimiento reproducible existente y se incorpora ese cotejo
+como comprobación externa; no se afirma que la fuente carezca del dato directo.
+
 15.2 Tratamiento de 3.H
 
 El CO2 numérico del sector 3 se asigna a 3.H porque 3.G y 3.I mantienen clave NO y
@@ -610,6 +638,11 @@ registra con método EMISION_OBSERVADA_CRT.
 
 La asignación depende de la estructura observada en las CRT. En 2022, 3.H registra
 32,3869824 kt de CO2. Las filas 3.G, 3.I y 3.J permanecen sin valor numérico.
+
+La serie directa de 3.H en Table10s2, fila 38 y columnas AG:AK de la CRT 2022,
+coincide con los cinco valores utilizados. Las celdas originales sin valor de
+3.G, 3.I y 3.J no se presentan como si contuvieran literalmente NO; esa clave
+es la codificación interna conservada por el modelo.
 
 
 16. PROLONGACIÓN AGRÍCOLA MEDIANTE VAB
@@ -642,7 +675,7 @@ manteniendo la composición y la intensidad de 2022. Por ello, no equivale a una
 observación de ganado, fertilizantes, arroz, suelos o quema para esos años.
 
 
-17. CO2 EQUIVALENTE, ESTADOS Y CLAVE NO
+17. CO2 EQUIVALENTE, ESTADOS Y DISPONIBILIDAD POR GAS
 
 17.1 Conversión a CO2 equivalente
 
@@ -654,11 +687,15 @@ del IPCC (AR5), sin retroalimentación clima–carbono: 1 para CO2, 28 para CH4 
 co2e_kt
   = co2_directo_kt + 28 x ch4_kt + 265 x n2o_kt
 
-El CO2 biogénico informativo no interviene en la ecuación.
+El CO2 biogénico informativo no interviene en la ecuación. Cuando falta un
+factor de algún gas, la emisión correspondiente permanece vacía. Si existen
+otros gases cuantificados, co2e_kt suma exclusivamente esos componentes y se
+identifica como subtotal PARCIAL. No se imputa una emisión al gas ausente. Si
+no hay factores numéricos disponibles, tampoco se calcula un subtotal CO2e.
 
 17.2 Estados
 
-Se utilizan cuatro estados:
+Se utilizan los siguientes estados:
 
 OBS
   Valor numérico procedente de la fuente para el año correspondiente.
@@ -671,13 +708,25 @@ PRX
   Valor o factor obtenido mediante una prolongación o ponderación explícita.
 
 NO
-  Clave de notación que indica ausencia de un valor numérico aplicable. NO no es
-  el gas monóxido de nitrógeno y no equivale a cero.
+  Codificación interna conservada en agricultura para ausencia de estimación.
+  No acredita que el original contenga literalmente esa notación, no es el gas
+  monóxido de nitrógeno y no equivale a cero.
+
+PARCIAL
+  Resultado energético con al menos un factor cuantificado y otro sin dato.
+  co2e_kt es el subtotal cuantificado; clave_notacion identifica los gases
+  ausentes, por ejemplo N2O:SIN_DATO.
+
+SIN_DATO
+  Ausencia de factores numéricos en una fila energética. Las emisiones y el
+  CO2e permanecen vacíos. La clave por gas utiliza GAS:SIN_DATO y separa varios
+  gases con punto y coma. Es un código interno, no una notación CRT.
 
 estado_factor y estado_resultado se conservan por separado. Un resultado puede
 ser CAL porque la multiplicación es exacta y, al mismo tiempo, depender de un
 factor PRX. Un cero directo definido por la correspondencia se registra como CAL;
-una ausencia comunicada por la fuente permanece NO.
+su fuente es METODO_EMISIONES. PARCIAL tampoco sustituye la condición PRX del
+factor: una fila puede ser parcial y depender a la vez de un factor prolongado.
 
 
 18. VISTAS DE RESULTADOS
@@ -694,8 +743,10 @@ EMISIONES_LARGA por anio y unidad_sectorial_agregada:
 - fila 12: n2o_kt; y
 - fila 13: co2e_kt.
 
-La columna J presenta el total del año. Una celda vacía conserva la ausencia de
-valor; no se rellena automáticamente con cero.
+La columna J presenta el agregado del año. La fila de actividad suma actividades
+de extracción, transformación y uso, y no representa consumo energético final.
+Las emisiones muestran subtotales cuantificados. Una combinación sin valores
+numéricos permanece vacía; cuando hay valores, se suman sin imputar los ausentes.
 
 18.2 Serie anual
 
@@ -813,15 +864,16 @@ La trazabilidad depende de conservar en cada registro:
 - fuente de actividad y fuente de factor o emisión; y
 - valores intermedios de actividad y factores.
 
-Los campos fuente_pagina y source_record_id documentan 392 localizadores de los
-insumos de emisiones: 233 observaciones externas con identificador de
-extracción, 90 reglas internas CERO_DIRECTO y 69 claves NO sin valor numérico.
-Las observaciones externas conservan tabla, año, categoría, gas e identificador.
-Los ceros metodológicos remiten a la regla interna y no a una celda CRT. En las
-claves NO, la localización permanece a nivel de tabla porque no existe un valor
-numérico externo que identificar. Los localizadores se recuperaron de los
-registros de extracción integrados; la comprobación directa de la celda primaria
-requiere reabrir los archivos oficiales correspondientes.
+Los campos fuente_pagina, source_record_id y nota relacionan los registros con
+la fuente, su localización y las transformaciones aplicadas. El cotejo de los
+originales CRT 2018–2022 documenta hojas y celdas de los factores externos de
+combustión, las actividades y emisiones de refinación y las fugitivas de
+producción. La serie histórica de agricultura se cotejó en el archivo CRT 2022.
+Los factores conservan los componentes del cociente cuando fueron verificados.
+Los ceros metodológicos remiten a METODO_EMISIONES y no a una celda CRT. Una
+celda original vacía se identifica como tal, incluso cuando el insumo conservaba
+una clave interna NO. La revisión no certifica todas las tablas del inventario;
+el registro de fuentes precisa los archivos y el alcance del cotejo.
 
 Las principales fuentes de incertidumbre son:
 

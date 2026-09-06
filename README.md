@@ -61,7 +61,7 @@ Totales anuales cuantificados de emisiones:
 | Año | Emisiones (kt CO₂e) | Condición |
 |---:|---:|---|
 | 2018 | 28 612,88 | Observado/calculado con información del año |
-| 2019 | 29 730,98 | Observado/calculado con información del año |
+| 2019 | 29 730,98 | Incluye gasolina no asignada con factor ponderado `PRX` |
 | 2020 | 27 015,69 | Observado/calculado con información del año |
 | 2021 | 29 978,96 | Observado/calculado con información del año |
 | 2022 | 28 320,98 | Observado/calculado con información del año |
@@ -70,8 +70,13 @@ Totales anuales cuantificados de emisiones:
 
 El CO₂ equivalente se calcula de forma uniforme como
 `CO₂e = CO₂ fósil + 28 × CH₄ + 265 × N₂O`; el CO₂ biogénico se presenta como
-partida informativa y no se suma al CO₂ fósil. La reproducción independiente
-aprobó los 47 controles estructurales y numéricos definidos; los detalles
+partida informativa y no se suma al CO₂ fósil. En fugitivas de petróleo, el N₂O
+permanece sin dato: la fila se identifica como `PARCIAL` y el CO₂e conserva
+el subtotal cuantificado de CO₂ y CH₄. Los totales anteriores son agregados de
+emisiones cuantificadas, sin imputación de los gases ausentes.
+
+La reproducción independiente comprueba controles estructurales y numéricos,
+disponibilidad por gas y procedencia de los ceros metodológicos; los detalles
 constan en el
 [informe de reproducción](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt).
 
@@ -96,7 +101,9 @@ directamente en GitHub.
 
 El generador y el validador utilizan exclusivamente la biblioteca estándar de
 Python (se requiere **Python 3.10 o posterior**). Una ejecución conforme
-devuelve código de salida `0` y aprueba los 47 controles del validador.
+devuelve código de salida `0` y aprueba los 55 controles del validador. La opción
+`--modelo-excel` añade dos comprobaciones de GN en la vista PSUT; su alcance
+se explica en las instrucciones de reproducción.
 
 ### Linux, macOS o Git Bash
 
@@ -179,6 +186,10 @@ identifica la versión 1.0.0; el DOI conceptual
 [`10.5281/zenodo.21924042`](https://doi.org/10.5281/zenodo.21924042) dirige
 siempre a la versión más reciente.
 
+La corrección técnica del 6 de septiembre de 2026 se documenta en el informe
+de reproducción y en el historial de GitHub. No modifica los archivos de la
+versión 1.0.0 ya depositada en Zenodo.
+
 ## Licencias
 
 | Material | Licencia |
@@ -191,4 +202,4 @@ condiciones de uso de origen; este producto no los relicencia.
 
 ---
 
-**Versión 1.0.0 · Guatemala · cobertura 2018–2024**
+**Versión de referencia 1.0.0 · Guatemala · cobertura 2018–2024**
