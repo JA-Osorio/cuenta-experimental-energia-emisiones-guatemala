@@ -334,9 +334,22 @@ FE(g,c,f,t) [kg/TJ]
   = emisión_CRT(g,c,f,t) [kt] x 1 000 000
     / actividad_CRT(c,f,t) [TJ]
 
-Solo se emplea un factor cuando la actividad y la emisión se refieren al mismo
-año, categoría, grupo de combustible y frontera. No se divide entre cero ni se
-obtiene un factor numérico de una clave de notación.
+La construcción del cociente requiere actividad y emisión del mismo año,
+categoría, grupo de combustible y frontera de las CRT. Su aplicación a la PSUT
+sigue las correspondencias declaradas; no demuestra equivalencia entre las
+fronteras de las CRT y del balance. No se divide entre cero ni se obtiene un
+factor numérico de una clave de notación.
+
+En 1.A.2 y 1.A.3, el modelo aplica un mismo factor de categoría y grupo a distintos
+combustibles. Las emisiones por combustible son aproximaciones: la
+representatividad del promedio no queda garantizada para cada producto.
+
+En 2019–2022, la actividad de queroseno de aviación incluida en el denominador
+agregado de 1.A.3 (Table1.A(a)s3, C18) coincide con la reportada para aviación
+internacional (Table1.D, C11). Las emisiones de ese combustible se presentan en
+Table1.D, G11:I11, y permanecen vacías en Table1.A(a)s3, H18:J18. Esta
+correspondencia requiere conciliación de cobertura: reproducir el cociente
+oficial no valida su aplicación a cualquier mezcla o perímetro de transporte.
 
 EMISIONES_LARGA recupera los factores en ef_co2_kg_tj, ef_ch4_kg_tj y
 ef_n2o_kg_tj mediante la clave de cuatro componentes. En 2018–2022:
@@ -344,6 +357,10 @@ ef_n2o_kg_tj mediante la clave de cuatro componentes. En 2018–2022:
 anio_factor = anio de la actividad
 
 estado_factor = OBS
+
+OBS documenta la procedencia del factor en las CRT; aun siendo un factor
+implícito cotejado, no convierte la emisión calculada ni su asignación por
+combustible en una observación directa.
 
 Los factores CERO_DIRECTO se generan como ceros metodológicos y se identifican
 como CAL. Las combinaciones sin factor numérico se identifican como NO y mantienen
@@ -381,6 +398,11 @@ CH4_kt
 
 N2O_kt
   = actividad_emisiones_tj x ef_n2o_kg_tj / 1 000 000
+
+Cada gas se evalúa por separado. Si falta su factor numérico, su emisión queda
+vacía aunque otros gases de la misma fila puedan calcularse. Si faltan todos
+los factores, las emisiones y el CO2e permanecen vacíos. Los ceros metodológicos
+explícitos se conservan como cero.
 
 El campo tratamiento_co2 determina el destino del CO2 calculado:
 
@@ -553,8 +575,12 @@ emisión_fugitiva_kt(g,p,t)
 
 Para 2018–2022 se utiliza el factor anual y para 2023–2024 el factor de 2022 con
 estado PRX. Solo PETR dispone de valores numéricos positivos suficientes para
-cuantificar CO2 y CH4. CRBN y GN mantienen estado NO y campos de emisiones vacíos;
-no se sustituyen por ceros ni por factores por defecto.
+cuantificar CO2 y CH4. En las CRT de 2018–2022, las celdas H12 y K12 de Table1.B.2
+están vacías para N2O de petróleo, sin valor ni clave de notación. En las siete
+filas de PETR, N2O permanece vacío; su CO2e es parcial y suma solo CO2 y CH4.
+CRBN y GN mantienen
+estado NO y campos de emisiones vacíos; no se sustituyen por ceros ni por
+factores por defecto.
 
 Como control, en 2024 PETR presenta 10 735,3113 TJ de actividad, factores de
 0,00676909343060816 kg CO2/TJ y 0,0928778003966022 kg CH4/TJ, y un resultado de
@@ -654,7 +680,10 @@ del IPCC (AR5), sin retroalimentación clima–carbono: 1 para CO2, 28 para CH4 
 co2e_kt
   = co2_directo_kt + 28 x ch4_kt + 265 x n2o_kt
 
-El CO2 biogénico informativo no interviene en la ecuación.
+La suma incluye únicamente los componentes cuantificados. Si ninguno tiene
+valor numérico, co2e_kt permanece vacío. Un componente ausente no se interpreta
+como cero ni la suma acredita cobertura completa. El CO2 biogénico informativo
+no interviene en la ecuación.
 
 17.2 Estados
 
@@ -677,7 +706,9 @@ NO
 estado_factor y estado_resultado se conservan por separado. Un resultado puede
 ser CAL porque la multiplicación es exacta y, al mismo tiempo, depender de un
 factor PRX. Un cero directo definido por la correspondencia se registra como CAL;
-una ausencia comunicada por la fuente permanece NO.
+una fila sin factores numéricos permanece NO. Si solo falta el factor de un gas,
+su emisión queda vacía y la fila conserva el estado de los componentes
+calculados; este estado no acredita que todos los gases estén cuantificados.
 
 
 18. VISTAS DE RESULTADOS
@@ -749,15 +780,20 @@ QA comprueba:
 - siete años con emisiones; y
 - la identidad de CO2e dentro de 0,000000001 kt.
 
-La identidad se evalúa como:
+La identidad se evalúa sobre los componentes cuantificados como:
 
 diferencia_CO2e
   = co2e_kt
     - (co2_directo_kt + 28 x ch4_kt + 265 x n2o_kt)
 
+Los componentes vacíos se excluyen de la suma y conservan su condición de
+faltantes. El control de faltantes verifica que una emisión energética sin
+factor numérico permanezca vacía, con los ceros metodológicos explícitos
+conservados.
+
 El control general exige además que:
 
-- la actividad y el factor tengan categorías, años y unidades compatibles;
+- la actividad y el factor sigan las categorías, años y unidades declaradas;
 - NOEN no reciba factores de combustión;
 - la electricidad de uso final tenga emisión directa cero;
 - el uso GAS no asignado de 2019 aparezca una sola vez;
@@ -820,8 +856,14 @@ Las observaciones externas conservan tabla, año, categoría, gas e identificado
 Los ceros metodológicos remiten a la regla interna y no a una celda CRT. En las
 claves NO, la localización permanece a nivel de tabla porque no existe un valor
 numérico externo que identificar. Los localizadores se recuperaron de los
-registros de extracción integrados; la comprobación directa de la celda primaria
-requiere reabrir los archivos oficiales correspondientes.
+registros de extracción integrados. El cotejo de los archivos originales de las
+CRT de 2018–2022 confirmó los 166 factores positivos del modelo: 156 de
+combustión y 10 de fugitivas, con una diferencia absoluta máxima de
+1,46 x 10^-11 kg/TJ. Se comprobaron los cocientes de emisiones y actividad y los
+factores reportados cuando correspondía; para fugitivas, el denominador es la
+extracción de la PSUT. Este cotejo establece la procedencia numérica de los
+factores, sin validar automáticamente su asignación por combustible ni todas
+las fronteras contables.
 
 Las principales fuentes de incertidumbre son:
 

@@ -12,7 +12,7 @@ José Carlos Soberanis
 Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
 en creditos.txt.
 
-Fecha de verificación: 2026-08-13
+Fecha de verificación: 2026-09-21
 
 1. OBJETIVO
 
@@ -43,61 +43,64 @@ Resultado:
 
 Los dos CSV de referencia se incorporaron únicamente después de la generación
 para comprobar la conformidad de los resultados. El validador independiente
-aprobó 47 de 47 controles. En el entorno de verificación descrito en el apartado
+aprobó 53 de 53 controles. En el entorno de verificación descrito en el apartado
 4, y utilizando los archivos identificados por las huellas SHA-256 del apartado
 6, los dos CSV generados coincidieron byte por byte con las referencias finales.
 Esta identidad corresponde a la corrida validada y no se extrapola a entornos
 con versiones de Python, sistema operativo, codificación o convenciones de fin
 de línea diferentes. Fuera de ese entorno, la conformidad debe evaluarse
-mediante los 47 controles estructurales y numéricos del validador.
+mediante los 53 controles estructurales y numéricos del validador.
 
-3. PRUEBA DEL CUADERNO
+3. PRUEBA DEL CUADERNO Y DEL LIBRO
 
-La prueba del cuaderno se realizó en otro directorio limpio que contenía
-únicamente:
+Las siete celdas técnicas del cuaderno se ejecutaron en orden con los dos CSV
+finales. Se verificaron las tablas anuales de 2018–2024 y las gráficas de
+respaldo de Matplotlib. La tabla HTML almacenada de 2024 se actualizó.
 
-- psut_energia_guatemala_2018_2024.csv;
-- cuenta_emisiones_aire_guatemala_2018_2024.csv; y
-- cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb.
+Las agregaciones conservan un gas sin valores numéricos como faltante y las
+vistas de emisiones lo presentan como «Sin cuantificar». Se comprobó que las
+filas totalmente no cuantificadas no generan ceros, que el subconjunto de
+fugitivas mantiene N2O sin cuantificar y que los totales nacionales conocidos
+conservan sus valores. La consulta mantiene el código plegado, la configuración
+del selector anual y la presentación con un máximo de dos decimales.
 
-El cuaderno no leyó datos_modelo_guatemala_2018_2024.csv, no importó el script
-de reproducción y no escribió archivos. Sus siete celdas técnicas se ejecutaron
-sin excepciones; permanecen plegadas de forma predeterminada y sus resultados
-son visibles.
+Plotly e ipywidgets no estaban instalados: se revisó su código, pero no se
+comprobó la interacción de esos componentes. El cuaderno utiliza Matplotlib
+cuando Plotly no está disponible.
 
-La auditoría confirmó:
-
-- una PSUT integrada de 22 filas conceptuales, incluido el gas natural;
-- una vista integrada de emisiones;
-- selector anual para 2018–2024;
-- ocho indicadores principales y seis complementarios;
-- once gráficas independientes;
-- presentación con un máximo de dos decimales;
-- señalización de las aproximaciones de 2023–2024;
-- distinción entre celdas vacías y ceros; y
-- ausencia de escrituras persistentes.
+El recálculo del libro confirmó 23 celdas modificadas en solo dos hojas:
+siete fórmulas de N2O, siete fórmulas de CO2e parcial y siete notas en
+EMISIONES_LARGA; y C12 y A5 en EMISIONES. Se conservaron los estilos y los
+demás componentes del archivo. No se detectaron errores de fórmula ni
+diferencias en los resultados numéricos conservados. Los siete N2O sin factor
+quedaron vacíos y los subtotales de CO2e conservaron sus valores. Las pruebas
+del selector con 2018 y 2021 confirmaron que un factor explícito de cero
+produce cero y que un factor positivo produce una emisión numérica. El libro
+final conserva seleccionado 2024.
 
 4. ENTORNO DE VERIFICACIÓN
 
 - Sistema: Linux x86_64, glibc 2.39.
-- Python: 3.12.13.
-- Generador y validador: biblioteca estándar de Python.
+- Python: CPython 3.12.14.
+- Generador, validador y pruebas de regresión: biblioteca estándar de Python.
 - Cuaderno: pandas 2.2.3, numpy 2.3.5 y matplotlib 3.10.8.
-- Plotly e ipywidgets: complementos opcionales; no fueron necesarios para la
-  prueba de respaldo.
+- Plotly, IPython e ipywidgets: no instalados en esta corrida.
 
 5. CONTROLES NUMÉRICOS
 
 Se verificaron los esquemas y el orden de columnas; claves únicas; cobertura
 2018–2024; cierre de oferta y utilización; tratamiento de NO_ASIG, NOEN y STAT;
-preservación de los registros no cuantificados; identidad del CO2 equivalente;
+preservación de faltantes por gas; actividad por factor; subtotales parciales
+identificados; identidad del CO2 equivalente;
 exclusión del CO2 biogénico del total; totales anuales; y dependencia de
 aproximaciones en 2023–2024.
 
 La diferencia máxima de cierre fue menor que 10^-6 TJ. La diferencia máxima de
 la identidad de CO2 equivalente fue menor que 10^-9 kt.
 
-La identidad se comprobó como CO2e = CO2 fósil + 28 × CH4 + 265 × N2O. Los
+La identidad se comprobó como CO2e = CO2 fósil + 28 × CH4 + 265 × N2O,
+sumando solo los componentes cuantificados y conservando vacíos los gases sin
+factor. Los
 potenciales de calentamiento global corresponden al horizonte de 100 años del
 Quinto Informe de Evaluación del IPCC, sin retroalimentación clima–carbono
 (IPCC, 2013, tabla 8.7).
@@ -121,35 +124,57 @@ aportaron 0,00 kt CO2e en ambos años. En los módulos energéticos, la activida
 conserva el año correspondiente en la PSUT y la aproximación recae en el factor;
 en agricultura, recae en el resultado prolongado mediante VAB.
 
+Corrección respecto del commit 5508c559b078d00114cca9c0545cbdf11690b814:
+
+- Siete campos n2o_kt de fugitivas PETR pasan de cero a vacío.
+- Siete notas identifican el CO2e parcial y el gas sin factor numérico.
+- No cambia ningún otro campo del CSV de emisiones ni ningún CO2e por registro.
+- La PSUT y el CSV de entrada conservan identidad byte a byte.
+- Se mantienen las 41 filas completamente no cuantificadas y los ceros
+  metodológicos explícitos.
+
+Las siete pruebas de test_emisiones_faltantes.py aprobaron. Incluyen el fallo
+original, la conservación de ceros explícitos y un caso donde se altera una
+emisión manteniendo la identidad CO2e: el control independiente de actividad
+por factor detecta esa alteración.
+
+El cotejo documental de los 166 factores positivos con las CRT originales se
+presenta en revision_factores_crt_2018_2022.txt y sus archivos de evidencia.
+La coincidencia computacional no sustituye la conciliación de cobertura
+pendiente para el agregado de transporte descrita allí.
+
 6. HUELLAS DIGITALES SHA-256
 
 - datos_modelo_guatemala_2018_2024.csv
   95dbf283f05f929d6193cb708acd7139f6794676ea4955628bd665894f6aae04
 
 - reproducir_modelo_guatemala_2018_2024.py
-  fb9d52ae769403a5074a02e01b6e0584375906f41d587eec159c41a895efa2a9
+  8de9df6e78aea41c997d6679ee163c3d206d663a3bec35ad112a12ba0d036c1c
 
 - validar_reproduccion_guatemala_2018_2024.py
-  aaf4fa4f0b7a214c3fbd7b59f7f846fcb8da8e068384054f550c879fe7da1d4a
+  9dc466cf9f999851a1d678c3cc43a84491ef03e3d1bf1b4e906e9fe587f0a55e
+
+- test_emisiones_faltantes.py
+  70f10d5914875d36de364dddd5ad7ecaf5f75f631f7e5367c812195902ddbde5
 
 - requirements.txt
   0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
 
 - cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb
-  2a130746990ca4dbe1461fcb91f91614f82d5145182e32b3cceea44588e013ab
+  77ef7bed88700605aaf0dec2df210b41446825f6436792f2ca8e307bafb8720e
 
 - modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx
-  1f9c2c5d614b9c26dfee4423e58e9a78adfe7fb3d36e9edb43747ab1cf74325c
+  f926dee7eaf91fab6211729705540fd523ae81c1dd8aeb8ea6ed8070a9058a9a
 
 - psut_energia_guatemala_2018_2024.csv
   4be0edefa6d24be0598a0c8cdbb5a7fc76211bed3dfc205083d60a18398bc071
 
 - cuenta_emisiones_aire_guatemala_2018_2024.csv
-  9c1004383e00d0d7d026eb488361d94dd6586bb583cedcf4ae0beb3fca94f15b
+  c17b41ade77e1acb2784de9d77db0ebca9eef3b3c2e93124238876a1e2ed6dba
 
 7. RESULTADO
 
 APROBADO para el entorno descrito en el apartado 4. En esas condiciones, el
 script produjo los dos datasets con identidad byte a byte respecto de las
-referencias finales y el validador aprobó 47 de 47 controles. El cuaderno
+referencias finales y el validador aprobó 53 de 53 controles. El cuaderno
 funcionó como visor anual y temporal sin duplicar el motor de cálculo.

@@ -1,0 +1,127 @@
+[
+  {
+    "anio": 2018,
+    "registro_id": "FE_FUG|2018|1.B.2.a.ii|FUGITIVA_PETROLEO|N2O",
+    "archivo_crt": "GTM-CRT-2024-V0.3-2018-20250304-084824_started.xlsx",
+    "sha256_xlsx": "1efce35f9670e4cbbd297ded271efaf4a32192bfcc9aa0eba7acb87b01dddc8d",
+    "hoja": "Table1.B.2",
+    "celda_emision": "K12",
+    "emision": null,
+    "celda_factor": "H12",
+    "factor": null,
+    "emision_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"K12\" s=\"49\" />",
+      "type": "n"
+    },
+    "factor_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"H12\" s=\"501\" />",
+      "type": "n"
+    }
+  },
+  {
+    "anio": 2019,
+    "registro_id": "FE_FUG|2019|1.B.2.a.ii|FUGITIVA_PETROLEO|N2O",
+    "archivo_crt": "GTM-CRT-2024-V0.3-2019-20250304-084824_started.xlsx",
+    "sha256_xlsx": "67d581bfd7a3e19c8ef8912e47014d2b2594b633567b44db6a66a46d21778680",
+    "hoja": "Table1.B.2",
+    "celda_emision": "K12",
+    "emision": null,
+    "celda_factor": "H12",
+    "factor": null,
+    "emision_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"K12\" s=\"49\" />",
+      "type": "n"
+    },
+    "factor_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"H12\" s=\"501\" />",
+      "type": "n"
+    }
+  },
+  {
+    "anio": 2020,
+    "registro_id": "FE_FUG|2020|1.B.2.a.ii|FUGITIVA_PETROLEO|N2O",
+    "archivo_crt": "GTM-CRT-2024-V0.3-2020-20250304-084824_started.xlsx",
+    "sha256_xlsx": "17f0e83d5b434cddc5e179c71e4106c1a96b35972ea36e19202a07e0219ebc6c",
+    "hoja": "Table1.B.2",
+    "celda_emision": "K12",
+    "emision": null,
+    "celda_factor": "H12",
+    "factor": null,
+    "emision_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"K12\" s=\"49\" />",
+      "type": "n"
+    },
+    "factor_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"H12\" s=\"501\" />",
+      "type": "n"
+    }
+  },
+  {
+    "anio": 2021,
+    "registro_id": "FE_FUG|2021|1.B.2.a.ii|FUGITIVA_PETROLEO|N2O",
+    "archivo_crt": "GTM-CRT-2024-V0.3-2021-20250304-084824_started.xlsx",
+    "sha256_xlsx": "72387c5108bf4044dc94c41679c64bff17814c9d1691106132a67186667b88ae",
+    "hoja": "Table1.B.2",
+    "celda_emision": "K12",
+    "emision": null,
+    "celda_factor": "H12",
+    "factor": null,
+    "emision_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"K12\" s=\"49\" />",
+      "type": "n"
+    },
+    "factor_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"H12\" s=\"501\" />",
+      "type": "n"
+    }
+  },
+  {
+    "anio": 2022,
+    "registro_id": "FE_FUG|2022|1.B.2.a.ii|FUGITIVA_PETROLEO|N2O",
+    "archivo_crt": "GTM-CRT-2024-V0.3-2022-20250304-084824_started.xlsx",
+    "sha256_xlsx": "55ea0ebf9c029a3bbd56aa5b6faff643d67df4d0b3987e778786d73d18c4d22e",
+    "hoja": "Table1.B.2",
+    "celda_emision": "K12",
+    "emision": null,
+    "celda_factor": "H12",
+    "factor": null,
+    "emision_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"K12\" s=\"49\" />",
+      "type": "n"
+    },
+    "factor_raw": {
+      "value": null,
+      "raw_v": null,
+      "formula": null,
+      "xml": "<ns0:c xmlns:ns0=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" r=\"H12\" s=\"501\" />",
+      "type": "n"
+    }
+  }
+]

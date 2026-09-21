@@ -41,7 +41,7 @@ El valor agregado real de Agricultura, ganadería, silvicultura y pesca, publica
 
 Cuando dos fuentes diferían, se compararon el concepto, el territorio, el período, la unidad, el producto, la actividad y la etapa de la cadena energética. La fuente más próxima al concepto de la cuenta se mantuvo como control y la otra se utilizó como contraste o componente, siempre que no generara doble conteo. No se promediaron cifras de coberturas distintas.
 
-Las observaciones de los balances conservan localizadores detallados. Para los factores de emisión, los registros agrícolas, las actividades de refinación y los valores de VAB se documentaron 392 localizadores: 233 corresponden a observaciones externas con identificador de extracción, 90 a reglas internas CERO_DIRECTO y 69 a claves NO sin valor numérico. En estas últimas no se atribuyó una celda inexistente: se consignaron la tabla de referencia y la clave interna que preserva la ausencia de un factor numérico. Los identificadores se recuperaron de los registros de extracción integrados; permiten seguir la procedencia dentro del modelo, aunque la comprobación directa de la celda primaria requiere reabrir los archivos oficiales correspondientes.
+Las observaciones de los balances conservan localizadores detallados. Para los factores de emisión, los registros agrícolas, las actividades de refinación y los valores de VAB se documentaron 392 localizadores: 233 corresponden a observaciones externas con identificador de extracción, 90 a reglas internas CERO_DIRECTO y 69 a claves NO sin valor numérico. En estas últimas no se atribuyó una celda inexistente: se consignaron la tabla de referencia y la clave interna que preserva la ausencia de un factor numérico. Los identificadores se recuperaron de los registros de extracción integrados. El cotejo de los archivos originales de las CRT de 2018–2022 confirmó los 166 factores positivos de combustión y fugitivas del modelo; su alcance y la conciliación pendiente de transporte se documentan en la NT-02.
 
 
 4. PREPARACIÓN Y ARMONIZACIÓN DE LA INFORMACIÓN
@@ -110,6 +110,8 @@ La emisión energética se obtuvo mediante:
 
 emision(g,s,p,t) [kt] = actividad_emisiones(s,p,t) [TJ] × fe(g,c,anio_factor) [kg/TJ] / 1 000 000
 
+El cálculo se realiza por gas: si falta su factor numérico, su emisión permanece vacía aunque otros gases de la misma fila puedan cuantificarse. Los ceros metodológicos explícitos se conservan como cero. El estado OBS del factor documenta su procedencia en las CRT; aun siendo un factor implícito cotejado, no convierte la emisión calculada ni su asignación por combustible en una observación directa.
+
 La electricidad utilizada por hogares o actividades económicas recibió emisión directa igual a cero, porque las emisiones de los combustibles empleados para generarla permanecen en ENER. El mismo tratamiento se aplicó a las fuentes renovables sin combustión en el punto de uso. Los flujos NOEN se excluyeron de combustión.
 
 En la refinación se distinguió el petróleo crudo procesado de la actividad de combustión. Para 2018–2022 se calculó un coeficiente anual entre la actividad de combustión observada en las Tablas Comunes de Reporte y el crudo registrado en la PSUT. El coeficiente de 2022 se aplicó en 2023 y 2024 con estado PRX. Las emisiones fugitivas utilizaron factores anuales de 2018–2022 y el factor de 2022 para los dos años siguientes.
@@ -136,7 +138,7 @@ Para agregar los gases se utilizaron potenciales de calentamiento global a 100 a
 
 co2e_kt = co2_directo_kt + 28 × ch4_kt + 265 × n2o_kt
 
-El CO₂ biogénico informativo quedó fuera de esta identidad.
+Esta suma incluye únicamente los componentes cuantificados; si ninguno tiene valor numérico, co2e_kt permanece vacío. Un componente ausente no se interpreta como cero ni la suma acredita cobertura completa. En las siete filas de fugitivas de petróleo, N₂O carece de factor numérico y queda vacío; el CO₂e parcial suma CO₂ y CH₄. El CO₂ biogénico informativo quedó fuera de esta identidad.
 
 
 7. TRAZABILIDAD E INTEGRACIÓN ENTRE LAS CUENTAS
@@ -173,7 +175,7 @@ QA comprueba las identidades sustantivas: los usos aparentes de NOEN permanecen 
 
 La resolución sectorial está condicionada por los agregados de los Balances Energéticos Nacionales. IND_BEN y TR_BEN no equivalen necesariamente a una sola actividad CIIU y no deben interpretarse con mayor detalle que el publicado. La base territorial limita la comparación directa con cuentas ajustadas por residencia.
 
-Los factores implícitos representan promedios de categorías oficiales y no factores tecnológicos de instalaciones individuales. La extensión de los factores de 2022 a 2023–2024 y el uso del VAB para las emisiones agrícolas son aproximaciones explícitas. La incertidumbre de estas decisiones no se reduce por la precisión decimal de los resultados.
+Los factores implícitos representan promedios de categorías oficiales y no factores tecnológicos de instalaciones individuales. En 1.A.2 y 1.A.3, el modelo aplica un mismo factor de categoría y grupo a distintos combustibles; las emisiones por combustible son aproximaciones y la representatividad del promedio no queda garantizada para cada producto. La extensión de los factores de 2022 a 2023–2024 y el uso del VAB para las emisiones agrícolas son aproximaciones explícitas. La incertidumbre de estas decisiones no se reduce por la precisión decimal de los resultados.
 
 El control de estados mostró que el 100 % del CO₂e cuantificado en 2023 y 2024 depende de un estado_factor PRX o de un estado_resultado PRX. En los registros energéticos, la actividad corresponde al año registrado en la PSUT y la aproximación recae en el factor de 2022; en agricultura, recae en la prolongación del resultado mediante VAB. Por ello, los totales de esos años incorporan aproximaciones en toda su magnitud cuantificada, sin que esto convierta en imputadas las actividades energéticas anuales.
 
@@ -184,7 +186,7 @@ Las categorías con clave de notación permanecen sin valor numérico. Las exclu
 
 La PSUT se validó por producto y año. Se comprobó la igualdad entre oferta y utilización después de incorporar los usos aparentes autorizados, la correspondencia entre residuales suministrados y recibidos, la ausencia de duplicación entre extracción, producción y uso, y la separación entre NO_ASIG y STAT. El umbral interno de cierre fue 0,00000001 TJ; las comparaciones de flujos utilizaron 0,000001 TJ.
 
-La cuenta de emisiones se validó mediante la correspondencia entre actividad, categoría y factor; la identificación del año del factor; la separación del CO₂ biogénico; la inclusión del CH₄ y el N₂O de biomasa en CO₂e; el tratamiento de emisión directa cero; la exclusión de NOEN de combustión; y la conservación de las claves de notación. La tolerancia numérica de comparación fue 0,000000001 kt.
+Los controles internos de la cuenta de emisiones revisaron las correspondencias declaradas entre actividad, categoría y factor; la identificación del año del factor; la separación del CO₂ biogénico; la inclusión del CH₄ y el N₂O cuantificados de biomasa en CO₂e; el tratamiento de emisión directa cero; la exclusión de NOEN de combustión; y la conservación de las claves de notación. La tolerancia numérica de comparación fue 0,000000001 kt. La reproducción interna y el cotejo numérico con las CRT son verificaciones distintas; ninguno demuestra por sí solo la representatividad del factor por combustible o la equivalencia de fronteras.
 
 Los controles de QA confirmaron que los siete usos aparentes de NOEN están asignados a NO_ASIG, que no existe ningún flujo NOEN en STAT, que GAS corresponde a gasolinas en el caso de 2019 y que no se generaron residuos estadísticos materiales. Los cálculos conservaron la precisión completa; las tablas y gráficas presentan como máximo dos decimales.
 

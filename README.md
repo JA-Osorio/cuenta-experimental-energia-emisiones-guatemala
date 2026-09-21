@@ -68,10 +68,12 @@ Totales anuales cuantificados de emisiones:
 | 2023 | 30 852,29 | 100 % dependiente de aproximaciones `PRX` |
 | 2024 | 33 159,61 | 100 % dependiente de aproximaciones `PRX` |
 
-El CO₂ equivalente se calcula de forma uniforme como
+El CO₂ equivalente cuantificado se calcula como
 `CO₂e = CO₂ fósil + 28 × CH₄ + 265 × N₂O`; el CO₂ biogénico se presenta como
-partida informativa y no se suma al CO₂ fósil. La reproducción independiente
-aprobó los 47 controles estructurales y numéricos definidos; los detalles
+partida informativa y no se suma al CO₂ fósil. Cuando falta el factor de un gas,
+su emisión queda vacía y el CO₂e suma los componentes cuantificados. La nota del
+registro identifica los gases sin cuantificar. La reproducción independiente
+aprobó los 53 controles estructurales y numéricos definidos; los detalles
 constan en el
 [informe de reproducción](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt).
 
@@ -96,7 +98,7 @@ directamente en GitHub.
 
 El generador y el validador utilizan exclusivamente la biblioteca estándar de
 Python (se requiere **Python 3.10 o posterior**). Una ejecución conforme
-devuelve código de salida `0` y aprueba los 47 controles del validador.
+devuelve código de salida `0` y aprueba los 53 controles del validador.
 
 ### Linux, macOS o Git Bash
 
@@ -129,6 +131,9 @@ están en
 [`instrucciones_reproduccion_python.txt`](04_reproduccion_python/instrucciones_reproduccion_python.txt)
 y en el
 [informe de reproducción](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt).
+
+Las siete pruebas de regresión del tratamiento de gases sin factor se ejecutan
+con `python3 04_reproduccion_python/test_emisiones_faltantes.py`.
 
 ## Estructura del repositorio
 
@@ -164,6 +169,17 @@ ausencia de dato, lo no estimado y lo incluido en otra categoría.
 - [Metodología de la cuenta de emisiones](01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt)
 - [Registro de trazabilidad de fuentes](00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx)
 
+Los factores se consultan en la hoja `DATOS_MODELO` del Excel o en el
+[CSV de entrada](04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv),
+filtrando `tipo_registro = FACTOR_EMISION_OBS`. La hoja `EMISIONES_LARGA`
+muestra el factor aplicado a cada registro. Los factores se asignan por
+categoría y grupo de combustibles; los de un agregado no identifican un
+factor específico de cada combustible que lo integra.
+
+El [cotejo con las CRT originales](05_verificacion/revision_factores_crt_2018_2022.txt)
+documenta las celdas y los cocientes que reproducen los 166 factores positivos
+de 2018–2022, así como el alcance de los agregados de industria y transporte.
+
 ## Citación
 
 Use la opción **Cite this repository** de GitHub o consulte
@@ -191,4 +207,4 @@ condiciones de uso de origen; este producto no los relicencia.
 
 ---
 
-**Versión 1.0.0 · Guatemala · cobertura 2018–2024**
+**Guatemala · cobertura 2018–2024 · revisión del repositorio: 21 de septiembre de 2026**

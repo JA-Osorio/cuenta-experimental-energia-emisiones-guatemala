@@ -40,7 +40,7 @@ La tabla de oferta y utilización física registra productos energéticos, flujo
 
 3.2 Emisiones al aire
 
-La cuenta de emisiones integra la actividad energética con factores de emisión por gas y clase de combustible. La electricidad se registra en el sector consumidor como uso de energía, mientras las emisiones de su generación permanecen en las industrias de energía. El CO₂ biogénico se presenta como partida informativa y no se suma al CO₂ fósil.
+La cuenta de emisiones integra la actividad energética con factores de emisión por gas, categoría y grupo de combustibles. La electricidad se registra en el sector consumidor como uso de energía, mientras las emisiones de su generación permanecen en las industrias de energía. El CO₂ biogénico se presenta como partida informativa y no se suma al CO₂ fósil.
 
 3.3 Datos y parámetros
 
@@ -70,6 +70,8 @@ Para 2018–2022 se emplean factores implícitos derivados de información ofici
 Para agregar los gases se utilizaron potenciales de calentamiento global a 100 años del Quinto Informe de Evaluación del IPCC (AR5), sin retroalimentación clima–carbono: 1 para CO₂, 28 para CH₄ y 265 para N₂O (IPCC, 2013, tabla 8.7). El indicador de CO₂ equivalente se calcula de forma uniforme:
 
 CO₂e [kt] = CO₂ fósil [kt] + 28 × CH₄ [kt] + 265 × N₂O [kt]
+
+Cuando falta el factor de un gas, su emisión permanece vacía. El CO₂e suma los componentes cuantificados y la nota del registro identifica los gases sin cuantificar. Un grupo sin valores numéricos para un gas se presenta como «Sin cuantificar» en el cuaderno y como celda vacía en el Excel.
 
 Los balances de oferta y uso, las asignaciones sectoriales y las emisiones se verifican mediante conciliaciones numéricas y reglas metodológicas explícitas.
 

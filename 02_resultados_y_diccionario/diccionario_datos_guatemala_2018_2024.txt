@@ -45,7 +45,7 @@ Tipos de registro
 - CATALOGO_UNIDAD: catálogo de unidades económicas y ambientales.
 - MAPEO_PSUT: reglas que transforman los datos del balance en flujos PSUT.
 - REGLA_EMISION_ENERGIA: correspondencias entre flujos energéticos y cálculos de emisiones.
-- FACTOR_EMISION_OBS: factores de emisión por año, gas y grupo de combustible.
+- FACTOR_EMISION_OBS: factores implícitos por año, categoría IPCC, gas y grupo de combustible, además de ceros metodológicos y combinaciones sin valor numérico.
 - ACTIVIDAD_REFINACION_OBS: actividad observada utilizada para la refinación.
 - EMISION_AGRICULTURA_OBS: emisiones agrícolas observadas por categoría y gas.
 - VAB_AGRICULTURA: valor agregado bruto anual utilizado para las aproximaciones agrícolas.
@@ -77,7 +77,7 @@ Campos
 - cero_imputado: indicador binario de un cero incorporado para completar la estructura tabular.
 - categoria_ipcc: código de la categoría del inventario de gases de efecto invernadero.
 - categoria_nombre: denominación de la categoría del inventario.
-- grupo_factor: grupo de combustible o regla utilizado para seleccionar el factor de emisión.
+- grupo_factor: grupo de combustible o regla utilizado para seleccionar el factor de emisión; un factor de grupo no es necesariamente específico de cada combustible.
 - gas: CO2, CH4 o N2O.
 - valor_factor: valor numérico del factor de emisión.
 - unidad_factor: unidad del factor de emisión.
@@ -159,7 +159,7 @@ Campos
 - grupo_factor: grupo utilizado para seleccionar el factor de emisión.
 - tratamiento_co2: tratamiento del CO2 fósil, biogénico o sin emisión directa.
 - anio_factor: año del factor de emisión aplicado.
-- estado_factor: condición metodológica del factor: OBS, CAL, PRX o NO.
+- estado_factor: condición metodológica del factor: OBS, CAL, PRX o NO; no describe por sí sola la cobertura por gas ni convierte la asignación por combustible en observada.
 - ef_co2_kg_tj: factor de emisión de CO2 en kg/TJ.
 - ef_ch4_kg_tj: factor de emisión de CH4 en kg/TJ.
 - ef_n2o_kg_tj: factor de emisión de N2O en kg/TJ.
@@ -169,7 +169,7 @@ Campos
 - co2_biogenico_memo_kt: CO2 biogénico informado por separado y excluido del total de CO2e, en kt.
 - ch4_kt: emisión de CH4, en kt.
 - n2o_kt: emisión de N2O, en kt.
-- co2e_kt: emisión en kt de CO2 equivalente.
+- co2e_kt: suma de los componentes cuantificados en kt de CO2 equivalente; queda vacía si ninguno tiene valor numérico y puede ser parcial si falta un gas.
 - estado_resultado: condición metodológica del resultado: OBS, CAL, PRX o NO.
 - clave_notacion: código de notación cuando no se calcula una emisión.
 - metodo_calculo: fórmula o procedimiento general aplicado.
@@ -180,6 +180,9 @@ Campos
 5. Reglas de interpretación
 
 - Las filas con estado NO o clave_notacion NO informan que no existe una estimación numérica; no deben convertirse automáticamente en cero.
+- En las filas energéticas, cada gas sin factor numérico conserva su emisión vacía aunque otros gases se calculen. Los ceros metodológicos explícitos se conservan como cero.
+- En las siete filas de fugitivas de PETR, N2O permanece vacío y co2e_kt suma solo CO2 y CH4. Los estados de la fila no implican cobertura completa de los gases.
+- En 1.A.2 y 1.A.3, un mismo factor de categoría y grupo se aplica a distintos combustibles. Las emisiones por combustible son aproximaciones; la representatividad del promedio no es automática.
 - NO_ASIG conserva usos internos cuantificados cuya actividad compradora no puede identificarse con la fuente disponible.
 - El CO2 biogénico se informa como partida de memoria y no se suma al CO2e.
 - Los resultados deben agregarse mediante las claves y unidades declaradas; no mediante el orden físico de las filas.

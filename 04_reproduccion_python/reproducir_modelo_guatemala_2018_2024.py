@@ -444,15 +444,22 @@ def construir_emisiones(
             )
 
         disponible = any(valor is not None for valor in valores_factor.values())
+        gases_sin_factor = [gas for gas, valor in valores_factor.items() if valor is None]
         if disponible:
-            ef_co2 = valores_factor["CO2"] or 0.0
-            ef_ch4 = valores_factor["CH4"] or 0.0
-            ef_n2o = valores_factor["N2O"] or 0.0
-            co2 = 0.0 if regla["tratamiento_co2"] == "BIOGENICO" else actividad * ef_co2 / kg_por_kt
-            biogenico = actividad * ef_co2 / kg_por_kt if regla["tratamiento_co2"] == "BIOGENICO" else 0.0
-            ch4 = actividad * ef_ch4 / kg_por_kt
-            n2o = actividad * ef_n2o / kg_por_kt
-            co2e = co2 + ch4 * gwp_ch4 + n2o * gwp_n2o
+            emisiones_por_gas = {
+                gas: None if factor is None else actividad * factor / kg_por_kt
+                for gas, factor in valores_factor.items()
+            }
+            co2 = 0.0 if regla["tratamiento_co2"] == "BIOGENICO" else emisiones_por_gas["CO2"]
+            biogenico = emisiones_por_gas["CO2"] if regla["tratamiento_co2"] == "BIOGENICO" else 0.0
+            ch4 = emisiones_por_gas["CH4"]
+            n2o = emisiones_por_gas["N2O"]
+            # Un subtotal cuantificado no convierte el gas ausente en cero.
+            # Conservamos el orden aritmetico de los resultados publicados.
+            co2e = 0.0
+            for valor, peso in ((co2, 1.0), (ch4, gwp_ch4), (n2o, gwp_n2o)):
+                if valor is not None:
+                    co2e += valor * peso
         else:
             co2 = biogenico = ch4 = n2o = co2e = None
         estado_factor = "NO" if not disponible else (
@@ -494,7 +501,11 @@ def construir_emisiones(
             ),
             "fuente_actividad": "MEM_BEN",
             "fuente_factor": "UNFCCC_GTM_CRT_2024",
-            "nota": "",
+            "nota": (
+                "CO2e parcial: " + ", ".join(gases_sin_factor)
+                + " sin factor numérico; el total incluye solo los gases cuantificados."
+                if disponible and gases_sin_factor else ""
+            ),
         })
 
     referencias_gas = [
@@ -701,11 +712,15 @@ def construir_emisiones(
     for fila in salida:
         if fila["co2e_kt"] == "":
             continue
-        co2 = float(fila["co2_directo_kt"])
-        ch4 = float(fila["ch4_kt"])
-        n2o = float(fila["n2o_kt"])
         co2e = float(fila["co2e_kt"])
-        diferencia = abs(co2 + ch4 * gwp_ch4 + n2o * gwp_n2o - co2e)
+        # La identidad suma solo componentes cuantificados; los CSV conservan
+        # vacíos los gases sin factor y explican el subtotal en la nota.
+        cuantificado = sum(
+            float(fila[campo]) * peso
+            for campo, peso in (("co2_directo_kt", 1.0), ("ch4_kt", gwp_ch4), ("n2o_kt", gwp_n2o))
+            if fila[campo] != ""
+        )
+        diferencia = abs(cuantificado - co2e)
         exigir(diferencia <= max(tolerancia, 5e-9), f"La identidad de CO2e no se cumple en {fila['clave_emision']}.")
     return salida
 
