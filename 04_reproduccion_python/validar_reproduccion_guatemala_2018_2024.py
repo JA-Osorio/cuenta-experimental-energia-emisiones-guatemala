@@ -445,7 +445,7 @@ def validar_emisiones(
     tolerancia_emisiones: Decimal,
     informe: Informe,
 ) -> dict[str, Decimal]:
-    """Comprueba estructura, cobertura e identidad de CO2e sin CO2 biogenico."""
+    """Comprueba factores por gas y subtotales de CO2e sin imputar faltantes."""
 
     validar_esquema(
         f"Emisiones {etiqueta}", encabezado, COLUMNAS_EMISIONES, informe
@@ -478,6 +478,8 @@ def validar_emisiones(
     errores_presencia: list[str] = []
     errores_numericos: list[str] = []
     errores_identidad: list[tuple[str, Decimal]] = []
+    errores_factores: list[str] = []
+    errores_notas: list[str] = []
     totales_co2e = {anio: Decimal(0) for anio in ANIOS_ESPERADOS}
     totales_componentes = {
         anio: {
@@ -493,43 +495,94 @@ def validar_emisiones(
         clave = fila.get("clave_emision", "")
         anio = fila.get("anio", "")
         presentes = [fila.get(campo, "") != "" for campo in campos_identidad]
-        if any(presentes) and not all(presentes):
-            if len(errores_presencia) < MAXIMO_EJEMPLOS:
-                errores_presencia.append(clave)
-            continue
-        if not any(presentes):
-            continue
         try:
-            co2_directo = a_decimal(
-                fila["co2_directo_kt"], f"Emisiones/{clave}/co2_directo_kt"
-            )
-            co2_biogenico = a_decimal(
-                fila["co2_biogenico_memo_kt"],
-                f"Emisiones/{clave}/co2_biogenico_memo_kt",
-            )
-            ch4 = a_decimal(fila["ch4_kt"], f"Emisiones/{clave}/ch4_kt")
-            n2o = a_decimal(fila["n2o_kt"], f"Emisiones/{clave}/n2o_kt")
-            co2e = a_decimal(fila["co2e_kt"], f"Emisiones/{clave}/co2e_kt")
+            valores = {
+                campo: a_decimal(fila[campo], f"Emisiones/{clave}/{campo}")
+                if fila.get(campo, "") != "" else None
+                for campo in campos_identidad
+            }
+            if fila.get("modulo") == "AGRICULTURA":
+                # Agricultura incorpora emisiones fuente, no factores kg/TJ.
+                if any(presentes) and not all(presentes):
+                    errores_presencia.append(clave)
+            else:
+                factores = {
+                    gas: a_decimal(fila[campo], f"Emisiones/{clave}/{campo}")
+                    if fila.get(campo, "") != "" else None
+                    for gas, campo in (
+                        ("CO2", "ef_co2_kg_tj"),
+                        ("CH4", "ef_ch4_kg_tj"),
+                        ("N2O", "ef_n2o_kg_tj"),
+                    )
+                }
+                disponibles = any(valor is not None for valor in factores.values())
+                esperados = {campo: None for campo in campos_identidad[:-1]}
+                if disponibles:
+                    actividad = a_decimal(fila.get("actividad_emisiones_tj", ""), f"Emisiones/{clave}/actividad")
+                    emisiones = {
+                        gas: None if factor is None else actividad * factor / Decimal("1000000")
+                        for gas, factor in factores.items()
+                    }
+                    es_biogenico = fila.get("tratamiento_co2") == "BIOGENICO"
+                    esperados.update({
+                        "co2_directo_kt": Decimal(0) if es_biogenico else emisiones["CO2"],
+                        "co2_biogenico_memo_kt": emisiones["CO2"] if es_biogenico else Decimal(0),
+                        "ch4_kt": emisiones["CH4"],
+                        "n2o_kt": emisiones["N2O"],
+                    })
+                if (valores["co2e_kt"] is not None) != disponibles:
+                    errores_presencia.append(clave)
+                for campo, esperado in esperados.items():
+                    observado = valores[campo]
+                    if ((observado is None) != (esperado is None)
+                        or (observado is not None and esperado is not None
+                            and abs(observado - esperado) > tolerancia_emisiones)):
+                        errores_factores.append(f"{clave}/{campo}: factor y resultado incompatibles")
+                if any(valor is not None and valor < 0 for valor in factores.values()):
+                    errores_factores.append(f"{clave}: factor negativo")
+                if fila.get("grupo_factor") == "CERO_DIRECTO" and (
+                    any(valor != Decimal(0) for valor in factores.values())
+                    or fila.get("estado_factor") != "CAL"
+                ):
+                    errores_factores.append(f"{clave}: cero metodologico inconsistente")
+                faltantes = [gas for gas, factor in factores.items() if factor is None]
+                if disponibles and faltantes:
+                    nota_esperada = (
+                        "CO2e parcial: " + ", ".join(faltantes)
+                        + " sin factor numérico; el total incluye solo los gases cuantificados."
+                    )
+                    if nota_esperada not in fila.get("nota", ""):
+                        errores_notas.append(clave)
         except ValueError as exc:
             if len(errores_numericos) < MAXIMO_EJEMPLOS:
                 errores_numericos.append(str(exc))
             continue
 
-        # El CO2 biogenico se mantiene como partida informativa y no entra en CO2e.
-        co2e_calculado = co2_directo + GWP_CH4 * ch4 + GWP_N2O * n2o
+        co2e = valores["co2e_kt"]
+        if co2e is None:
+            continue
+        # Suma de componentes conocidos: no se rellena ningun campo ausente.
+        # El CO2 biogenico permanece como partida informativa fuera del subtotal.
+        co2e_calculado = sum(
+            valores[campo] * peso
+            for campo, peso in (("co2_directo_kt", Decimal(1)), ("ch4_kt", GWP_CH4), ("n2o_kt", GWP_N2O))
+            if valores[campo] is not None
+        )
         diferencia = co2e - co2e_calculado
         if abs(diferencia) > tolerancia_emisiones:
             errores_identidad.append((clave, diferencia))
         if anio in totales_co2e:
             totales_co2e[anio] += co2e
-            totales_componentes[anio]["co2_directo"] += co2_directo
-            totales_componentes[anio]["ch4"] += ch4
-            totales_componentes[anio]["n2o"] += n2o
-            totales_componentes[anio]["biogenico"] += co2_biogenico
+            for componente, campo in (
+                ("co2_directo", "co2_directo_kt"), ("ch4", "ch4_kt"),
+                ("n2o", "n2o_kt"), ("biogenico", "co2_biogenico_memo_kt"),
+            ):
+                if valores[campo] is not None:
+                    totales_componentes[anio][componente] += valores[campo]
 
     informe.comprobar(
         not errores_presencia,
-        f"Emisiones {etiqueta}: componentes de la identidad completos o todos vacios",
+        f"Emisiones {etiqueta}: presencia del subtotal coherente con los gases disponibles",
         detalle_elementos(errores_presencia),
     )
     informe.comprobar(
@@ -537,10 +590,35 @@ def validar_emisiones(
         f"Emisiones {etiqueta}: valores de la identidad validos y finitos",
         "; ".join(errores_numericos),
     )
+    informe.comprobar(
+        not errores_factores,
+        f"Emisiones {etiqueta}: resultados por gas coherentes con actividad y factor; faltantes preservados",
+        detalle_elementos(errores_factores),
+    )
+    informe.comprobar(
+        not errores_notas,
+        f"Emisiones {etiqueta}: subtotales parciales identifican los gases sin factor",
+        detalle_elementos(errores_notas),
+    )
+    petroleo_fugitivo = [
+        fila for fila in registros
+        if fila.get("modulo") == "FUGITIVAS" and fila.get("producto_std") == "PETR"
+    ]
+    informe.comprobar(
+        Counter(fila.get("anio") for fila in petroleo_fugitivo)
+        == Counter({anio: 1 for anio in ANIOS_ESPERADOS})
+        and all(
+            fila.get("ef_n2o_kg_tj") == "" and fila.get("n2o_kt") == ""
+            and fila.get("co2_directo_kt", "") != "" and fila.get("ch4_kt", "") != ""
+            and fila.get("co2e_kt", "") != ""
+            for fila in petroleo_fugitivo
+        ),
+        f"Emisiones {etiqueta}: 7 registros fugitivos de petroleo conservan N2O sin cuantificar",
+    )
     errores_identidad.sort(key=lambda elemento: abs(elemento[1]), reverse=True)
     informe.comprobar(
         not errores_identidad,
-        f"Emisiones {etiqueta}: identidad CO2e excluye CO2 biogenico",
+        f"Emisiones {etiqueta}: identidad CO2e suma gases cuantificados y excluye CO2 biogenico",
         detalle_elementos(errores_identidad),
     )
 

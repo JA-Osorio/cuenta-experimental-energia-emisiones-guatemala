@@ -1,7 +1,7 @@
 MANIFIESTO DEL PAQUETE FINAL PARA COMPARTIR
 
 Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
-Fecha de preparación: 2026-08-13
+Fecha de preparación: 2026-09-21
 
 1. CONTENIDO DEL PAQUETE
 
@@ -28,11 +28,14 @@ publicación.
   Versión en hoja de cálculo con fórmulas y trazabilidad.
 
 04_reproduccion_python
-  Archivo único de entrada, script generador, validador, cuaderno de consulta,
-  instrucciones y versiones de dependencias.
+  Archivo único de entrada, script generador, validador, siete pruebas de
+  regresión, auditor de factores CRT, cuaderno de consulta, instrucciones y
+  versiones de dependencias.
 
 05_verificacion
-  Informe final de reproducción computacional.
+  Informe final de reproducción computacional, cotejo de factores con las CRT
+  originales, conciliación de cobertura de transporte y evidencia XML del
+  N2O fugitivo sin cuantificar.
 
 2. REPRODUCCIÓN RÁPIDA
 
@@ -50,6 +53,14 @@ python 04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py \
 
 El cuaderno no reconstruye las cuentas. Para consultarlo deben cargarse los dos
 CSV finales ubicados en 02_resultados_y_diccionario.
+
+Las siete pruebas de regresión se ejecutan con:
+
+python -m unittest discover -s 04_reproduccion_python -p "test_*.py" -v
+
+El cotejo de factores CRT y sus requisitos se describen en
+05_verificacion/revision_factores_crt_2018_2022.txt; el auditor reproducible se
+encuentra en 04_reproduccion_python/auditar_factores_crt_2018_2022.py.
 
 3. ALCANCE DE LA DISTRIBUCIÓN
 
@@ -74,23 +85,30 @@ porque su huella cambiaría al incorporarla dentro del mismo archivo.
 RUTA | TAMAÑO_BYTES | SHA-256
 .zenodo.json | 1853 | cddf68af692feeee78800cb270b3b437383ad193e319311c8c03248418f8a3f8
 00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx | 41639 | 0d03385526dab461227075c188909d7c6281c595d47275b4cb0eb01830817a26
-01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt | 23873 | 2c474dfec18faf2508bc636ef91827b16ca130409377e8b08ec1111fe6d5d97b
+01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt | 25156 | 0613679617e8e9d1af769e49acc62ea0adff6e0f4adccf4e171aea65fd25db33
 01_metodologia/nt_01_metodologia_psut_energia_2018_2024.txt | 33952 | d565027cb5011a2693700a23ac851ba2bfe8bba6258d8207e46e91bfd6f9373d
-01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt | 30822 | 9a9e8619e881d0c5c9dff7aee661a8e9ba1f1a5e39ae02876086948efa559458
-02_resultados_y_diccionario/cuenta_emisiones_aire_guatemala_2018_2024.csv | 110373 | 9c1004383e00d0d7d026eb488361d94dd6586bb583cedcf4ae0beb3fca94f15b
-02_resultados_y_diccionario/diccionario_datos_guatemala_2018_2024.txt | 9455 | 007578340e260ae75a700af3a6175c3450b1beea76285918547c32f1bbe57194
+01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt | 33451 | 38e1aa5d9dd4dd0bc214cb53a606738162ec9c15e5b8ed353096cb727990d087
+02_resultados_y_diccionario/cuenta_emisiones_aire_guatemala_2018_2024.csv | 110968 | c17b41ade77e1acb2784de9d77db0ebca9eef3b3c2e93124238876a1e2ed6dba
+02_resultados_y_diccionario/diccionario_datos_guatemala_2018_2024.txt | 10370 | 0a840d898a646fcba12b2a58b109f2691be71856f15560a341b598eaa0cde5eb
 02_resultados_y_diccionario/psut_energia_guatemala_2018_2024.csv | 64692 | 4be0edefa6d24be0598a0c8cdbb5a7fc76211bed3dfc205083d60a18398bc071
-03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx | 693474 | 1f9c2c5d614b9c26dfee4423e58e9a78adfe7fb3d36e9edb43747ab1cf74325c
-04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb | 549614 | 2a130746990ca4dbe1461fcb91f91614f82d5145182e32b3cceea44588e013ab
+03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx | 695065 | f926dee7eaf91fab6211729705540fd523ae81c1dd8aeb8ea6ed8070a9058a9a
+04_reproduccion_python/auditar_factores_crt_2018_2022.py | 22623 | 0b9c3dc160861295f556210555afee037bc104697dd9a4d8bc72841a80c7480f
+04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb | 552528 | 77ef7bed88700605aaf0dec2df210b41446825f6436792f2ca8e307bafb8720e
 04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv | 1183574 | 95dbf283f05f929d6193cb708acd7139f6794676ea4955628bd665894f6aae04
-04_reproduccion_python/instrucciones_reproduccion_python.txt | 3026 | 8094f7dd4358e7332206a8b75aa961f1da6db3d6b57257d909ae0880a25b54fd
-04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py | 37523 | fb9d52ae769403a5074a02e01b6e0584375906f41d587eec159c41a895efa2a9
+04_reproduccion_python/instrucciones_reproduccion_python.txt | 3665 | 6639b56e2773edbaa285583933e64a6cac75c26cc8aee84a0cb5528d7bc11660
+04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py | 38348 | 8de9df6e78aea41c997d6679ee163c3d206d663a3bec35ad112a12ba0d036c1c
 04_reproduccion_python/requirements.txt | 46 | 0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
-04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py | 23503 | aaf4fa4f0b7a214c3fbd7b59f7f846fcb8da8e068384054f550c879fe7da1d4a
-05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt | 5999 | 54b299b639b770e7c2564531097ea0d64cff34945e4a246a68a55a17a2a92c9d
+04_reproduccion_python/test_emisiones_faltantes.py | 5452 | 70f10d5914875d36de364dddd5ad7ecaf5f75f631f7e5367c812195902ddbde5
+04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py | 27651 | 9dc466cf9f999851a1d678c3cc43a84491ef03e3d1bf1b4e906e9fe587f0a55e
+05_verificacion/conciliacion_cobertura_transporte_crt.csv | 2462 | 4684b799b664a1e69438863d2e9a8edd7c4cadbcc1309a92035c5ff4e1867636
+05_verificacion/cotejo_factores_crt_2018_2022.csv | 81435 | 81609877039de912d882d241853164dd13bb7cba326ee4c14e2f622f60a08530
+05_verificacion/evidencia_xml_n2o_fugitivo.json | 4163 | aa88c0931ecee16345b508fa9d4e608a727746bc7c8f4c15b2739d4cd74653cc
+05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt | 7829 | bd5155444ab9f138ee943f250db94448261afd0b3ba79f0a517734269411bd04
+05_verificacion/revision_factores_crt_2018_2022.txt | 4087 | e914866ce750f300c8683ed430a48a3dcc5cd5c4f8be3c7ad3331aa551a12dc7
 CITATION.cff | 1656 | fa126e7c96e81127cd21be45e65feb63442385bfabd8d43c672cde26a523123c
 LICENSE | 2163 | 258bd8e8315b82862ff0c5e79820fd1d0d2d4705585eced43edfd9a478f504e6
 LICENSE_CODE | 1457 | 176eab08e9c28f9fe63fb83ee56683e68ade0fd67be9ec94e9731cc8680ca3ab
+README.md | 11474 | 157d9111f37658575e1deae39a1e9007812c6b76c6a94e203fe439bdf15e7307
 codemeta.json | 1904 | 035209820d0c69c9f6088001f0e5b8e6de3b5f447f96c5a8793d81e6ada90b0b
 creditos.txt | 2355 | 14c59501dd4b00eb492a2a0e630f5f650733fd8080455961944d93b0dbb56f98
-readme.txt | 9435 | e42d0d3e5b0b612185f16c88ee0d834d4320812b6ee21b3e11e5a9097893092f
+readme.txt | 9748 | a0b733ebc603863fb514d486c80e88c1b965780dd4897e702f92690c80b871f3
