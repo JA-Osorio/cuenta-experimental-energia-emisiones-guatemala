@@ -2,179 +2,139 @@ INFORME DE REPRODUCCIÓN COMPUTACIONAL
 
 Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
 
-Autores
-
-Juan Alejandro Osorio
-Patricia Villatoro
-Noe Salguero
-José Carlos Soberanis
-
-Las afiliaciones, los identificadores ORCID y los demás créditos se presentan
-en creditos.txt.
-
+Autores: Juan Alejandro Osorio, Patricia Villatoro, Noe Salguero y
+José Carlos Soberanis. Afiliaciones y créditos en creditos.txt.
 Fecha de verificación: 2026-09-21
 
 1. OBJETIVO
 
-Comprobar por separado la generación de los datasets y su consulta en el
-cuaderno. El script debe reconstruir las cuentas desde un único CSV de entrada,
-sin utilizar el libro de cálculo, Google Drive ni resultados previamente
-calculados. El cuaderno debe leer únicamente los dos CSV finales y presentar
-las tablas, indicadores y gráficas sin repetir el cálculo del script.
+Verificar la asignación de factores de emisión por combustible y uso, la
+reproducción de los resultados y su correspondencia con el modelo Excel y
+el cuaderno.
 
-2. PRUEBA DEL GENERADOR
+2. GENERACIÓN Y VALIDACIÓN
 
-La corrida comenzó en un directorio limpio que contenía únicamente:
+La reproducción utiliza únicamente el CSV de entrada y el generador de Python;
+no requiere el Excel, las fuentes primarias ni resultados precalculados.
+El insumo contiene 3 671 registros y 39 campos, incluidos 555 factores:
+391 positivos, 90 ceros metodológicos y 74 sin valor numérico.
 
-- datos_modelo_guatemala_2018_2024.csv; y
-- reproducir_modelo_guatemala_2018_2024.py.
+Se generaron 617 registros PSUT y 374 registros de emisiones. El validador
+aprobó 55 de 55 controles, incluidos dos controles independientes de factores,
+fuentes y estados contra el insumo. Los dos CSV generados coinciden byte a byte
+con los resultados del repositorio en el entorno indicado en el apartado 4.
 
-Comando:
+Comandos desde la raíz del repositorio:
 
-python reproducir_modelo_guatemala_2018_2024.py
+python 04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py \
+  --entrada 04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv \
+  --salida resultados_reproducidos
+python 04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py \
+  --entrada 04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv \
+  --generados resultados_reproducidos \
+  --referencias 02_resultados_y_diccionario
 
-Resultado:
+Las 13 pruebas de regresión aprobaron. Comprueban faltantes y ceros explícitos,
+CO2e parcial, asignación incompatible de producto, propagación de fuente y
+estado, y el componente GAS ponderado de 2019. Se ejecutan con:
 
-- código de salida: 0;
-- registros de entrada validados: 3 446;
-- registros PSUT generados: 617;
-- registros de emisiones generados: 374; y
-- cobertura temporal: 2018–2024.
+python -m unittest discover -s 04_reproduccion_python -p "test_*.py" -v
 
-Los dos CSV de referencia se incorporaron únicamente después de la generación
-para comprobar la conformidad de los resultados. El validador independiente
-aprobó 53 de 53 controles. En el entorno de verificación descrito en el apartado
-4, y utilizando los archivos identificados por las huellas SHA-256 del apartado
-6, los dos CSV generados coincidieron byte por byte con las referencias finales.
-Esta identidad corresponde a la corrida validada y no se extrapola a entornos
-con versiones de Python, sistema operativo, codificación o convenciones de fin
-de línea diferentes. Fuera de ese entorno, la conformidad debe evaluarse
-mediante los 53 controles estructurales y numéricos del validador.
+3. CUADERNO Y LIBRO
 
-3. PRUEBA DEL CUADERNO Y DEL LIBRO
+Las siete celdas de código del cuaderno se ejecutaron con los CSV del repositorio.
+Sus 28 salidas corresponden a esos resultados y las once figuras se revisaron
+visualmente. Las etiquetas temporales distinguen la prolongación desde
+2022 de los factores de referencia que también se aplican antes de ese año.
+El cuaderno conserva el selector anual y el código plegado.
 
-Las siete celdas técnicas del cuaderno se ejecutaron en orden con los dos CSV
-finales. Se verificaron las tablas anuales de 2018–2024 y las gráficas de
-respaldo de Matplotlib. La tabla HTML almacenada de 2024 se actualizó.
+Las vistas conservan como faltante un gas sin valores numéricos. El N2O
+fugitivo está sin cuantificar y el CO2e correspondiente suma los componentes
+conocidos. El CO2 biogénico permanece como partida informativa.
 
-Las agregaciones conservan un gas sin valores numéricos como faltante y las
-vistas de emisiones lo presentan como «Sin cuantificar». Se comprobó que las
-filas totalmente no cuantificadas no generan ceros, que el subconjunto de
-fugitivas mantiene N2O sin cuantificar y que los totales nacionales conocidos
-conservan sus valores. La consulta mantiene el código plegado, la configuración
-del selector anual y la presentación con un máximo de dos decimales.
+El Excel se recalculó en LibreOffice. Se comprobaron las 374 filas de
+emisiones contra el CSV: cero discrepancias numéricas o de metadatos y cero
+errores de fórmula. Las 617 filas PSUT coinciden con el CSV. DATOS_MODELO contiene
+3 671 entradas y los rangos de consulta cubren todos sus registros. Las siete
+filas de N2O fugitivo permanecen vacías. Pasaron las comprobaciones de factor
+cero, factor ausente y selector de 2018; el libro presenta 2024 al abrirse.
 
-Plotly e ipywidgets no estaban instalados: se revisó su código, pero no se
-comprobó la interacción de esos componentes. El cuaderno utiliza Matplotlib
-cuando Plotly no está disponible.
+4. ENTORNO
 
-El recálculo del libro confirmó 23 celdas modificadas en solo dos hojas:
-siete fórmulas de N2O, siete fórmulas de CO2e parcial y siete notas en
-EMISIONES_LARGA; y C12 y A5 en EMISIONES. Se conservaron los estilos y los
-demás componentes del archivo. No se detectaron errores de fórmula ni
-diferencias en los resultados numéricos conservados. Los siete N2O sin factor
-quedaron vacíos y los subtotales de CO2e conservaron sus valores. Las pruebas
-del selector con 2018 y 2021 confirmaron que un factor explícito de cero
-produce cero y que un factor positivo produce una emisión numérica. El libro
-final conserva seleccionado 2024.
-
-4. ENTORNO DE VERIFICACIÓN
-
-- Sistema: Linux x86_64, glibc 2.39.
-- Python: CPython 3.12.14.
-- Generador, validador y pruebas de regresión: biblioteca estándar de Python.
+- Linux x86_64, glibc 2.39; CPython 3.12.14.
+- Generador, validador y pruebas: biblioteca estándar de Python.
 - Cuaderno: pandas 2.2.3, numpy 2.3.5 y matplotlib 3.10.8.
-- Plotly, IPython e ipywidgets: no instalados en esta corrida.
+- Plotly, IPython e ipywidgets no estaban instalados. La ejecución verificada
+  utiliza Matplotlib; no se ensayó la interacción de widgets ni Plotly.
 
-5. CONTROLES NUMÉRICOS
+La identidad binaria corresponde al entorno y archivos verificados. En otros
+entornos se comprueba equivalencia con las tolerancias del validador:
+1e-9 absoluta y 1e-12 relativa en campos, 1e-6 TJ en cierre PSUT y 1e-9 kt
+en identidad de emisiones.
 
-Se verificaron los esquemas y el orden de columnas; claves únicas; cobertura
-2018–2024; cierre de oferta y utilización; tratamiento de NO_ASIG, NOEN y STAT;
-preservación de faltantes por gas; actividad por factor; subtotales parciales
-identificados; identidad del CO2 equivalente;
-exclusión del CO2 biogénico del total; totales anuales; y dependencia de
-aproximaciones en 2023–2024.
+5. FACTORES Y RESULTADOS
 
-La diferencia máxima de cierre fue menor que 10^-6 TJ. La diferencia máxima de
-la identidad de CO2 equivalente fue menor que 10^-9 kt.
+Los factores se seleccionan por combustible y uso. En 22 combinaciones se
+utilizan parámetros específicos: tres de transporte proceden de las CRT y
+19 emplean parámetros constantes BTR/IPCC. GAS en transporte pondera gasolina
+de aviación y de motor; DOIL y GLP utilizan sus factores anuales específicos.
+El factor de GAS no asignado en 2019 pondera los usos de industria, servicios
+y transporte. Para 2023–2024 se utiliza la clave de factor de 2022.
 
-La identidad se comprobó como CO2e = CO2 fósil + 28 × CH4 + 265 × N2O,
-sumando solo los componentes cuantificados y conservando vacíos los gases sin
-factor. Los
-potenciales de calentamiento global corresponden al horizonte de 100 años del
-Quinto Informe de Evaluación del IPCC, sin retroalimentación clima–carbono
-(IPCC, 2013, tabla 8.7).
+Las emisiones se calculan sobre las actividades de la PSUT. Hay 41 filas
+totalmente no cuantificadas y siete valores de N2O fugitivo vacíos.
 
-Totales anuales cuantificados de emisiones:
+Totales cuantificados de CO2e, en kt:
+Año | CO2e
+2018 | 28 606,66
+2019 | 30 043,05
+2020 | 27 165,77
+2021 | 30 232,18
+2022 | 28 649,59
+2023 | 31 171,50
+2024 | 33 553,41
 
-- 2018: 28 612,88 kt CO2e.
-- 2019: 29 730,98 kt CO2e.
-- 2020: 27 015,69 kt CO2e.
-- 2021: 29 978,96 kt CO2e.
-- 2022: 28 320,98 kt CO2e.
-- 2023: 30 852,29 kt CO2e.
-- 2024: 33 159,61 kt CO2e.
+La identidad es CO2e = CO2 fósil + 28 CH4 + 265 N2O, con gases cuantificados.
+Los potenciales corresponden a IPCC AR5, horizonte de 100 años, sin
+retroalimentación clima–carbono (2013, tabla 8.7).
 
-Dependencia de aproximaciones en 2023–2024. Para este control se consideró
-dependiente de una aproximación todo registro con estado_factor = PRX o
-estado_resultado = PRX. En 2023, esos registros sumaron 30 852,29 kt CO2e,
-equivalentes al 100 % del total cuantificado; en 2024 sumaron 33 159,61 kt CO2e,
-también el 100 %. Los registros que no cumplen ninguna de las dos condiciones
-aportaron 0,00 kt CO2e en ambos años. En los módulos energéticos, la actividad
-conserva el año correspondiente en la PSUT y la aproximación recae en el factor;
-en agricultura, recae en el resultado prolongado mediante VAB.
+Los factores de referencia del BTR1/IPCC y la aplicación de la mezcla de
+gasolina se identifican como PRX, también durante 2018–2022.
+En 2023 y 2024 el 100 % del CO2e cuantificado depende de un factor
+o resultado PRX. La actividad energética mantiene el año de la PSUT.
 
-Corrección respecto del commit 5508c559b078d00114cca9c0545cbdf11690b814:
+6. COTEJO DE FUENTES E INTEGRIDAD
 
-- Siete campos n2o_kt de fugitivas PETR pasan de cero a vacío.
-- Siete notas identifican el CO2e parcial y el gas sin factor numérico.
-- No cambia ningún otro campo del CSV de emisiones ni ningún CO2e por registro.
-- La PSUT y el CSV de entrada conservan identidad byte a byte.
-- Se mantienen las 41 filas completamente no cuantificadas y los ceros
-  metodológicos explícitos.
+El auditor CRT verifica 106 factores positivos: 96 de combustión y 10 de
+fugitivas. Los 45 de transporte incluyen 15 para la mezcla GAS de filas 17+21,
+15 de DOIL (fila 22) y 15 de GLP (fila 23). Los 106 coinciden con las fuentes;
+la diferencia máxima es 1,4552e-11 kg/TJ. Los cinco N2O fugitivos de 2018–2022
+se conservan vacíos según las celdas originales.
 
-Las siete pruebas de test_emisiones_faltantes.py aprobaron. Incluyen el fallo
-original, la conservación de ceros explícitos y un caso donde se altera una
-emisión manteniendo la identidad CO2e: el control independiente de actividad
-por factor detecta esa alteración.
+Los 285 parámetros constantes BTR/IPCC resultaron conformes en valor, unidad,
+fuente por gas y estado PRX: 19 combinaciones de combustible y uso, tres gases
+y cinco claves anuales. Son 260 registros BTR y 25 IPCC; la repetición anual
+permite enlazar el parámetro con la actividad y no es una observación nueva.
+Se verificaron las tablas y los localizadores del insumo:
 
-El cotejo documental de los 166 factores positivos con las CRT originales se
-presenta en revision_factores_crt_2018_2022.txt y sus archivos de evidencia.
-La coincidencia computacional no sustituye la conciliación de cobertura
-pendiente para el agregado de transporte descrita allí.
+- BTR1: tabla 3.6, p. 48, para CO2; tablas 3.17, p. 57; 3.22, p. 62; y
+  3.33, p. 70, para CH4 y N2O según el uso.
+- IPCC 2006, volumen 2: tabla 2.2, p. 2.16, para CH4/N2O de coque de petróleo
+  en energía; tablas 3.6.4 y 3.6.5, p. 3.64, para KER de transporte.
 
-6. HUELLAS DIGITALES SHA-256
+Las fuentes y la aplicación por combustible se detallan en NT-02. El cotejo
+documenta la procedencia de los parámetros; la representatividad y la frontera
+contable se interpretan conforme a esa metodología.
 
-- datos_modelo_guatemala_2018_2024.csv
-  95dbf283f05f929d6193cb708acd7139f6794676ea4955628bd665894f6aae04
+Referencias de los parámetros:
+https://unfccc.int/documents/646195
+https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/2_Volume2/V2_2_Ch2_Stationary_Combustion.pdf
+https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/2_Volume2/V2_3_Ch3_Mobile_Combustion.pdf
 
-- reproducir_modelo_guatemala_2018_2024.py
-  8de9df6e78aea41c997d6679ee163c3d206d663a3bec35ad112a12ba0d036c1c
-
-- validar_reproduccion_guatemala_2018_2024.py
-  9dc466cf9f999851a1d678c3cc43a84491ef03e3d1bf1b4e906e9fe587f0a55e
-
-- test_emisiones_faltantes.py
-  70f10d5914875d36de364dddd5ad7ecaf5f75f631f7e5367c812195902ddbde5
-
-- requirements.txt
-  0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
-
-- cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb
-  77ef7bed88700605aaf0dec2df210b41446825f6436792f2ca8e307bafb8720e
-
-- modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx
-  f926dee7eaf91fab6211729705540fd523ae81c1dd8aeb8ea6ed8070a9058a9a
-
-- psut_energia_guatemala_2018_2024.csv
-  4be0edefa6d24be0598a0c8cdbb5a7fc76211bed3dfc205083d60a18398bc071
-
-- cuenta_emisiones_aire_guatemala_2018_2024.csv
-  c17b41ade77e1acb2784de9d77db0ebca9eef3b3c2e93124238876a1e2ed6dba
+Las huellas SHA-256 de los archivos del repositorio figuran en
+manifiesto_archivos.txt. Las fuentes primarias se obtienen por separado.
 
 7. RESULTADO
 
-APROBADO para el entorno descrito en el apartado 4. En esas condiciones, el
-script produjo los dos datasets con identidad byte a byte respecto de las
-referencias finales y el validador aprobó 53 de 53 controles. El cuaderno
-funcionó como visor anual y temporal sin duplicar el motor de cálculo.
+APROBADO para la generación, los 55 controles del validador y las 13 pruebas
+de regresión en el entorno indicado.

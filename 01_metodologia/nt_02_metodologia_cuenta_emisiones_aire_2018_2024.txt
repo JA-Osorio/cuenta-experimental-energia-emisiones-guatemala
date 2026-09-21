@@ -23,7 +23,7 @@ correspondencias, factores y datos complementarios proceden del archivo base; y
 los resultados se calculan por registro antes de agregarse por año y unidad.
 
 La cobertura comprende 2018–2024. Para 2018–2022 se emplean datos anuales de las
-Tablas Comunes de Reporte (CRT). Para 2023 y 2024 se aplican reglas explícitas de
+Tablas Comunes de Reporte (CRT) y parámetros por combustible del BTR1 y del IPCC. Para 2023 y 2024 se aplican reglas explícitas de
 prolongación cuando la fuente utilizada no aporta observaciones para esos años.
 La cuenta distingue valores observados, cálculos, aproximaciones y claves de
 notación, y conserva la relación entre cada resultado, su actividad y su factor o
@@ -82,7 +82,7 @@ valor no se interpreta como emisión física igual a cero.
 
 2. FUENTES Y FUNCIÓN DE CADA INSUMO
 
-La elaboración utiliza cuatro fuentes principales:
+La elaboración utiliza las siguientes fuentes:
 
 a) los balances energéticos nacionales del Ministerio de Energía y Minas (MEM),
    que proporcionan los flujos físicos anuales de 2018–2024;
@@ -95,7 +95,10 @@ c) el valor agregado bruto real de Agricultura, ganadería, silvicultura y pesca
    publicado por el Banco de Guatemala a precios constantes de 2013, que se usa
    como indicador de prolongación de las emisiones agrícolas; y
 
-d) el SCAE, el SCAE–Energía y las Directrices del IPCC, que sustentan la frontera
+d) el BTR1 de Guatemala y las Directrices del IPCC de 2006, que aportan
+   parámetros por combustible y uso; y
+
+e) el SCAE, el SCAE–Energía y las Directrices del IPCC, que sustentan la frontera
    contable y las correspondencias conceptuales.
 
 La precedencia metodológica es: dato oficial del mismo año; operación reproducible
@@ -115,7 +118,7 @@ intermedias y resultados agregados.
 
 3.1 DATOS_MODELO
 
-DATOS_MODELO es la tabla integrada del archivo base. Contiene 3 446 registros y
+DATOS_MODELO es la tabla integrada del archivo base. Contiene 3 671 registros y
 39 campos. El campo tipo_registro distingue:
 
 - BALANCE;
@@ -272,8 +275,10 @@ La correspondencia principal es:
 La etiqueta oficial fuente “1.A.2 — Industrias manufactureras y construcción” se
 aplica al agregado IND_BEN. No constituye una desagregación adicional de la PSUT.
 
-Los grupos de factor separan BIOMASS, SOLID_FUELS, LIQUID_FUELS, GASEOUS_FUELS,
-FOSSIL_AGG, CERO_DIRECTO, FUGITIVA_PETROLEO y GAS_COMPUESTO_2019, entre otros.
+Los grupos COMB_BCANA, COMB_BIOGAS, COMB_COQUE, COMB_CRBN, COMB_DOIL,
+COMB_FOIL, COMB_GAS, COMB_GLP, COMB_KER y COMB_LENA identifican los combustibles
+seleccionados. Se utilizan también BIOMASS, LIQUID_FUELS y GASEOUS_FUELS para
+factores CRT, CERO_DIRECTO, FUGITIVA_PETROLEO y GAS_COMPUESTO_2019, entre otros.
 La asignación depende conjuntamente de la categoría y del producto; no se aplica
 un factor por semejanza del nombre del combustible.
 
@@ -320,70 +325,76 @@ origen ENV y método EXTRACCION_B. La unidad agregada de presentación es B. Est
 actividad no se incorpora a COMBUSTION.
 
 
-6. FACTORES DE EMISIÓN DE 2018–2022
+6. SELECCIÓN DE FACTORES POR COMBUSTIBLE Y USO
 
-Los registros FACTOR_EMISION_OBS de DATOS_MODELO se identifican por:
+DATOS_MODELO contiene 555 registros FACTOR_EMISION_OBS. Los campos estado y
+fuente_id distinguen los factores reportados, las aproximaciones, los ceros
+y los valores ausentes.
+La clave de selección es:
 
 anio | categoria_ipcc | grupo_factor | gas
 
-El valor se conserva en valor_factor, la unidad en unidad_factor y la referencia
-en fuente_id. Para cada año t, categoría c, grupo f y gas g, el factor implícito
-responde a:
+Para 22 combinaciones de combustible y uso se seleccionan factores específicos.
+En transporte, DOIL y GLP utilizan los cocientes anuales de emisiones y actividad
+de Table1.A(a)s3, filas 22 y 23, cotejados con sus factores implícitos publicados.
+Se identifican como OBS, sin que ello signifique una medición directa de emisiones.
+GAS reúne gasolina de aviación y de motor, filas 17 y 21:
+
+FE_GAS_TR(g,t) [kg/TJ]
+  = 1 000 000 x [E_CRT(g,fila17,t) + E_CRT(g,fila21,t)]
+    / [A_CRT(fila17,t) + A_CRT(fila21,t)]
+
+El factor ponderado es PRX: aplicarlo al BEN supone que esa mezcla es
+representativa. El BTR1, p. 66, documenta que GAS del balance incluye ambas
+clases de gasolina. La categoría de transporte terrestre incorpora navegación
+no desagregable; no se interpreta como exclusivamente vial (BTR1, pp. 64–65).
+
+Las otras 19 combinaciones utilizan 285 registros de parámetros constantes:
+260 del BTR1 y 25 del IPCC, equivalentes a tres gases y cinco claves anuales por
+combinación. El CO2 procede de la tabla 3.6 del BTR1; CH4 y N2O, de las tablas
+3.17, 3.22 y 3.33 según el uso energético, industrial o de servicios y hogares.
+Para COQUE en generación, CH4 y N2O proceden de IPCC 2006, volumen 2, tabla 2.2.
+Para KER en transporte se aplican los factores de aviación de las tablas 3.6.4 y
+3.6.5. Todos estos parámetros se identifican como PRX durante 2018–2024.
+
+COQUE corresponde a coque de petróleo. BIOGAS se homologa a gas de vertedero y
+BCANA a otra biomasa sólida primaria. Para CRBN, el BTR1 adopta 98 300 kg CO2/TJ
+por dictamen del MEM, usando el factor de antracita para otro carbón bituminoso;
+no es un factor nacional medido. KER corresponde a queroseno de aviación en
+transporte y a otro queroseno en usos estacionarios, según la correspondencia
+BTR1. Aplicar el factor al consumo ya presente en la PSUT no añade un flujo de
+búnkeres ni resuelve por sí solo la frontera nacional/internacional.
+
+Para los factores derivados de las CRT, el factor implícito responde a:
 
 FE(g,c,f,t) [kg/TJ]
-  = emisión_CRT(g,c,f,t) [kt] x 1 000 000
-    / actividad_CRT(c,f,t) [TJ]
+  = emisión_CRT(g,c,f,t) [kt] x 1 000 000 / actividad_CRT(c,f,t) [TJ]
 
-La construcción del cociente requiere actividad y emisión del mismo año,
-categoría, grupo de combustible y frontera de las CRT. Su aplicación a la PSUT
-sigue las correspondencias declaradas; no demuestra equivalencia entre las
-fronteras de las CRT y del balance. No se divide entre cero ni se obtiene un
-factor numérico de una clave de notación.
+En fugitivas se utiliza el denominador descrito en la sección 14. Los factores
+constantes BTR/IPCC no se obtienen de este cociente anual. El año de su clave
+sirve para enlazarlos con la actividad; anio_fuente identifica la fuente del
+parámetro, no una nueva observación anual.
 
-En 1.A.2 y 1.A.3, el modelo aplica un mismo factor de categoría y grupo a distintos
-combustibles. Las emisiones por combustible son aproximaciones: la
-representatividad del promedio no queda garantizada para cada producto.
-
-En 2019–2022, la actividad de queroseno de aviación incluida en el denominador
-agregado de 1.A.3 (Table1.A(a)s3, C18) coincide con la reportada para aviación
-internacional (Table1.D, C11). Las emisiones de ese combustible se presentan en
-Table1.D, G11:I11, y permanecen vacías en Table1.A(a)s3, H18:J18. Esta
-correspondencia requiere conciliación de cobertura: reproducir el cociente
-oficial no valida su aplicación a cualquier mezcla o perímetro de transporte.
-
-EMISIONES_LARGA recupera los factores en ef_co2_kg_tj, ef_ch4_kg_tj y
-ef_n2o_kg_tj mediante la clave de cuatro componentes. En 2018–2022:
-
-anio_factor = anio de la actividad
-
-estado_factor = OBS
-
-OBS documenta la procedencia del factor en las CRT; aun siendo un factor
-implícito cotejado, no convierte la emisión calculada ni su asignación por
-combustible en una observación directa.
-
-Los factores CERO_DIRECTO se generan como ceros metodológicos y se identifican
-como CAL. Las combinaciones sin factor numérico se identifican como NO y mantienen
-vacíos los campos de factor.
+Los factores CERO_DIRECTO son ceros metodológicos con estado CAL. Las
+combinaciones sin factor numérico conservan sus campos vacíos. La procedencia
+por gas se presenta en fuente_id_factor y nota cuando una fila combina fuentes.
 
 
 7. REGLA TEMPORAL PARA 2023 Y 2024
 
-Las CRT utilizadas cubren hasta 2022. Para los registros energéticos con factor
-positivo derivado de las CRT se mantiene el último factor disponible:
+Los factores CRT anuales cubren hasta 2022. La selección conserva el año de
+actividad hasta 2022 y utiliza la clave de 2022 para los dos años siguientes:
 
-FE_aplicado(g,c,f,t) = FE(g,c,f,t), para 2018 <= t <= 2022
+anio_factor = min(anio_actividad, 2022)
 
-FE_aplicado(g,c,f,t) = FE(g,c,f,2022), para t = 2023 o 2024
+Los factores CRT prolongados son PRX en 2023–2024. Los parámetros constantes
+BTR/IPCC y GAS ponderado en transporte ya son PRX desde 2018; repetir el valor
+en una clave anual no lo convierte en una observación de ese año. Los ceros
+metodológicos CERO_DIRECTO conservan estado CAL.
 
-Por ello, en esos registros EMISIONES_LARGA consigna anio_factor = 2022 y
-estado_factor = PRX en 2023–2024. La actividad sigue correspondiendo al año
-registrado en la PSUT; solo el factor se prolonga. Los ceros metodológicos
-CERO_DIRECTO permanecen identificados como CAL.
-
-La regla supone que la intensidad media representada por el factor agregado de
-2022 permanece aplicable durante los dos años siguientes. No convierte los
-resultados en observaciones del inventario.
+La actividad sigue correspondiendo al año registrado en la PSUT. Mantener un
+factor supone que continúa siendo aplicable; no convierte los resultados de
+2023–2024 en observaciones del inventario.
 
 
 8. CÁLCULO POR REGISTRO
@@ -540,18 +551,18 @@ donde s pertenece a {TR_BEN, IND_BEN, SERV}. En EMISIONES_LARGA las fórmulas
 ponderan las tres actividades observadas y sus factores correspondientes. Los
 resultados son:
 
-- CO2: 69 827,9121313056 kg/TJ;
-- CH4: 17,0631285460481 kg/TJ; y
-- N2O: 3,37365746315288 kg/TJ.
+- CO2: 69 300,6378908276 kg/TJ;
+- CH4: 32,2560349098 kg/TJ; y
+- N2O: 3,1339660006 kg/TJ.
 
 El factor se identifica como PRX porque depende de una ponderación de usos
 observados y no de una categoría sectorial identificada para la diferencia. Las
 emisiones son:
 
-- CO2: 766,456874190458 kt;
-- CH4: 0,187291181565355 kt;
-- N2O: 0,037030506496244 kt; y
-- CO2e: 781,514111495792 kt.
+- CO2: 760,6693179846 kt;
+- CH4: 0,354054115841605 kt;
+- N2O: 0,034399564748446 kt; y
+- CO2e: 779,6987178865 kt.
 
 
 14. EMISIONES FUGITIVAS
@@ -697,7 +708,8 @@ CAL
   reproducible.
 
 PRX
-  Valor o factor obtenido mediante una prolongación o ponderación explícita.
+  Valor o factor aplicado mediante una prolongación, ponderación o parámetro
+  por defecto con una hipótesis de representatividad explícita.
 
 NO
   Clave de notación que indica ausencia de un valor numérico aplicable. NO no es
@@ -750,7 +762,7 @@ Los controles se ejecutan sobre las tablas con precisión completa.
 
 19.1 Integridad estructural
 
-- DATOS_MODELO contiene 3 446 registros y 39 campos.
+- DATOS_MODELO contiene 3 671 registros y 39 campos.
 - PSUT_LARGA contiene 617 registros.
 - EMISIONES_LARGA contiene 374 registros.
 - La cuenta contiene siete años, de 2018 a 2024.
@@ -807,31 +819,31 @@ El control general exige además que:
 
 El total anual de CO2e es:
 
-- 2018: 28 612,8775533491 kt;
-- 2019: 29 730,9837653987 kt;
-- 2020: 27 015,6898353380 kt;
-- 2021: 29 978,9646732626 kt;
-- 2022: 28 320,9846840887 kt;
-- 2023: 30 852,2910573021 kt; y
-- 2024: 33 159,6071488939 kt.
+- 2018: 28 606,6575934185 kt;
+- 2019: 30 043,0476364841 kt;
+- 2020: 27 165,7696670873 kt;
+- 2021: 30 232,1779431377 kt;
+- 2022: 28 649,5930359379 kt;
+- 2023: 31 171,4956253886 kt; y
+- 2024: 33 553,4092089920 kt.
 
 En 2023 y 2024, todos los registros con co2e_kt positivo cumplen al menos una
 de estas condiciones: estado_factor = PRX o estado_resultado = PRX. La suma de
 esos registros equivale al 100 % del CO2e cuantificado de cada año. En
 combustión y fugitivas, la actividad pertenece al año corriente de la PSUT y el
-factor prolongado desde 2022 es PRX; en agricultura, el resultado prolongado
-mediante VAB es PRX. Por esta razón, un registro energético puede conservar
+parámetro constante o el factor prolongado desde 2022 es PRX; en agricultura,
+el resultado prolongado mediante VAB es PRX. Por esta razón, un registro energético puede conservar
 estado_resultado = CAL —la multiplicación es reproducible— y depender al mismo
 tiempo de estado_factor = PRX. Los ceros directos y las claves NO no aportan
 magnitud al total cuantificado y no alteran este porcentaje.
 
 Para 2024, los valores de control por gas son:
 
-- CO2 directo: 22 834,2454727240 kt;
-- CO2 biogénico informativo: 46 107,3104363208 kt;
-- CH4: 301,372719031487 kt;
-- N2O: 7,1204737482575 kt; y
-- CO2e: 33 159,6071488939 kt.
+- CO2 directo: 23 224,5881485613 kt;
+- CO2 biogénico informativo: 46 104,9561339347 kt;
+- CH4: 301,417579141226 kt;
+- N2O: 7,1287880923638 kt; y
+- CO2e: 33 553,4092089920 kt.
 
 Las diferencias visibles al mostrar dos decimales no se corrigen alterando los
 datos. Los controles utilizan los valores sin redondear.
@@ -849,26 +861,21 @@ La trazabilidad depende de conservar en cada registro:
 - fuente de actividad y fuente de factor o emisión; y
 - valores intermedios de actividad y factores.
 
-Los campos fuente_pagina y source_record_id documentan 392 localizadores de los
-insumos de emisiones: 233 observaciones externas con identificador de
-extracción, 90 reglas internas CERO_DIRECTO y 69 claves NO sin valor numérico.
-Las observaciones externas conservan tabla, año, categoría, gas e identificador.
-Los ceros metodológicos remiten a la regla interna y no a una celda CRT. En las
-claves NO, la localización permanece a nivel de tabla porque no existe un valor
-numérico externo que identificar. Los localizadores se recuperaron de los
-registros de extracción integrados. El cotejo de los archivos originales de las
-CRT de 2018–2022 confirmó los 166 factores positivos del modelo: 156 de
-combustión y 10 de fugitivas, con una diferencia absoluta máxima de
-1,46 x 10^-11 kg/TJ. Se comprobaron los cocientes de emisiones y actividad y los
-factores reportados cuando correspondía; para fugitivas, el denominador es la
-extracción de la PSUT. Este cotejo establece la procedencia numérica de los
-factores, sin validar automáticamente su asignación por combustible ni todas
-las fronteras contables.
+Los 555 registros de factores conservan la referencia de origen por gas.
+fuente_pagina localiza las tablas y sus celdas o filas; source_record_id enlaza
+las extracciones cuando corresponde. Los ceros metodológicos remiten a reglas
+internas y las combinaciones NO conservan campos numéricos vacíos.
+
+El cotejo con las CRT originales confirmó los 106 factores numéricos que
+proceden de ellas. La comprobación independiente de las tablas BTR/IPCC confirmó
+los 285 parámetros constantes en valor, unidad, fuente por gas y estado PRX.
+Estas comprobaciones verifican procedencia y transcripción; la representatividad
+y la cobertura se interpretan según las reglas de las secciones 6 y 7.
 
 Las principales fuentes de incertidumbre son:
 
 - la agregación sectorial del balance energético;
-- el uso de factores medios de categoría;
+- la representatividad de parámetros por defecto y de la mezcla de GAS;
 - las diferencias de frontera entre el balance y las CRT;
 - la prolongación de factores de 2022 a 2023–2024;
 - el coeficiente de actividad de refinación;
@@ -911,3 +918,13 @@ constantes de 2013.
 
 United Nations Statistics Division. Clasificación Industrial Internacional
 Uniforme de todas las actividades económicas, Revisión 4.
+
+Ministerio de Ambiente y Recursos Naturales de Guatemala. Primer Informe Bienal
+de Transparencia (BTR1), presentación 2024, edición del informe 2025.
+Tablas 3.5–3.6, 3.17, 3.22, 3.27 y 3.33.
+https://unfccc.int/documents/646195
+
+IPCC. 2006 Guidelines for National Greenhouse Gas Inventories. Volumen 2:
+Energy, capítulo 2, tabla 2.2; capítulo 3, tablas 3.6.4 y 3.6.5.
+https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/2_Volume2/V2_2_Ch2_Stationary_Combustion.pdf
+https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/2_Volume2/V2_3_Ch3_Mobile_Combustion.pdf

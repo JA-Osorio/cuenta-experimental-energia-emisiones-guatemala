@@ -60,20 +60,20 @@ Totales anuales cuantificados de emisiones:
 
 | Año | Emisiones (kt CO₂e) | Condición |
 |---:|---:|---|
-| 2018 | 28 612,88 | Observado/calculado con información del año |
-| 2019 | 29 730,98 | Observado/calculado con información del año |
-| 2020 | 27 015,69 | Observado/calculado con información del año |
-| 2021 | 29 978,96 | Observado/calculado con información del año |
-| 2022 | 28 320,98 | Observado/calculado con información del año |
-| 2023 | 30 852,29 | 100 % dependiente de aproximaciones `PRX` |
-| 2024 | 33 159,61 | 100 % dependiente de aproximaciones `PRX` |
+| 2018 | 28 606,66 | Información anual y factores de referencia `PRX` |
+| 2019 | 30 043,05 | Información anual y factores de referencia `PRX` |
+| 2020 | 27 165,77 | Información anual y factores de referencia `PRX` |
+| 2021 | 30 232,18 | Información anual y factores de referencia `PRX` |
+| 2022 | 28 649,59 | Información anual y factores de referencia `PRX` |
+| 2023 | 31 171,50 | 100 % dependiente de aproximaciones `PRX` |
+| 2024 | 33 553,41 | 100 % dependiente de aproximaciones `PRX` |
 
 El CO₂ equivalente cuantificado se calcula como
 `CO₂e = CO₂ fósil + 28 × CH₄ + 265 × N₂O`; el CO₂ biogénico se presenta como
 partida informativa y no se suma al CO₂ fósil. Cuando falta el factor de un gas,
 su emisión queda vacía y el CO₂e suma los componentes cuantificados. La nota del
 registro identifica los gases sin cuantificar. La reproducción independiente
-aprobó los 53 controles estructurales y numéricos definidos; los detalles
+aprobó los 55 controles estructurales y numéricos definidos; los detalles
 constan en el
 [informe de reproducción](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt).
 
@@ -98,7 +98,7 @@ directamente en GitHub.
 
 El generador y el validador utilizan exclusivamente la biblioteca estándar de
 Python (se requiere **Python 3.10 o posterior**). Una ejecución conforme
-devuelve código de salida `0` y aprueba los 53 controles del validador.
+devuelve código de salida `0` y aprueba los 55 controles del validador.
 
 ### Linux, macOS o Git Bash
 
@@ -132,8 +132,12 @@ están en
 y en el
 [informe de reproducción](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt).
 
-Las siete pruebas de regresión del tratamiento de gases sin factor se ejecutan
-con `python3 04_reproduccion_python/test_emisiones_faltantes.py`.
+Las trece pruebas de regresión comprueban el tratamiento de gases sin factor,
+la asignación por producto y la propagación de fuentes y estados:
+
+```bash
+python3 -m unittest discover -s 04_reproduccion_python -p "test_*.py" -v
+```
 
 ## Estructura del repositorio
 
@@ -172,13 +176,18 @@ ausencia de dato, lo no estimado y lo incluido en otra categoría.
 Los factores se consultan en la hoja `DATOS_MODELO` del Excel o en el
 [CSV de entrada](04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv),
 filtrando `tipo_registro = FACTOR_EMISION_OBS`. La hoja `EMISIONES_LARGA`
-muestra el factor aplicado a cada registro. Los factores se asignan por
-categoría y grupo de combustibles; los de un agregado no identifican un
-factor específico de cada combustible que lo integra.
+muestra el factor aplicado a cada registro. La combustión utiliza factores
+por combustible y uso. En transporte, gasolina, diésel y GLP emplean factores
+anuales específicos de las CRT; la gasolina integra la gasolina de motor y
+de aviación. Para las demás combinaciones se utilizan parámetros por
+combustible y uso documentados en el BTR1 y las Directrices IPCC 2006,
+identificados como `PRX`. La fuente y el estado se conservan por gas.
 
-El [cotejo con las CRT originales](05_verificacion/revision_factores_crt_2018_2022.txt)
-documenta las celdas y los cocientes que reproducen los 166 factores positivos
-de 2018–2022, así como el alcance de los agregados de industria y transporte.
+El insumo contiene 555 factores: 391 positivos, 90 ceros metodológicos y 74
+sin valor numérico. El [cotejo con las CRT originales](05_verificacion/revision_factores_crt_2018_2022.txt)
+verifica los 106 factores positivos procedentes de esas tablas. Los otros 285
+parámetros positivos están documentados en el insumo y la
+[metodología de emisiones](01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt).
 
 ## Citación
 
@@ -207,4 +216,4 @@ condiciones de uso de origen; este producto no los relicencia.
 
 ---
 
-**Guatemala · cobertura 2018–2024 · revisión del repositorio: 21 de septiembre de 2026**
+**Guatemala · cobertura 2018–2024**

@@ -661,6 +661,114 @@ def comparar_totales_anuales(
     )
 
 
+def validar_asignacion_factores(
+    etiqueta: str,
+    registros: Sequence[Mapping[str, str]],
+    entrada: Sequence[Mapping[str, str]],
+    tolerancia: Decimal,
+    informe: Informe,
+) -> None:
+    """Contrasta la salida con reglas y factores fuente, sin importar el generador."""
+    errores: list[str] = []
+    try:
+        reglas = {}
+        factores = {}
+        for fila in entrada:
+            if fila["tipo_registro"] == "REGLA_EMISION_ENERGIA" and fila["incluir"] == "1":
+                clave = tuple(fila[c] for c in ("anio", "source_record_id", "lado", "bloque", "unidad_sectorial", "metodo"))
+                if clave in reglas:
+                    errores.append(f"Regla duplicada: {clave}")
+                reglas[clave] = fila
+            elif fila["tipo_registro"] == "FACTOR_EMISION_OBS":
+                clave = tuple(fila[c] for c in ("anio", "categoria_ipcc", "grupo_factor", "gas"))
+                if clave in factores:
+                    errores.append(f"Factor duplicado: {clave}")
+                factores[clave] = fila
+
+        metadatos = {}
+        compuesto = []
+        gases_campos = (("CO2", "ef_co2_kg_tj"), ("CH4", "ef_ch4_kg_tj"), ("N2O", "ef_n2o_kg_tj"))
+
+        def contrastar(fila, valores, estado, fuentes, anio_factor):
+            identificador = fila["clave_emision"]
+            for gas, campo in gases_campos:
+                observado = None if fila[campo] == "" else a_decimal(fila[campo], identificador)
+                esperado = valores[gas]
+                if ((observado is None) != (esperado is None)
+                    or (observado is not None and esperado is not None and abs(observado - esperado) > tolerancia)):
+                    errores.append(f"{identificador}/{gas}: factor aplicado distinto del insumo")
+            if fila["estado_factor"] != estado or fila["fuente_id_factor"] != fuentes or fila["anio_factor"] != str(anio_factor):
+                errores.append(f"{identificador}: estado, fuente o año de factor incoherente")
+
+        for fila in registros:
+            if fila["modulo"] == "AGRICULTURA":
+                continue
+            clave = tuple(fila[c] for c in ("anio", "source_record_id", "psut_side", "psut_block_code", "unidad_origen_psut", "metodo_asignacion"))
+            regla = reglas[clave]
+            for campo_salida, campo_regla in (("categoria_ipcc", "categoria_ipcc"), ("grupo_factor", "grupo_factor"), ("producto_std", "producto"), ("tratamiento_co2", "tratamiento_co2")):
+                if fila[campo_salida] != regla[campo_regla]:
+                    errores.append(f"{fila['clave_emision']}: correspondencia {campo_salida} distinta de la regla")
+            if regla["metodo"] == "USO_ENERGETICO_INTERNO_APARENTE":
+                compuesto.append(fila)
+                continue
+            anio = int(fila["anio"])
+            anio_factor = min(anio, 2022)
+            fuentes_gas = {gas: factores[(str(anio_factor), regla["categoria_ipcc"], regla["grupo_factor"], gas)] for gas, _ in gases_campos}
+            valores = {gas: None if f["valor_factor"] == "" else a_decimal(f["valor_factor"], f["registro_id"]) for gas, f in fuentes_gas.items()}
+            for gas, f in fuentes_gas.items():
+                if (f["unidad_factor"] != f"kg {gas}/TJ" or not f["fuente_id"] or not f["fuente_pagina"]
+                    or f["estado"] not in {"OBS", "CAL", "PRX", "NO"}
+                    or (valores[gas] is None) != (f["estado"] == "NO")
+                    or (f["producto"] and f["producto"] != regla["producto"])):
+                    errores.append(f"{f['registro_id']}: metadatos fuente incompatibles")
+            conocidos = [fuentes_gas[gas] for gas, valor in valores.items() if valor is not None]
+            fuentes = " | ".join(sorted({f["fuente_id"] for f in (conocidos or list(fuentes_gas.values()))}))
+            if not conocidos:
+                estado = "NO"
+            elif regla["grupo_factor"] == "CERO_DIRECTO":
+                estado = "CAL"
+                if any(v != Decimal(0) for v in valores.values()) or any(f["estado"] != "CAL" for f in conocidos):
+                    errores.append(f"{fila['clave_emision']}: factores de cero metodológico inválidos")
+            elif anio > anio_factor or "PRX" in {f["estado"] for f in conocidos}:
+                estado = "PRX"
+            else:
+                estado = "CAL" if "CAL" in {f["estado"] for f in conocidos} else "OBS"
+            contrastar(fila, valores, estado, fuentes, anio_factor)
+            requiere_detalle = (
+                len({f["fuente_id"] for f in conocidos}) > 1
+                or any(f["producto"] or f["metodo"] not in {"CRT_ANUAL", "CERO_DIRECTO", "SIN_FACTOR_NUMERICO", "EMISION_CRT_DIV_PSUT_EXTRACCION"}
+                       or f["fuente_id"] not in {"UNFCCC_GTM_CRT_2024", "METODO_EMISIONES"} for f in fuentes_gas.values())
+            )
+            if requiere_detalle:
+                for gas, f in fuentes_gas.items():
+                    if f"{gas}: {f['fuente_id']} [{f['estado']}; {f['fuente_pagina']}]" not in fila["nota"]:
+                        errores.append(f"{fila['clave_emision']}/{gas}: falta procedencia detallada en nota")
+            metadatos[fila["clave_emision"]] = (valores, fuentes)
+
+        referencias = [f for f in registros if f["anio"] == "2019" and f["modulo"] == "COMBUSTION" and f["producto_std"] == "GAS" and f["unidad_sectorial_agregada"] in {"IND_BEN", "SERV", "TR_BEN"}]
+        if len(compuesto) != 1 or len(referencias) != 3 or {f["unidad_sectorial_agregada"] for f in referencias} != {"IND_BEN", "SERV", "TR_BEN"}:
+            errores.append("La ponderación GAS 2019 requiere una fila compuesta y tres sectores de referencia")
+        else:
+            actividad_total = sum(a_decimal(f["actividad_emisiones_tj"], f["clave_emision"]) for f in referencias)
+            if actividad_total <= 0:
+                errores.append("La ponderación GAS 2019 no tiene actividad positiva")
+            else:
+                ponderados = {}
+                for gas, _ in gases_campos:
+                    pares = [(a_decimal(f["actividad_emisiones_tj"], f["clave_emision"]), metadatos[f["clave_emision"]][0][gas]) for f in referencias]
+                    ponderados[gas] = None if any(a != 0 and v is None for a, v in pares) else sum(a * v for a, v in pares if v is not None) / actividad_total
+                fuentes = " | ".join(sorted({s for f in referencias for s in metadatos[f["clave_emision"]][1].split(" | ")}))
+                estado = "PRX" if any(v is not None for v in ponderados.values()) else "NO"
+                contrastar(compuesto[0], ponderados, estado, fuentes, 2019)
+    except (KeyError, ValueError, InvalidOperation) as exc:
+        errores.append(f"Entrada o correspondencia incompleta: {exc}")
+    informe.comprobar(
+        not errores,
+        f"Emisiones {etiqueta}: factores, fuentes y estados corresponden a la entrada y sus reglas",
+        detalle_elementos(errores),
+    )
+
+
 def crear_argumentos() -> argparse.ArgumentParser:
     directorio_script = Path(__file__).resolve().parent
     analizador = argparse.ArgumentParser(
@@ -680,6 +788,11 @@ def crear_argumentos() -> argparse.ArgumentParser:
         type=Path,
         default=directorio_script.parent / "datasets_finales",
         help="directorio que contiene los dos CSV finales de referencia",
+    )
+    analizador.add_argument(
+        "--entrada",
+        type=Path,
+        help="CSV de entrada para contrastar asignaciones y procedencia; por defecto se busca junto al script",
     )
     analizador.add_argument(
         "--tolerancia-campos",
@@ -783,6 +896,17 @@ def ejecutar(argumentos: argparse.Namespace) -> int:
         argumentos.tolerancia_emisiones_kt,
         informe,
     )
+    entrada = argumentos.entrada
+    if entrada is None:
+        candidata = Path(__file__).resolve().parent / "datos_modelo_guatemala_2018_2024.csv"
+        entrada = candidata if candidata.is_file() else None
+    if entrada is None:
+        print("Sin CSV de entrada: no se valida la asignación de factores, fuentes y estados contra el insumo.")
+    else:
+        print(f"Entrada para validar asignaciones: {entrada.resolve()}")
+        _, filas_entrada = leer_csv(entrada)
+        validar_asignacion_factores("generadas", emi_gen, filas_entrada, argumentos.tolerancia_campos, informe)
+        validar_asignacion_factores("de referencia", emi_ref, filas_entrada, argumentos.tolerancia_campos, informe)
     comparar_totales_anuales(
         totales_generados,
         totales_referencia,

@@ -28,14 +28,14 @@ publicación.
   Versión en hoja de cálculo con fórmulas y trazabilidad.
 
 04_reproduccion_python
-  Archivo único de entrada, script generador, validador, siete pruebas de
+  Archivo único de entrada, script generador, validador, trece pruebas de
   regresión, auditor de factores CRT, cuaderno de consulta, instrucciones y
   versiones de dependencias.
 
 05_verificacion
-  Informe final de reproducción computacional, cotejo de factores con las CRT
-  originales, conciliación de cobertura de transporte y evidencia XML del
-  N2O fugitivo sin cuantificar.
+  Informe de reproducción computacional y verificación de parámetros BTR/IPCC,
+  cotejo de factores con las CRT originales, conciliación de cobertura de
+  transporte y evidencia XML del N2O fugitivo sin cuantificar.
 
 2. REPRODUCCIÓN RÁPIDA
 
@@ -54,7 +54,7 @@ python 04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py \
 El cuaderno no reconstruye las cuentas. Para consultarlo deben cargarse los dos
 CSV finales ubicados en 02_resultados_y_diccionario.
 
-Las siete pruebas de regresión se ejecutan con:
+Las trece pruebas de regresión se ejecutan con:
 
 python -m unittest discover -s 04_reproduccion_python -p "test_*.py" -v
 
@@ -84,31 +84,31 @@ porque su huella cambiaría al incorporarla dentro del mismo archivo.
 
 RUTA | TAMAÑO_BYTES | SHA-256
 .zenodo.json | 1853 | cddf68af692feeee78800cb270b3b437383ad193e319311c8c03248418f8a3f8
-00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx | 41639 | 0d03385526dab461227075c188909d7c6281c595d47275b4cb0eb01830817a26
-01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt | 25156 | 0613679617e8e9d1af769e49acc62ea0adff6e0f4adccf4e171aea65fd25db33
-01_metodologia/nt_01_metodologia_psut_energia_2018_2024.txt | 33952 | d565027cb5011a2693700a23ac851ba2bfe8bba6258d8207e46e91bfd6f9373d
-01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt | 33451 | 38e1aa5d9dd4dd0bc214cb53a606738162ec9c15e5b8ed353096cb727990d087
-02_resultados_y_diccionario/cuenta_emisiones_aire_guatemala_2018_2024.csv | 110968 | c17b41ade77e1acb2784de9d77db0ebca9eef3b3c2e93124238876a1e2ed6dba
-02_resultados_y_diccionario/diccionario_datos_guatemala_2018_2024.txt | 10370 | 0a840d898a646fcba12b2a58b109f2691be71856f15560a341b598eaa0cde5eb
+00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx | 59673 | 44c16997bbe1b3ba6283c69f39c9583dbcbd8f09a411ea6be5bef68c1532f785
+01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt | 25923 | a1014c4fe7ca8121ede1c14d9c0dd53746929f098d754602853d6cf4c1782db9
+01_metodologia/nt_01_metodologia_psut_energia_2018_2024.txt | 33952 | 706bf27f97749b7b97a73de1bddefcb721d20c9c491ffc0cd307ab6e7cb67666
+01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt | 34794 | abcf07c736e3f0687fcf3bb116a229b5fc30368f2bd3417d3269096904e55002
+02_resultados_y_diccionario/cuenta_emisiones_aire_guatemala_2018_2024.csv | 156389 | a28b8b18f8e4791806cac4fb231427cedd01076f8149d6143aff5d99b827059a
+02_resultados_y_diccionario/diccionario_datos_guatemala_2018_2024.txt | 10716 | bb33db53d7154949a8d80dc011c379eec382d342e9e47a107b62cb5dfde05f8d
 02_resultados_y_diccionario/psut_energia_guatemala_2018_2024.csv | 64692 | 4be0edefa6d24be0598a0c8cdbb5a7fc76211bed3dfc205083d60a18398bc071
-03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx | 695065 | f926dee7eaf91fab6211729705540fd523ae81c1dd8aeb8ea6ed8070a9058a9a
-04_reproduccion_python/auditar_factores_crt_2018_2022.py | 22623 | 0b9c3dc160861295f556210555afee037bc104697dd9a4d8bc72841a80c7480f
-04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb | 552528 | 77ef7bed88700605aaf0dec2df210b41446825f6436792f2ca8e307bafb8720e
-04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv | 1183574 | 95dbf283f05f929d6193cb708acd7139f6794676ea4955628bd665894f6aae04
-04_reproduccion_python/instrucciones_reproduccion_python.txt | 3665 | 6639b56e2773edbaa285583933e64a6cac75c26cc8aee84a0cb5528d7bc11660
-04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py | 38348 | 8de9df6e78aea41c997d6679ee163c3d206d663a3bec35ad112a12ba0d036c1c
+03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx | 757559 | 664afbe3eb5d6182603d1b8b9f5a9b48e92f8e78d04a505ec3e51f530cf25fdd
+04_reproduccion_python/auditar_factores_crt_2018_2022.py | 25944 | 77256f5c750b044dc2c501c07127f8a653ad51b4f65670b0a4490bf8cbc8d1cb
+04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb | 714516 | 127d4cefceb62dcfb61bd1579707a9a42b8c2f504256d207968308bebcab5f7a
+04_reproduccion_python/datos_modelo_guatemala_2018_2024.csv | 1371546 | 6e9667ecb5267cca81e0fe6b94f7385a3db6ab32dc3f439283e5f5a63955b811
+04_reproduccion_python/instrucciones_reproduccion_python.txt | 3878 | d69f5606fd77f7d786605b57cee2bd064f74740006c81edfab314175a48c61c0
+04_reproduccion_python/reproducir_modelo_guatemala_2018_2024.py | 42599 | 43ed97747576e99d8f843e088c70be754478d9869c3753f169c351f979fdfefb
 04_reproduccion_python/requirements.txt | 46 | 0bf7466ec8d0bc18d2ecc5db4bae9e132590df827eba743092e88474b4800849
-04_reproduccion_python/test_emisiones_faltantes.py | 5452 | 70f10d5914875d36de364dddd5ad7ecaf5f75f631f7e5367c812195902ddbde5
-04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py | 27651 | 9dc466cf9f999851a1d678c3cc43a84491ef03e3d1bf1b4e906e9fe587f0a55e
+04_reproduccion_python/test_emisiones_faltantes.py | 11008 | d5e28815e20b56da576921e779bb42c5c95bf2b8564bce9fccbbfe10532ef1a2
+04_reproduccion_python/validar_reproduccion_guatemala_2018_2024.py | 35501 | 6a5b0c09ebb69dd7b16e1dc8c0316e92b6e9d930d884b2b20d6183e68fa86333
 05_verificacion/conciliacion_cobertura_transporte_crt.csv | 2462 | 4684b799b664a1e69438863d2e9a8edd7c4cadbcc1309a92035c5ff4e1867636
-05_verificacion/cotejo_factores_crt_2018_2022.csv | 81435 | 81609877039de912d882d241853164dd13bb7cba326ee4c14e2f622f60a08530
+05_verificacion/cotejo_factores_crt_2018_2022.csv | 68888 | 6b8739d4a026a09ec786572382ab5e6ef250e2b0e17cba60751d6009c95dbb19
 05_verificacion/evidencia_xml_n2o_fugitivo.json | 4163 | aa88c0931ecee16345b508fa9d4e608a727746bc7c8f4c15b2739d4cd74653cc
-05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt | 7829 | bd5155444ab9f138ee943f250db94448261afd0b3ba79f0a517734269411bd04
-05_verificacion/revision_factores_crt_2018_2022.txt | 4087 | e914866ce750f300c8683ed430a48a3dcc5cd5c4f8be3c7ad3331aa551a12dc7
+05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt | 6574 | 14a4a31aa716e2d617209ab3fa29eb91f9a7cff861eda7b775927d61e6dc439f
+05_verificacion/revision_factores_crt_2018_2022.txt | 2659 | 1008c615231839b59840d9556ee38cda9ab446f24831d98565e7c6530c984334
 CITATION.cff | 1656 | fa126e7c96e81127cd21be45e65feb63442385bfabd8d43c672cde26a523123c
 LICENSE | 2163 | 258bd8e8315b82862ff0c5e79820fd1d0d2d4705585eced43edfd9a478f504e6
 LICENSE_CODE | 1457 | 176eab08e9c28f9fe63fb83ee56683e68ade0fd67be9ec94e9731cc8680ca3ab
-README.md | 11474 | 157d9111f37658575e1deae39a1e9007812c6b76c6a94e203fe439bdf15e7307
+README.md | 11945 | 80012481d63b4c155b0c45b4b3801dd93b9477b8de9fce5e61872cad2944a2c4
 codemeta.json | 1904 | 035209820d0c69c9f6088001f0e5b8e6de3b5f447f96c5a8793d81e6ada90b0b
 creditos.txt | 2355 | 14c59501dd4b00eb492a2a0e630f5f650733fd8080455961944d93b0dbb56f98
-readme.txt | 9748 | a0b733ebc603863fb514d486c80e88c1b965780dd4897e702f92690c80b871f3
+readme.txt | 10118 | 0a6b1bae9ceef92ff9b262decb244e18fef7b6c253e52703fec8e9800cbae144

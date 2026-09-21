@@ -25,8 +25,8 @@ El selector anual permite consultar cualquiera de los años comprendidos entre
 
 datos_modelo_guatemala_2018_2024.csv
 
-Este CSV contiene los balances energéticos, mapeos, factores de emisión,
-parámetros, observaciones y catálogos requeridos por el cálculo. No se necesita
+Este CSV contiene 3 671 registros de balances energéticos, mapeos, factores de
+emisión, parámetros, observaciones y catálogos; incluye 555 registros de factores. No se necesita
 el libro de cálculo ni otro archivo de datos.
 
 3. Ejecución mediante script
@@ -85,11 +85,14 @@ faltantes por gas, identidad de CO2 equivalente cuantificado y totales anuales.
 
 python validar_reproduccion_guatemala_2018_2024.py \
   --generados resultados \
-  --referencias referencias
+  --referencias referencias \
+  --entrada datos_modelo_guatemala_2018_2024.csv
 
-Una reproducción conforme devuelve el código de salida 0.
+Con --entrada se ejecutan 55 controles, incluido el contraste de fuentes y
+estados de los factores con las reglas de entrada. Una reproducción conforme
+devuelve el código de salida 0.
 
-Esta comprobación verifica la reproducción interna. El cotejo numérico de los
-factores con las CRT originales se documenta en la NT-02; su coincidencia no
-demuestra la representatividad del promedio para cada combustible ni resuelve
-la conciliación de cobertura del transporte.
+Esta comprobación verifica la reproducción interna. La NT-02 documenta la
+selección por combustible y uso, el cotejo de factores CRT anuales y el de
+parámetros constantes BTR/IPCC. El estado y la fuente por gas se conservan para
+interpretar las aproximaciones y la cobertura del transporte.

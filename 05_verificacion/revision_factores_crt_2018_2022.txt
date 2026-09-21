@@ -1,51 +1,30 @@
 AUDITORÍA DE FACTORES CONTRA CRT ORIGINALES 2018–2022
-Fecha de revisión: 2026-09-21
 
-Factores positivos cotejados: 166. Coinciden: 166.
-Combustión: 156 también coinciden con el IEF reportado, después de convertir t CO2/TJ a kg CO2/TJ.
-Fugitivas: 10 reproducen emisión CRT (kt) x 1 000 000 / extracción PETR PSUT (TJ), en kg/TJ. No se confunde ese denominador con E12 del CRT, expresado en 10^3 m^3.
+Factores positivos cotejados: 106. Coinciden: 106.
+Factores de 2018–2022 con fuente_id=UNFCCC_GTM_CRT_2024, incluidos estados OBS y PRX. Los parámetros de otras fuentes no se atribuyen a CRT.
+Parámetros positivos de otras fuentes fuera de alcance: 285. Fuentes: IPCC_2006_GL, MARN_GTM_BTR1_2024.
+Combustión: 96 coinciden con IEF publicados o su promedio ponderado por TJ, después de convertir t CO2/TJ a kg CO2/TJ.
+Transporte por producto: 45 factores. GAS: 15 reconstruyen suma de emisiones / suma de actividad de filas 17+21; DOIL usa fila 22; GLP usa fila 23.
+GAS agrega gasolina de aviación y de motor; el cálculo se deriva de datos oficiales, pero su aplicación mantiene PRX por el supuesto de representatividad de la mezcla CRT respecto de BEN. DOIL/GLP conservan la cobertura de la categoría reportada, que incluye navegación no desagregada según BTR1 pp. 64–65.
+Fugitivas: 10 reproducen emisión CRT / extracción PETR PSUT (TJ). No se confunde ese denominador con E12 del CRT, expresado en 10^3 m^3.
 N2O fugitivo: 5 años con factor H12 y emisión K12 vacíos en Table1.B.2. No equivalen a un cero medido.
 Diferencia absoluta máxima: 1.45519152284e-11 kg/TJ.
 ZIP SHA256: 78ae95f39fd7d85b795192cbf4343d962b80ecab4a41aa2661cb36646a1c10c5
 Referencia: https://unfccc.int/documents/646206
 
-PROCEDENCIA Y AGRUPACIÓN
-En combustión, el cociente es emisión CRT (kt) x 1 000 000 / actividad CRT (TJ),
-en kg/TJ. Su coincidencia con el IEF identifica la procedencia numérica del
-factor; no determina cómo el inventario construyó originalmente sus emisiones.
-
-En industria (1.A.2), el agregado de Table1.A(a)s2, fila 10, coincide con la fila
-11, rotulada Liquid fuels; los IEF están en E11:G11. AGREGADO_FOSIL es la etiqueta
-interna del modelo. El cotejo no acredita una ponderación observada entre todas
-las familias fósiles ni un factor específico para cada combustible asignado.
-
-TRANSPORTE: COINCIDENCIA ARITMÉTICA Y COBERTURA
-En 2019–2022 C18 (Jet kerosene) de Table1.A(a)s3 aporta actividad igual a Table1.D C11, pero H18/I18/J18 están vacías y las emisiones se reportan en Table1.D G11/H11/I11. En 2018 C18 también está vacía. La causa de la doble ubicación no se determina aquí. No reclasificar actividad ni sumar emisiones de bunkers sin definir el alcance.
-En cada año, C10 = C17 + C18 + C20 de Table1.A(a)s3 (sumando únicamente entradas numéricas). H10/I10/J10 = emisiones de gasolina de aviación y carretera, filas 17 y 20. Esto describe la suma publicada y no imputa cero a celdas vacías.
-Las celdas H18:J18 no contienen valores, fórmulas ni claves de notación; no hay combinaciones de celdas que oculten una emisión en esa fila. Table1.D, nota B28, establece que los búnkeres internacionales se reportan por separado del total nacional.
-
-Año; actividad jet coincidente (TJ); proporción del denominador agregado
-2019; 4285.13700000; 3.099429%
-2020; 2048.63171000; 1.514611%
-2021; 3456.40528000; 2.135146%
-2022; 4486.13182000; 2.820965%
-
-Estos porcentajes describen la composición del denominador; no representan un ajuste calculado de las emisiones de la cuenta. No se establece la causa de la ubicación duplicada ni se determina aquí el perímetro correcto de la cuenta experimental.
-La conciliación de cobertura afecta la interpretación de los factores 1.A.3 de 2019–2022 y de su reutilización en años posteriores. La correspondencia entre combustibles individuales y factores agrupados sigue siendo un supuesto que no queda validado por la coincidencia del cociente.
-La auditoría no modifica insumos, factores ni resultados. Se conservaron los hashes de las tres fuentes antes y después de la lectura.
+COBERTURA DE TRANSPORTE
+COMB_GAS, COMB_DOIL y COMB_GLP utilizan las filas 17+21, 22 y 23 de Table1.A(a)s3, respectivamente. El queroseno de transporte utiliza los parámetros IPCC documentados en la NT-02 y queda fuera de este cotejo CRT.
+El archivo conciliacion_cobertura_transporte_crt.csv documenta la composición del agregado CRT y la correspondencia de actividad entre sus tablas como control de cobertura de la fuente.
 
 REPRODUCIR
 Desde la raíz del repositorio:
 python 04_reproduccion_python/auditar_factores_crt_2018_2022.py --crt-zip RUTA_ZIP --entrada . --salida RUTA_EVIDENCIA
 Solo requiere la biblioteca estándar de Python. El ZIP original debe obtenerse por separado. Los hashes y las celdas se incluyen en los CSV y JSON producidos.
 
-ARCHIVOS DE EVIDENCIA PUBLICADOS
-- cotejo_factores_crt_2018_2022.csv: 166 factores, unidades, celdas, cocientes,
-  diferencias, hashes de XLSX y, para fugitivas, denominador y referencia PSUT.
-- conciliacion_cobertura_transporte_crt.csv: actividad y emisiones por celda,
-  suma del agregado y correspondencia con aviación internacional.
-- evidencia_xml_n2o_fugitivo.json: valores y XML de los cinco pares de celdas
-  de N2O vacías, sin valor, fórmula ni clave de notación.
+ARCHIVOS DE EVIDENCIA
+- cotejo_factores_crt_2018_2022.csv: 106 factores CRT, celdas, unidades, cocientes y huellas de las fuentes.
+- conciliacion_cobertura_transporte_crt.csv: composición del agregado CRT y correspondencia de actividad jet.
+- evidencia_xml_n2o_fugitivo.json: celdas originales sin dato de N2O.
 
 La copia del ZIP fue facilitada por el autor. Sus archivos internos son
 GTM-CRT-2024-V0.3-AAAA-20250304-084824_started.xlsx. El programa produce evidencia

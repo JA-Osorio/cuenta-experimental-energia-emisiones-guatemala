@@ -953,7 +953,7 @@ suministro_residual_ENER = uso_residual_ENV
 
 La comprobación del archivo base produjo los siguientes resultados:
 
-- DATOS_MODELO contiene 3 446 registros y 39 campos, con conteos coherentes por
+- DATOS_MODELO contiene 3 671 registros y 39 campos, con conteos coherentes por
   tipo de registro;
 - PSUT_LARGA contiene 617 filas y 13 campos;
 - las 617 filas de PSUT_LARGA tienen fórmula en TJ, tipo_STAT y estado_fuente;

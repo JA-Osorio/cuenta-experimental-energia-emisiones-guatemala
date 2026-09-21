@@ -1,6 +1,8 @@
-"""Auditoría de lectura de factores 2018–2022 contra XLSX originales CRT V0.3.
+"""Auditoría de factores con procedencia CRT 2018–2022 contra XLSX V0.3.
 
 No modifica el ZIP, los XLSX fuente ni los archivos del repositorio.
+Los parámetros BTR/IPCC quedan fuera de este cotejo; su verificación requiere
+sus propias fuentes. GAS transporte se reconstruye con las filas 17 + 21.
 """
 import csv
 import argparse
@@ -29,6 +31,15 @@ MAPPING = {
     ('1.A.4.b', 'BIOMASS'): ('Table1.A(a)s4', 30, 24, 'Biomass (3)'),
 }
 GAS_COLUMNS = {'CO2': ('H', 'E'), 'CH4': ('I', 'F'), 'N2O': ('J', 'G')}
+CRT_SOURCE_ID = 'UNFCCC_GTM_CRT_2024'
+TRANSPORT_MAPPING = {
+    ('1.A.3', 'COMB_GAS'): (
+        'Table1.A(a)s3', (17, 21), 10, ('Aviation gasoline', 'Gasoline')),
+    ('1.A.3', 'COMB_DOIL'): (
+        'Table1.A(a)s3', (22,), 10, ('Diesel oil',)),
+    ('1.A.3', 'COMB_GLP'): (
+        'Table1.A(a)s3', (23,), 10, ('Liquefied petroleum gases (LPG)',)),
+}
 
 
 class RawXlsx:
@@ -92,17 +103,23 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     with MODEL.open(encoding='utf-8-sig') as f:
         model_rows = list(csv.DictReader(f))
-        target = [r for r in model_rows
-                  if r['tipo_registro'] == 'FACTOR_EMISION_OBS'
-                  and (r['categoria_ipcc'], r['grupo_factor']) in MAPPING
+        crt_rows = [r for r in model_rows
+                    if r['tipo_registro'] == 'FACTOR_EMISION_OBS'
+                    and r['fuente_id'] == CRT_SOURCE_ID
+                    and 2018 <= int(r['anio']) <= 2022]
+        target = [r for r in crt_rows
+                  if (r['categoria_ipcc'], r['grupo_factor']) in MAPPING.keys() | TRANSPORT_MAPPING.keys()
                   and r['valor_factor'] and float(r['valor_factor']) > 0]
-        fugitive_targets = [r for r in model_rows if r['tipo_registro'] == 'FACTOR_EMISION_OBS'
-                            and r['categoria_ipcc'] == '1.B.2.a.ii']
+        fugitive_targets = [r for r in crt_rows
+                            if r['categoria_ipcc'] == '1.B.2.a.ii']
     with PSUT.open(encoding='utf-8-sig') as f:
         psut_rows = list(csv.DictReader(f))
     source_hashes = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in [ZIP, MODEL, PSUT]}
-    expected_positive_ids = {r['registro_id'] for r in model_rows if r['tipo_registro'] == 'FACTOR_EMISION_OBS'
-                             and r['valor_factor'] and float(r['valor_factor']) > 0}
+    expected_positive_ids = {r['registro_id'] for r in crt_rows
+                             if r['valor_factor'] and float(r['valor_factor']) > 0}
+    outside_scope = [r for r in model_rows
+                     if r.get('valor_factor') and float(r['valor_factor']) > 0
+                     and r['fuente_id'] != CRT_SOURCE_ID]
     report, transport_details, all_cells, manifest = [], [], {}, []
     transport_checks, transport_raw, missing_n2o = [], {}, []
     with zipfile.ZipFile(ZIP) as z:
@@ -121,19 +138,34 @@ def main():
             all_cells[str(year)] = source
             for r in [t for t in target if int(t['anio']) == year]:
                 category, group, gas = r['categoria_ipcc'], r['grupo_factor'], r['gas']
-                sheet, row_num, parent_row, expected_label = MAPPING[(category, group)]
+                key = (category, group)
+                if key in TRANSPORT_MAPPING:
+                    sheet, row_nums, parent_row, expected_labels = TRANSPORT_MAPPING[key]
+                else:
+                    sheet, row_num, parent_row, expected_label = MAPPING[key]
+                    row_nums, expected_labels = (row_num,), (expected_label,)
                 cells = source[sheet]
-                label = str(cells[f'B{row_num}']).strip()
-                assert label == expected_label, (year, sheet, row_num, label)
+                labels = tuple(str(cells[f'B{n}']).strip() for n in row_nums)
+                assert labels == expected_labels, (year, sheet, row_nums, labels)
+                label = ' + '.join(labels)
                 parent_label = str(cells[f'B{parent_row}']).strip()
                 assert parent_label.startswith(category), (year, parent_label, category)
                 assert int(cells.get('K1', cells.get('J1'))) == year
                 emission_col, factor_col = GAS_COLUMNS[gas]
-                ad_cell, em_cell, fe_cell = f'C{row_num}', f'{emission_col}{row_num}', f'{factor_col}{row_num}'
-                activity, emission = cells[ad_cell], cells[em_cell]
-                reported_fe = cells[fe_cell]
-                assert isinstance(activity, (int, float)) and activity > 0
-                assert isinstance(emission, (int, float))
+                ad_cells = [f'C{n}' for n in row_nums]
+                em_cells = [f'{emission_col}{n}' for n in row_nums]
+                fe_cells = [f'{factor_col}{n}' for n in row_nums]
+                activities = [cells[c] for c in ad_cells]
+                emissions = [cells[c] for c in em_cells]
+                reported_factors = [cells[c] for c in fe_cells]
+                assert all(isinstance(v, (int, float)) and v > 0 for v in activities)
+                assert all(isinstance(v, (int, float)) for v in emissions + reported_factors)
+                activity, emission = sum(activities), sum(emissions)
+                ad_cell, em_cell, fe_cell = ('+'.join(v) for v in (ad_cells, em_cells, fe_cells))
+                # For GAS no single IEF cell exists: reconstruct the activity-weighted
+                # IEF of the two fuels, and distinguish it from a reported scalar.
+                reported_fe = (reported_factors[0] if len(row_nums) == 1 else
+                               sum(a * f for a, f in zip(activities, reported_factors)) / activity)
                 calculated = emission * 1_000_000 / activity
                 normalized_ief = reported_fe * (1000 if gas == 'CO2' else 1)
                 current = float(r['valor_factor'])
@@ -146,12 +178,23 @@ def main():
                     'etiqueta_grupo_crt': label, 'celda_actividad': ad_cell,
                     'actividad_crt_tj': activity, 'celda_emision': em_cell,
                     'emision_crt_kt_gas': emission, 'celda_ief_reportado': fe_cell,
-                    'ief_reportado_original': reported_fe,
+                    'ief_reportado_original': reported_factors[0] if len(row_nums) == 1 else None,
+                    'ief_ponderado_unidad_original': reported_fe if len(row_nums) > 1 else None,
+                    'metodo_cotejo_ief': 'PONDERADO_POR_TJ_DE_IEF_REPORTADOS' if len(row_nums) > 1 else 'IEF_REPORTADO_DIRECTO',
+                    'estado_factor_modelo': r['estado'], 'fuente_id_modelo': r['fuente_id'],
+                    'actividad_componentes_tj': json.dumps(activities),
+                    'emision_componentes_kt_gas': json.dumps(emissions),
+                    'ief_componentes_originales': json.dumps(reported_factors),
+                    'formula_reconstruccion': f'1000000*({em_cell})/({ad_cell})',
                     'unidad_ief_reportado': 't CO2/TJ' if gas == 'CO2' else f'kg {gas}/TJ',
                     'factor_calculado_kg_tj': calculated,
                     'factor_repositorio_kg_tj': current, 'diferencia_kg_tj': current - calculated,
                     'coincide_E_div_A': comparison, 'coincide_ief_reportado': ief_comparison,
                     'nota_compatibilidad': (
+                        'GAS reúne gasolina de aviación y de motor, BTR1 p. 66. Cociente de sumas (cálculo CAL); aplicación PRX supone representatividad de la mezcla anual CRT respecto de BEN. No usa C18 ni Table1.D.'
+                        if group == 'COMB_GAS' else
+                        'Combustible específico de la categoría CRT 1.A.3.b. BTR1 pp. 64–65 describe navegación no desagregable dentro de esta categoría; no equivale a una medición exclusivamente vial. No usa C18 ni Table1.D.'
+                        if group in {'COMB_DOIL', 'COMB_GLP'} else
                         'El denominador incluye Jet kerosene cuya actividad también se reporta en aviación internacional; sus emisiones se reportan en Table1.D. Requiere conciliación de cobertura.'
                         if category == '1.A.3' and year >= 2019 else
                         'Mismo año, categoría y grupo CRT. Un factor agrupado no distingue combustibles dentro del grupo.')
@@ -259,6 +302,12 @@ def main():
         'url_oficial_zip': 'https://unfccc.int/sites/default/files/resource/GTM-CRT-2024-V0.3-20250304-084824_started.zip',
         'verificacion_identidad': 'Nombres internos, país, versión y sello coinciden con publicación. Sin hash público remoto para comparación bit a bit.',
         'input_sha256': source_hashes, 'archivos_xlsx': manifest, 'factores_cotejados': len(report),
+        'criterio_alcance': f'Factores de 2018–2022 con fuente_id={CRT_SOURCE_ID}, incluidos estados OBS y PRX. Los parámetros de otras fuentes no se atribuyen a CRT.',
+        'factores_crt_positivos_en_entrada': len(expected_positive_ids),
+        'parametros_positivos_de_otras_fuentes_fuera_de_alcance': len(outside_scope),
+        'fuentes_fuera_de_alcance': sorted({r['fuente_id'] for r in outside_scope}),
+        'factores_transporte_por_producto': sum(r['grupo_factor'] in {'COMB_GAS', 'COMB_DOIL', 'COMB_GLP'} for r in report),
+        'factores_gasolina_con_ief_ponderado': sum(r.get('metodo_cotejo_ief') == 'PONDERADO_POR_TJ_DE_IEF_REPORTADOS' for r in report),
         'coinciden_E_div_A': sum(r['coincide_E_div_A'] for r in report),
         'coinciden_ief_reportado_combustion': sum(r['coincide_ief_reportado'] is True for r in report),
         'factores_fugitivos_con_denominador_PSUT': sum(r['categoria_ipcc'] == '1.B.2.a.ii' for r in report),
@@ -275,34 +324,26 @@ def main():
         json.dumps(missing_n2o, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     compared_ids = [r['registro_id'] for r in report]
     assert len(set(compared_ids)) == len(compared_ids), 'Factores duplicados en el cotejo'
-    assert set(compared_ids) == expected_positive_ids, 'Hay factores positivos sin cotejar o registros adicionales'
+    assert set(compared_ids) == expected_positive_ids, 'Hay factores CRT positivos sin cotejar o registros adicionales'
     assert source_hashes == {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in [ZIP, MODEL, PSUT]}, 'Fuentes modificadas durante auditoría'
     lines = [
         'AUDITORÍA DE FACTORES CONTRA CRT ORIGINALES 2018–2022',
         '',
         f"Factores positivos cotejados: {len(report)}. Coinciden: {summary['coinciden_E_div_A']}.",
-        f"Combustión: {summary['coinciden_ief_reportado_combustion']} también coinciden con el IEF reportado, después de convertir t CO2/TJ a kg CO2/TJ.",
+        summary['criterio_alcance'],
+        f"Parámetros positivos de otras fuentes fuera de alcance: {len(outside_scope)}. Fuentes: {', '.join(summary['fuentes_fuera_de_alcance']) or 'ninguna'}.",
+        f"Combustión: {summary['coinciden_ief_reportado_combustion']} coinciden con IEF publicados o su promedio ponderado por TJ, después de convertir t CO2/TJ a kg CO2/TJ.",
+        f"Transporte por producto: {summary['factores_transporte_por_producto']} factores. GAS: {summary['factores_gasolina_con_ief_ponderado']} reconstruyen suma de emisiones / suma de actividad de filas 17+21; DOIL usa fila 22; GLP usa fila 23.",
+        'GAS agrega gasolina de aviación y de motor; el cálculo se deriva de datos oficiales, pero su aplicación mantiene PRX por el supuesto de representatividad de la mezcla CRT respecto de BEN. DOIL/GLP conservan la cobertura de la categoría reportada, que incluye navegación no desagregada según BTR1 pp. 64–65.',
         f"Fugitivas: {summary['factores_fugitivos_con_denominador_PSUT']} reproducen emisión CRT / extracción PETR PSUT (TJ). No se confunde ese denominador con E12 del CRT, expresado en 10^3 m^3.",
         f"N2O fugitivo: {summary['n2o_fugitivo_sin_emision_y_factor']} años con factor H12 y emisión K12 vacíos en Table1.B.2. No equivalen a un cero medido.",
         f"Diferencia absoluta máxima: {summary['max_diferencia_absoluta_kg_tj']:.12g} kg/TJ.",
         f"ZIP SHA256: {summary['zip_sha256']}",
         'Referencia: https://unfccc.int/documents/646206',
         '',
-        'TRANSPORTE: COINCIDENCIA ARITMÉTICA Y COBERTURA',
-        summary['hallazgo_transporte'],
-        'En cada año, C10 = C17 + C18 + C20 de Table1.A(a)s3 (sumando únicamente entradas numéricas). H10/I10/J10 = emisiones de gasolina de aviación y carretera, filas 17 y 20. Esto describe la suma publicada y no imputa cero a celdas vacías.',
-        'Las celdas H18:J18 no contienen valores, fórmulas ni claves de notación; no hay combinaciones de celdas que oculten una emisión en esa fila. Table1.D, nota B28, establece que los búnkeres internacionales se reportan por separado del total nacional.',
-        '',
-        'Año; actividad jet coincidente (TJ); proporción del denominador agregado',
-    ]
-    for r in transport_checks:
-        if r['jet_actividad_repetida_entre_tablas']:
-            lines.append(f"{r['anio']}; {r['actividad_jet_s3_C18_tj']:.8f}; {100*r['fraccion_AD_total_que_repite_jet_internacional']:.6f}%")
-    lines += [
-        '',
-        'Estos porcentajes describen la composición del denominador; no son una corrección aprobada de emisiones. No se establece la causa de la ubicación duplicada ni se determina aquí el perímetro correcto de la cuenta experimental.',
-        'La conciliación de cobertura afecta la interpretación de los factores 1.A.3 de 2019–2022 y de su reutilización en años posteriores. La correspondencia entre combustibles individuales y factores agrupados sigue siendo un supuesto que no queda validado por la coincidencia del cociente.',
-        'La auditoría no modifica insumos, factores ni resultados. Se conservaron los hashes de las tres fuentes antes y después de la lectura.',
+        'COBERTURA DE TRANSPORTE',
+        'COMB_GAS, COMB_DOIL y COMB_GLP utilizan las filas 17+21, 22 y 23 de Table1.A(a)s3, respectivamente. El queroseno de transporte utiliza los parámetros IPCC documentados en la NT-02 y queda fuera de este cotejo CRT.',
+        'El archivo conciliacion_cobertura_transporte_crt.csv documenta la composición del agregado CRT y la correspondencia de actividad entre sus tablas como control de cobertura de la fuente.',
         '',
         'REPRODUCIR',
         'python auditar_factores_crt_2018_2022.py --crt-zip RUTA_ZIP --entrada RUTA_REPOSITORIO --psut RUTA_CSV_PSUT --salida RUTA_EVIDENCIA',

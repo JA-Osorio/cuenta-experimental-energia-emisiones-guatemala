@@ -35,13 +35,13 @@ La cuenta de emisiones comprende CO₂, CH₄ y N₂O provenientes de la combust
 
 Los Balances Energéticos Nacionales del Ministerio de Energía y Minas para 2018–2024 controlaron las magnitudes físicas. De ellos se obtuvieron la producción, las importaciones, las exportaciones, los cambios de existencias, los insumos y productos de transformación, los consumos sectoriales, los usos propios y las pérdidas. Ninguna fuente auxiliar modificó estos totales.
 
-Las Tablas Comunes de Reporte aportaron la actividad y las emisiones por categoría y gas para 2018–2022. Esta información permitió obtener factores implícitos anuales para la combustión y las emisiones fugitivas, además de incorporar las emisiones agrícolas observadas. Las claves de notación de la fuente se conservaron cuando una categoría no presentaba un valor numérico.
+Las Tablas Comunes de Reporte aportaron actividad, emisiones y factores implícitos para 2018–2022, además de las emisiones agrícolas observadas. Para seleccionar factores por combustible y uso se emplearon también las tablas del Primer Informe Bienal de Transparencia de Guatemala (BTR1) y las Directrices del IPCC de 2006. Los parámetros por defecto se identificaron como PRX. Las claves de notación se conservaron cuando la fuente no presentaba un valor numérico.
 
 El valor agregado real de Agricultura, ganadería, silvicultura y pesca, publicado por el Banco de Guatemala a precios constantes de 2013, se utilizó como indicador para estimar las emisiones agrícolas de 2023 y 2024. El estudio WISDOM de oferta y demanda de leña se empleó únicamente como contraste de la importancia del consumo residencial; no se utilizó para distribuir los totales del balance.
 
 Cuando dos fuentes diferían, se compararon el concepto, el territorio, el período, la unidad, el producto, la actividad y la etapa de la cadena energética. La fuente más próxima al concepto de la cuenta se mantuvo como control y la otra se utilizó como contraste o componente, siempre que no generara doble conteo. No se promediaron cifras de coberturas distintas.
 
-Las observaciones de los balances conservan localizadores detallados. Para los factores de emisión, los registros agrícolas, las actividades de refinación y los valores de VAB se documentaron 392 localizadores: 233 corresponden a observaciones externas con identificador de extracción, 90 a reglas internas CERO_DIRECTO y 69 a claves NO sin valor numérico. En estas últimas no se atribuyó una celda inexistente: se consignaron la tabla de referencia y la clave interna que preserva la ausencia de un factor numérico. Los identificadores se recuperaron de los registros de extracción integrados. El cotejo de los archivos originales de las CRT de 2018–2022 confirmó los 166 factores positivos de combustión y fugitivas del modelo; su alcance y la conciliación pendiente de transporte se documentan en la NT-02.
+Las observaciones de los balances conservan localizadores detallados. Los 555 registros de factores documentan categoría, combustible o grupo, gas, año, estado y fuente. fuente_pagina identifica la tabla y la celda o fila utilizada; source_record_id conserva el vínculo con la extracción cuando corresponde. Los factores procedentes de las CRT se cotejaron con los archivos originales y los parámetros BTR/IPCC con sus tablas. Los ceros metodológicos remiten a reglas internas; la ausencia de valor no se convierte en cero.
 
 
 4. PREPARACIÓN Y ARMONIZACIÓN DE LA INFORMACIÓN
@@ -56,7 +56,7 @@ La precisión completa se conservó en los cálculos. El redondeo se aplicó ún
 
 0,005 kBEP × 5,81 TJ/kBEP = 0,02905 TJ
 
-Se utilizaron cuatro estados metodológicos. OBS identifica un valor numérico transcrito de una fuente; CAL, un resultado obtenido mediante una identidad, conversión o fórmula reproducible; PRX, una estimación basada en un indicador o en la extensión temporal de un parámetro; y NO, una categoría informada mediante clave de notación sin valor numérico. Un cero representa una magnitud numérica nula; una celda vacía indica que el campo no aplica o que no existe un valor cuantificable. Estos estados no se sustituyeron entre sí.
+Se utilizaron cuatro estados metodológicos. OBS identifica un valor numérico transcrito de una fuente; CAL, un resultado obtenido mediante una identidad, conversión o fórmula reproducible; PRX, una estimación basada en un indicador, ponderación, parámetro de referencia o extensión temporal; y NO, una categoría informada mediante clave de notación sin valor numérico. Un cero representa una magnitud numérica nula; una celda vacía indica que el campo no aplica o que no existe un valor cuantificable. Estos estados no se sustituyeron entre sí.
 
 Estos estados metodológicos se distinguen de los controles técnicos del archivo base. En PSUT_LARGA, OK confirma que un flujo directo encontró una observación de origen, CAL identifica un flujo obtenido por identidad y FORMULA señala un cierre STAT; en QA, OK expresa que un control fue superado. OK y FORMULA no reemplazan OBS, CAL, PRX o NO ni describen por sí solos la calidad estadística del dato.
 
@@ -98,19 +98,21 @@ El resultado fue 10 976,3682 TJ y se registró en NO_ASIG. Los usos observados n
 
 La cuenta de emisiones se derivó de los flujos PSUT que representan una actividad emisora. La extracción o el suministro de un producto no se interpretaron automáticamente como combustión. Cada regla identificó el flujo de origen, el módulo, la categoría IPCC, el grupo de factor y el tratamiento del CO₂. Los módulos se mantuvieron separados para combustión, emisiones fugitivas y emisiones agrícolas no energéticas.
 
-Para las categorías con actividad y emisiones observadas en las Tablas Comunes de Reporte, el factor implícito del gas g, la categoría c y el año t se calculó como:
+Se seleccionan factores por combustible y uso en 22 combinaciones. En transporte, DOIL y GLP utilizan factores específicos anuales de las CRT, con estado OBS. GAS combina las emisiones y la actividad de gasolina de aviación y de motor, con estado PRX por la transferencia de esa mezcla al BEN. Las otras 19 combinaciones utilizan parámetros constantes BTR/IPCC con estado PRX. La refinación y las fugitivas utilizan factores derivados de las CRT.
+
+Cuando el factor se obtiene de actividad y emisiones CRT, para el gas g, la categoría c y el año t se calcula:
 
 fe(g,c,t) [kg/TJ] = emision_crt(g,c,t) [kt] × 1 000 000 / actividad_crt(c,t) [TJ]
 
-Los factores anuales de 2018–2022 se aplicaron a la actividad energética del mismo año. Para 2023 y 2024 se mantuvo el factor de 2022 y se identificó como PRX:
+Los factores CRT de 2018–2022 se aplicaron a la actividad del año correspondiente. Los parámetros constantes se repiten en las claves anuales para enlazarlos con la actividad; no representan nuevas observaciones de la fuente. Para 2023 y 2024 se utiliza la clave de 2022 y se mantiene o asigna estado PRX:
 
 anio_factor(t) = min(t,2022)
 
 La emisión energética se obtuvo mediante:
 
-emision(g,s,p,t) [kt] = actividad_emisiones(s,p,t) [TJ] × fe(g,c,anio_factor) [kg/TJ] / 1 000 000
+emision(g,s,p,t) [kt] = actividad_emisiones(s,p,t) [TJ] × fe(g,p,c,anio_factor) [kg/TJ] / 1 000 000
 
-El cálculo se realiza por gas: si falta su factor numérico, su emisión permanece vacía aunque otros gases de la misma fila puedan cuantificarse. Los ceros metodológicos explícitos se conservan como cero. El estado OBS del factor documenta su procedencia en las CRT; aun siendo un factor implícito cotejado, no convierte la emisión calculada ni su asignación por combustible en una observación directa.
+El cálculo se realiza por gas: si falta su factor numérico, su emisión permanece vacía aunque otros gases de la misma fila puedan cuantificarse. Los ceros metodológicos explícitos se conservan como cero. El estado OBS del factor identifica su procedencia en las CRT; los parámetros BTR/IPCC y el factor ponderado de GAS en transporte son PRX. Ninguno convierte la emisión calculada en una observación directa.
 
 La electricidad utilizada por hogares o actividades económicas recibió emisión directa igual a cero, porque las emisiones de los combustibles empleados para generarla permanecen en ENER. El mismo tratamiento se aplicó a las fuentes renovables sin combustión en el punto de uso. Los flujos NOEN se excluyeron de combustión.
 
@@ -175,18 +177,18 @@ QA comprueba las identidades sustantivas: los usos aparentes de NOEN permanecen 
 
 La resolución sectorial está condicionada por los agregados de los Balances Energéticos Nacionales. IND_BEN y TR_BEN no equivalen necesariamente a una sola actividad CIIU y no deben interpretarse con mayor detalle que el publicado. La base territorial limita la comparación directa con cuentas ajustadas por residencia.
 
-Los factores implícitos representan promedios de categorías oficiales y no factores tecnológicos de instalaciones individuales. En 1.A.2 y 1.A.3, el modelo aplica un mismo factor de categoría y grupo a distintos combustibles; las emisiones por combustible son aproximaciones y la representatividad del promedio no queda garantizada para cada producto. La extensión de los factores de 2022 a 2023–2024 y el uso del VAB para las emisiones agrícolas son aproximaciones explícitas. La incertidumbre de estas decisiones no se reduce por la precisión decimal de los resultados.
+Los factores por combustible evitan aplicar el promedio de una mezcla a productos distintos. Los parámetros BTR/IPCC siguen siendo aproximaciones a las propiedades y condiciones de uso del país; el factor de GAS en transporte depende de la mezcla anual de motor y aviación. La extensión temporal de los factores y el uso del VAB para agricultura también son aproximaciones. La precisión decimal no reduce esa incertidumbre.
 
-El control de estados mostró que el 100 % del CO₂e cuantificado en 2023 y 2024 depende de un estado_factor PRX o de un estado_resultado PRX. En los registros energéticos, la actividad corresponde al año registrado en la PSUT y la aproximación recae en el factor de 2022; en agricultura, recae en la prolongación del resultado mediante VAB. Por ello, los totales de esos años incorporan aproximaciones en toda su magnitud cuantificada, sin que esto convierta en imputadas las actividades energéticas anuales.
+El control de estados mostró que el 100 % del CO₂e cuantificado en 2023 y 2024 depende de un estado_factor PRX o de un estado_resultado PRX. En los registros energéticos, la actividad corresponde al año registrado en la PSUT y la aproximación recae en los parámetros constantes o en la prolongación del factor de 2022; en agricultura, recae en la prolongación del resultado mediante VAB. Por ello, los totales de esos años incorporan aproximaciones en toda su magnitud cuantificada, sin que esto convierta en imputadas las actividades energéticas anuales.
 
-Las categorías con clave de notación permanecen sin valor numérico. Las exclusiones de la cuenta delimitan la cobertura y no deben interpretarse como emisiones iguales a cero. Para las 69 claves NO sin observación numérica, el localizador se mantiene al nivel de tabla y regla interna; esta condición no representa un dato perdido ni autoriza sustituir la ausencia por cero.
+Las categorías con clave de notación permanecen sin valor numérico. Las exclusiones de la cuenta delimitan la cobertura y no deben interpretarse como emisiones iguales a cero. Las combinaciones NO sin valor numérico conservan el localizador de tabla o regla interna; esa condición no autoriza sustituir la ausencia por cero.
 
 
 10. VALIDACIÓN
 
 La PSUT se validó por producto y año. Se comprobó la igualdad entre oferta y utilización después de incorporar los usos aparentes autorizados, la correspondencia entre residuales suministrados y recibidos, la ausencia de duplicación entre extracción, producción y uso, y la separación entre NO_ASIG y STAT. El umbral interno de cierre fue 0,00000001 TJ; las comparaciones de flujos utilizaron 0,000001 TJ.
 
-Los controles internos de la cuenta de emisiones revisaron las correspondencias declaradas entre actividad, categoría y factor; la identificación del año del factor; la separación del CO₂ biogénico; la inclusión del CH₄ y el N₂O cuantificados de biomasa en CO₂e; el tratamiento de emisión directa cero; la exclusión de NOEN de combustión; y la conservación de las claves de notación. La tolerancia numérica de comparación fue 0,000000001 kt. La reproducción interna y el cotejo numérico con las CRT son verificaciones distintas; ninguno demuestra por sí solo la representatividad del factor por combustible o la equivalencia de fronteras.
+Los controles internos de la cuenta de emisiones revisaron las correspondencias declaradas entre actividad, categoría y factor; la identificación del año del factor; la separación del CO₂ biogénico; la inclusión del CH₄ y el N₂O cuantificados de biomasa en CO₂e; el tratamiento de emisión directa cero; la exclusión de NOEN de combustión; y la conservación de las claves de notación. La tolerancia numérica de comparación fue 0,000000001 kt. La reproducción interna y el cotejo con las CRT y las tablas BTR/IPCC son verificaciones distintas; ninguno demuestra por sí solo la representatividad del factor o la equivalencia de fronteras.
 
 Los controles de QA confirmaron que los siete usos aparentes de NOEN están asignados a NO_ASIG, que no existe ningún flujo NOEN en STAT, que GAS corresponde a gasolinas en el caso de 2019 y que no se generaron residuos estadísticos materiales. Los cálculos conservaron la precisión completa; las tablas y gráficas presentan como máximo dos decimales.
 
@@ -216,3 +218,13 @@ Gobierno de Guatemala y Convención Marco de las Naciones Unidas sobre el Cambio
 Banco de Guatemala. Producto interno bruto por actividad económica a precios constantes de 2013.
 
 FAO, IARNA-URL e INAB. Estudio de oferta y demanda de leña mediante WISDOM en Guatemala.
+
+Ministerio de Ambiente y Recursos Naturales de Guatemala. Primer Informe Bienal
+de Transparencia (BTR1), presentación 2024, edición del informe 2025.
+Tablas 3.5–3.6, 3.17, 3.22, 3.27 y 3.33.
+https://unfccc.int/documents/646195
+
+IPCC. 2006 Guidelines for National Greenhouse Gas Inventories. Volumen 2:
+Energy, capítulo 2, tabla 2.2; capítulo 3, tablas 3.6.4 y 3.6.5.
+https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/2_Volume2/V2_2_Ch2_Stationary_Combustion.pdf
+https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/2_Volume2/V2_3_Ch3_Mobile_Combustion.pdf

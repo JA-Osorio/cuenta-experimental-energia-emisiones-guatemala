@@ -81,11 +81,14 @@ CONTEOS_ESPERADOS = {
     "ACTIVIDAD_REFINACION_OBS": 5,
     "EMISION_AGRICULTURA_OBS": 50,
     "VAB_AGRICULTURA": 7,
-    "FACTOR_EMISION_OBS": 330,
+    "FACTOR_EMISION_OBS": 555,
     "PARAMETRO": 8,
     "CATALOGO_PRODUCTO": 19,
     "CATALOGO_UNIDAD": 15,
 }
+# Inventario cerrado: 555 factores en ternas de gases. Ademas del conteo se
+# validan claves, metadatos y correspondencias de todas las reglas utilizadas.
+CONTEO_FACTORES_ESPERADO: int | None = 555
 
 ESPECIFICACIONES_AGRICULTURA = [
     ("3.A", "Fermentación entérica", "CH4"),
@@ -173,9 +176,14 @@ def leer_entrada(ruta: Path) -> list[dict[str, str]]:
         exigir(lector.fieldnames == COLUMNAS_ENTRADA, "El esquema del archivo de entrada no coincide con el esperado.")
         filas = list(lector)
     exigir(all(None not in fila for fila in filas), "Hay filas con más campos que el encabezado.")
-    exigir(len(filas) == sum(CONTEOS_ESPERADOS.values()), "El número total de registros no coincide con el modelo.")
     conteos = Counter(fila["tipo_registro"] for fila in filas)
-    exigir(conteos == Counter(CONTEOS_ESPERADOS), f"Los tipos de registro o sus cantidades son inconsistentes: {dict(conteos)}")
+    esperados = dict(CONTEOS_ESPERADOS)
+    cantidad_factores = conteos["FACTOR_EMISION_OBS"]
+    exigir(cantidad_factores > 0 and cantidad_factores % 3 == 0, "Los factores deben formar ternas de gases.")
+    esperados["FACTOR_EMISION_OBS"] = (
+        cantidad_factores if CONTEO_FACTORES_ESPERADO is None else CONTEO_FACTORES_ESPERADO
+    )
+    exigir(conteos == Counter(esperados), f"Los tipos de registro o sus cantidades son inconsistentes: {dict(conteos)}")
     identificadores = [fila["registro_id"] for fila in filas]
     exigir(all(identificadores), "Hay registros sin identificador.")
     exigir(len(identificadores) == len(set(identificadores)), "Hay identificadores de registro duplicados.")
@@ -193,6 +201,43 @@ def indice_unico(
         exigir(clave not in indice, f"Clave duplicada en {descripcion}: {'|'.join(clave)}")
         indice[clave] = fila
     return indice
+
+
+def metadatos_factores(
+    factores: Mapping[str, Mapping[str, str]],
+    valores: Mapping[str, float | None],
+    año: int,
+    año_factor: int,
+    grupo: str,
+) -> tuple[str, str, str]:
+    """Hereda condicion y procedencia de los factores efectivamente utilizados."""
+    disponibles = [factores[gas] for gas, valor in valores.items() if valor is not None]
+    fuentes = " | ".join(sorted({f["fuente_id"] for f in (disponibles or list(factores.values()))}))
+    if not disponibles:
+        estado = "NO"
+    elif grupo == "CERO_DIRECTO":
+        estado = "CAL"
+    elif año > año_factor or any(f["estado"] == "PRX" for f in disponibles):
+        estado = "PRX"
+    elif any(f["estado"] == "CAL" for f in disponibles):
+        estado = "CAL"
+    else:
+        estado = "OBS"
+
+    metodos_previos = {"CRT_ANUAL", "CERO_DIRECTO", "SIN_FACTOR_NUMERICO", "EMISION_CRT_DIV_PSUT_EXTRACCION"}
+    requiere_detalle = (
+        len({f["fuente_id"] for f in disponibles}) > 1
+        or any(f["producto"] or f["metodo"] not in metodos_previos
+               or f["fuente_id"] not in {"UNFCCC_GTM_CRT_2024", "METODO_EMISIONES"}
+               for f in factores.values())
+    )
+    detalle = ""
+    if requiere_detalle:
+        detalle = "Origen de factores: " + "; ".join(
+            f"{gas}: {f['fuente_id']} [{f['estado']}; {f['fuente_pagina']}]"
+            for gas, f in factores.items()
+        ) + "."
+    return estado, fuentes, detalle
 
 
 def validar_catalogos(filas: Sequence[Mapping[str, str]]) -> None:
@@ -380,6 +425,15 @@ def construir_emisiones(
     )
     exigir({f["gas"] for f in factores_filas} == {"CO2", "CH4", "N2O"}, "El conjunto de gases de los factores es inconsistente.")
     exigir({entero_obligatorio(f["anio"], f"factor {f['registro_id']}") for f in factores_filas} == set(range(2018, 2023)), "Los años de los factores son incompletos.")
+    ternas = Counter((f["anio"], f["categoria_ipcc"], f["grupo_factor"]) for f in factores_filas)
+    exigir(all(n == 3 for n in ternas.values()), "Cada clave de factor debe declarar CO2, CH4 y N2O, incluidos los faltantes.")
+    for factor in factores_filas:
+        valor = flotante_opcional(factor["valor_factor"], f"factor {factor['registro_id']}")
+        exigir(factor["estado"] in {"OBS", "CAL", "PRX", "NO"}, f"Estado de factor inválido en {factor['registro_id']}.")
+        exigir((valor is None) == (factor["estado"] == "NO"), f"Valor y estado de factor incompatibles en {factor['registro_id']}.")
+        exigir(bool(factor["fuente_id"] and factor["fuente_pagina"]), f"Falta procedencia del factor {factor['registro_id']}.")
+        if factor["grupo_factor"] == "CERO_DIRECTO":
+            exigir(valor == 0 and factor["estado"] == "CAL", f"Cero metodológico inválido en {factor['registro_id']}.")
 
     observaciones_refinacion = {
         entero_obligatorio(f["anio"], f"actividad {f['registro_id']}"): flotante_opcional(f["valor_tj"], f"actividad {f['registro_id']}")
@@ -431,10 +485,13 @@ def construir_emisiones(
 
         año_factor = min(año, 2022)
         valores_factor: dict[str, float | None] = {}
+        filas_factor: dict[str, Mapping[str, str]] = {}
         for gas in ("CO2", "CH4", "N2O"):
             clave_factor = (str(año_factor), regla["categoria_ipcc"], regla["grupo_factor"], gas)
             exigir(clave_factor in factores, f"Falta el factor {'|'.join(clave_factor)}.")
             fila_factor = factores[clave_factor]
+            filas_factor[gas] = fila_factor
+            exigir(not fila_factor["producto"] or fila_factor["producto"] == regla["producto"], f"El factor de {fila_factor['producto']} no corresponde al producto {regla['producto']}.")
             unidad_esperada = f"kg {gas}/TJ"
             exigir(fila_factor["unidad_factor"] == unidad_esperada, f"Unidad de factor inconsistente en {'|'.join(clave_factor)}.")
             valores_factor[gas] = flotante_opcional(fila_factor["valor_factor"], f"factor {'|'.join(clave_factor)}")
@@ -462,8 +519,13 @@ def construir_emisiones(
                     co2e += valor * peso
         else:
             co2 = biogenico = ch4 = n2o = co2e = None
-        estado_factor = "NO" if not disponible else (
-            "CAL" if regla["grupo_factor"] == "CERO_DIRECTO" else ("OBS" if año <= 2022 else "PRX")
+        estado_factor, fuente_factor, detalle_factor = metadatos_factores(
+            filas_factor, valores_factor, año, año_factor, regla["grupo_factor"]
+        )
+        nota_parcial = (
+            "CO2e parcial: " + ", ".join(gases_sin_factor)
+            + " sin factor numérico; el total incluye solo los gases cuantificados."
+            if disponible and gases_sin_factor else ""
         )
         calculos.append({
             "clave_emision": f"EM|{año}|{regla['source_record_id']}",
@@ -500,12 +562,9 @@ def construir_emisiones(
                 "CERO_DIRECTO" if regla["grupo_factor"] == "CERO_DIRECTO" else "ACTIVIDAD_X_FE"
             ),
             "fuente_actividad": "MEM_BEN",
-            "fuente_factor": "UNFCCC_GTM_CRT_2024",
-            "nota": (
-                "CO2e parcial: " + ", ".join(gases_sin_factor)
-                + " sin factor numérico; el total incluye solo los gases cuantificados."
-                if disponible and gases_sin_factor else ""
-            ),
+            "fuente_factor": fuente_factor,
+            "detalle_factor": detalle_factor,
+            "nota": " ".join(n for n in (nota_parcial, detalle_factor) if n),
         })
 
     referencias_gas = [
@@ -519,10 +578,13 @@ def construir_emisiones(
     exigir(len(referencias_gas) == 3 and {c["unidad"] for c in referencias_gas} == {"IND_BEN", "SERV", "TR_BEN"}, "No se pueden ponderar los factores del gas no asignado.")
     total_actividad_gas = sum(float(c["actividad"]) for c in referencias_gas)
     exigir(total_actividad_gas > 0, "La actividad de referencia del gas debe ser positiva.")
-    factores_compuestos = {
-        gas: sum(float(c["actividad"]) * float(c[f"ef_{gas}"]) for c in referencias_gas) / total_actividad_gas
-        for gas in ("co2", "ch4", "n2o")
-    }
+    factores_compuestos = {}
+    for gas in ("co2", "ch4", "n2o"):
+        factores_compuestos[gas] = (
+            None if any(c[f"ef_{gas}"] is None and float(c["actividad"]) != 0 for c in referencias_gas)
+            else sum(float(c["actividad"]) * float(c[f"ef_{gas}"])
+                     for c in referencias_gas if c[f"ef_{gas}"] is not None) / total_actividad_gas
+        )
     regla_gas = next((f for f in reglas if f["metodo"] == METODO_GAS_NO_ASIGNADO), None)
     exigir(regla_gas is not None, "Falta la regla del gas no asignado.")
     clave_gas = (
@@ -530,8 +592,20 @@ def construir_emisiones(
         regla_gas["bloque"], regla_gas["unidad_sectorial"], regla_gas["metodo"],
     )
     actividad_gas = psut[clave_gas]
-    emisiones_gas = {gas: actividad_gas * factor / kg_por_kt for gas, factor in factores_compuestos.items()}
-    co2e_gas = emisiones_gas["co2"] + emisiones_gas["ch4"] * gwp_ch4 + emisiones_gas["n2o"] * gwp_n2o
+    emisiones_gas = {gas: None if factor is None else actividad_gas * factor / kg_por_kt for gas, factor in factores_compuestos.items()}
+    disponible_gas = any(factor is not None for factor in factores_compuestos.values())
+    co2e_gas = 0.0 if disponible_gas else None
+    for gas, peso in (("co2", 1.0), ("ch4", gwp_ch4), ("n2o", gwp_n2o)):
+        if emisiones_gas[gas] is not None:
+            co2e_gas += emisiones_gas[gas] * peso
+    nota_gas = "Factor ponderado por los usos observados de GAS en transporte, industria y servicios."
+    faltantes_gas = [gas.upper() for gas, factor in factores_compuestos.items() if factor is None]
+    if disponible_gas and faltantes_gas:
+        nota_gas += " CO2e parcial: " + ", ".join(faltantes_gas) + " sin factor numérico; el total incluye solo los gases cuantificados."
+    for referencia in referencias_gas:
+        if referencia["detalle_factor"]:
+            nota_gas += f" {referencia['unidad']}: {referencia['detalle_factor']}"
+    fuentes_gas = " | ".join(sorted({fuente for c in referencias_gas for fuente in str(c["fuente_factor"]).split(" | ")}))
     calculos.append({
         "clave_emision": "EM|2019|GAS_USO_INTERNO_APARENTE_2019",
         "anio": 2019,
@@ -550,23 +624,23 @@ def construir_emisiones(
         "grupo": GRUPO_GAS_COMPUESTO,
         "tratamiento": "FOSIL",
         "anio_factor": 2019,
-        "estado_factor": "PRX",
+        "estado_factor": "PRX" if disponible_gas else "NO",
         "ef_co2": factores_compuestos["co2"],
         "ef_ch4": factores_compuestos["ch4"],
         "ef_n2o": factores_compuestos["n2o"],
         "gas_fuente": None,
         "emision_fuente": None,
         "co2": emisiones_gas["co2"],
-        "biogenico": 0.0,
+        "biogenico": 0.0 if disponible_gas else None,
         "ch4": emisiones_gas["ch4"],
         "n2o": emisiones_gas["n2o"],
         "co2e": co2e_gas,
-        "estado_resultado": "PRX",
+        "estado_resultado": "PRX" if disponible_gas else "NO",
         "clave_notacion": "",
         "metodo_calculo": "ACTIVIDAD_X_FE_PONDERADO_USOS_OBSERVADOS_2019",
         "fuente_actividad": "MEM_BEN",
-        "fuente_factor": "UNFCCC_GTM_CRT_2024",
-        "nota": "Factor ponderado por los usos observados de GAS en transporte, industria y servicios.",
+        "fuente_factor": fuentes_gas,
+        "nota": nota_gas,
     })
 
     emisiones_observadas_filas = [f for f in filas if f["tipo_registro"] == "EMISION_AGRICULTURA_OBS"]

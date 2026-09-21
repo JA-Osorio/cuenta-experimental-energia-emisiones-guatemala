@@ -26,7 +26,7 @@ Estados de los datos
 
 - OBS: valor observado en una fuente.
 - CAL: valor calculado mediante una identidad o regla explícita.
-- PRX: estimación mediante una aproximación documentada.
+- PRX: estimación mediante una ponderación, parámetro de referencia, prolongación u otra aproximación documentada.
 - NO: categoría informada sin valor numérico calculable.
 - FORMULA: valor obtenido mediante una identidad de cálculo.
 - OK: registro que supera los controles definidos.
@@ -35,7 +35,7 @@ Estados de los datos
 
 Función: entrada única para reproducir la PSUT de energía y la cuenta de emisiones al aire.
 Unidad de observación: un registro de datos, catálogo, mapeo, regla o parámetro.
-Registros: 3 446.
+Registros: 3 671.
 Campos: 39.
 
 Tipos de registro
@@ -45,7 +45,7 @@ Tipos de registro
 - CATALOGO_UNIDAD: catálogo de unidades económicas y ambientales.
 - MAPEO_PSUT: reglas que transforman los datos del balance en flujos PSUT.
 - REGLA_EMISION_ENERGIA: correspondencias entre flujos energéticos y cálculos de emisiones.
-- FACTOR_EMISION_OBS: factores implícitos por año, categoría IPCC, gas y grupo de combustible, además de ceros metodológicos y combinaciones sin valor numérico.
+- FACTOR_EMISION_OBS: 555 registros de factores CRT y parámetros BTR/IPCC por año, categoría, gas y combustible o grupo, incluidos ceros metodológicos y combinaciones sin valor numérico. El nombre del tipo no implica estado OBS.
 - ACTIVIDAD_REFINACION_OBS: actividad observada utilizada para la refinación.
 - EMISION_AGRICULTURA_OBS: emisiones agrícolas observadas por categoría y gas.
 - VAB_AGRICULTURA: valor agregado bruto anual utilizado para las aproximaciones agrícolas.
@@ -57,7 +57,7 @@ Campos
 - registro_id: identificador único del registro.
 - clave_union: clave estable utilizada para relacionar registros.
 - anio: año al que corresponde el dato o la regla.
-- anio_fuente: año de la observación utilizada como fuente.
+- anio_fuente: año de la observación o de la fuente del parámetro; en constantes no equivale al año de aplicación.
 - estado: condición metodológica del dato: OBS, CAL, PRX o NO.
 - fuente_id: identificador estable de la fuente.
 - titulo_fuente: nombre de la institución, publicación o criterio metodológico.
@@ -174,7 +174,7 @@ Campos
 - clave_notacion: código de notación cuando no se calcula una emisión.
 - metodo_calculo: fórmula o procedimiento general aplicado.
 - fuente_id_actividad: identificador de la fuente de actividad.
-- fuente_id_factor: identificador de la fuente del factor o emisión observada.
+- fuente_id_factor: identificador de la fuente del factor o emisión observada; puede reunir varias fuentes, cuyo detalle por gas se conserva en nota.
 - nota: aclaración necesaria para interpretar el resultado.
 
 5. Reglas de interpretación
@@ -182,7 +182,7 @@ Campos
 - Las filas con estado NO o clave_notacion NO informan que no existe una estimación numérica; no deben convertirse automáticamente en cero.
 - En las filas energéticas, cada gas sin factor numérico conserva su emisión vacía aunque otros gases se calculen. Los ceros metodológicos explícitos se conservan como cero.
 - En las siete filas de fugitivas de PETR, N2O permanece vacío y co2e_kt suma solo CO2 y CH4. Los estados de la fila no implican cobertura completa de los gases.
-- En 1.A.2 y 1.A.3, un mismo factor de categoría y grupo se aplica a distintos combustibles. Las emisiones por combustible son aproximaciones; la representatividad del promedio no es automática.
+- Los grupos COMB_* seleccionan factores por combustible y uso. Los parámetros constantes BTR/IPCC son PRX; las claves anuales no representan nuevas observaciones. En transporte, GAS pondera gasolina de aviación y de motor (PRX); DOIL y GLP conservan factores específicos CRT (OBS).
 - NO_ASIG conserva usos internos cuantificados cuya actividad compradora no puede identificarse con la fuente disponible.
 - El CO2 biogénico se informa como partida de memoria y no se suma al CO2e.
 - Los resultados deben agregarse mediante las claves y unidades declaradas; no mediante el orden físico de las filas.

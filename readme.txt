@@ -40,7 +40,7 @@ La tabla de oferta y utilización física registra productos energéticos, flujo
 
 3.2 Emisiones al aire
 
-La cuenta de emisiones integra la actividad energética con factores de emisión por gas, categoría y grupo de combustibles. La electricidad se registra en el sector consumidor como uso de energía, mientras las emisiones de su generación permanecen en las industrias de energía. El CO₂ biogénico se presenta como partida informativa y no se suma al CO₂ fósil.
+La cuenta de emisiones integra la actividad energética con factores de emisión por gas, combustible y uso. La electricidad se registra en el sector consumidor como uso de energía, mientras las emisiones de su generación permanecen en las industrias de energía. El CO₂ biogénico se presenta como partida informativa y no se suma al CO₂ fósil.
 
 3.3 Datos y parámetros
 
@@ -51,7 +51,8 @@ Los datos de entrada conservan la relación entre productos de las fuentes, cód
 Las fuentes principales son:
 
 - Balances Energéticos Nacionales del Ministerio de Energía y Minas, 2018–2024.
-- Tablas Comunes de Reporte de Guatemala y documentación de la CMNUCC, con información disponible hasta 2022.
+- Tablas Comunes de Reporte de Guatemala, con información disponible hasta 2022.
+- Primer Informe Bienal de Transparencia de Guatemala (BTR1, 2024) y Directrices IPCC 2006 para parámetros de emisión por combustible y uso.
 - Referencias de Naciones Unidas, UNSD, OLADE e IPCC para conceptos, clasificaciones, unidades y métodos.
 - Información de AMM, CNEE, BANGUAT, SAT, INE, INAB, CPN y otras instituciones nacionales utilizada para contraste sectorial y documental.
 
@@ -63,9 +64,9 @@ Energía [TJ] = valor [kBEP] × 5,81 [TJ/kBEP]
 
 Las emisiones directas se estiman por sector s, producto p, gas g y año t:
 
-Emisiones(g,s,p,t) [kt] = Energía(s,p,t) [TJ] × FE(g,c,t) [kg/TJ] ÷ 1 000 000
+Emisiones(g,s,p,t) [kt] = Energía(s,p,t) [TJ] × FE(g,p,c,t) [kg/TJ] ÷ 1 000 000
 
-Para 2018–2022 se emplean factores implícitos derivados de información oficial del mismo año. En 2023–2024, la actividad energética continúa procediendo de la PSUT de cada año, pero los factores de emisión corresponden a 2022 y se identifican como PRX; las emisiones agrícolas se prolongan desde 2022 mediante el valor agregado bruto y su resultado también se identifica como PRX. En consecuencia, el 100 % del CO₂e cuantificado en 2023 y en 2024 depende de registros cuyo estado_factor o estado_resultado es PRX. Esta condición identifica una aproximación explícita en el factor o en el resultado; no implica que la actividad energética registrada en la PSUT haya sido inventada o imputada.
+Para 2018–2022 se combinan factores implícitos anuales de las CRT y parámetros de referencia por combustible y uso del BTR1 y del IPCC. En transporte, gasolina integra las filas de gasolina de aviación y de motor; diésel y GLP utilizan sus filas específicas de las CRT. Los parámetros de referencia y la aplicación de la mezcla de gasolina se identifican como PRX. Cada gas conserva su fuente, tabla y estado en el insumo. En 2023–2024, la actividad energética continúa procediendo de la PSUT de cada año, pero los factores de emisión corresponden a 2022 y se identifican como PRX; las emisiones agrícolas se prolongan desde 2022 mediante el valor agregado bruto y su resultado también se identifica como PRX. En consecuencia, el 100 % del CO₂e cuantificado en 2023 y en 2024 depende de registros cuyo estado_factor o estado_resultado es PRX. Esta condición identifica una aproximación explícita en el factor o en el resultado; no implica que la actividad energética registrada en la PSUT haya sido inventada o imputada.
 
 Para agregar los gases se utilizaron potenciales de calentamiento global a 100 años del Quinto Informe de Evaluación del IPCC (AR5), sin retroalimentación clima–carbono: 1 para CO₂, 28 para CH₄ y 265 para N₂O (IPCC, 2013, tabla 8.7). El indicador de CO₂ equivalente se calcula de forma uniforme:
 
@@ -83,7 +84,7 @@ Los datos se organizan en tablas relacionadas mediante identificadores estables.
 - Productos: código original, código normalizado, nombre, clase energética y unidad.
 - Flujos de energía: año, producto, bloque, lado de oferta o uso, agente, sector y valor en TJ.
 - Emisiones: año, sector, producto, categoría, gas, tipo de CO₂, actividad, factor de emisión, unidad y emisión calculada.
-- Parámetros: factores de conversión, factores implícitos anuales, potenciales de calentamiento global, tolerancias, coeficientes y reglas de asignación.
+- Parámetros: factores de conversión, factores de emisión anuales y de referencia por combustible y uso, potenciales de calentamiento global, tolerancias, coeficientes y reglas de asignación.
 - Validaciones: diferencias de balance, cobertura de registros y consistencia entre tablas relacionadas.
 
 En documentos y visualizaciones, los valores numéricos emplean coma decimal y espacio para separar millares. Los archivos CSV utilizan punto decimal, no incluyen separador de millares y se codifican en UTF-8 para facilitar su lectura con Python y otras herramientas. Las unidades acompañan cada variable cuantitativa.
@@ -126,8 +127,7 @@ estructurales y numéricos; no se afirma una identidad binaria general.
 - Las emisiones de biomasa distinguen el CO₂ biogénico de los gases incluidos en el indicador de CO₂ equivalente.
 - Las cifras deben interpretarse conforme a las definiciones y alcances de cada tabla.
 
-El alcance de esta publicación se limita a la compilación validada para
-2018–2024; no establece un calendario ni un compromiso de actualización.
+La publicación comprende el período 2018–2024.
 
 8. LICENCIA Y CITACIÓN
 
