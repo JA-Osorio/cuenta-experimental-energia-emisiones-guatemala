@@ -26,6 +26,7 @@ ARCHIVOS DE EVIDENCIA
 - conciliacion_cobertura_transporte_crt.csv: composición del agregado CRT y correspondencia de actividad jet.
 - evidencia_xml_n2o_fugitivo.json: celdas originales sin dato de N2O.
 
-La copia del ZIP fue facilitada por el autor. Sus archivos internos son
-GTM-CRT-2024-V0.3-AAAA-20250304-084824_started.xlsx. El programa produce evidencia
-adicional en el directorio de salida; no se redistribuye el ZIP original.
+Procedencia de la copia del ZIP: aportada por el autor.
+Archivos internos: GTM-CRT-2024-V0.3-AAAA-20250304-084824_started.xlsx.
+El programa produce evidencia adicional en el directorio de salida;
+no se redistribuye el ZIP original.

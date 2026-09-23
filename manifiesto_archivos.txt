@@ -1,7 +1,7 @@
 MANIFIESTO DEL PAQUETE FINAL PARA COMPARTIR
 
 Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
-Fecha de preparación: 2026-09-21
+Fecha de preparación: 2026-09-23
 
 1. CONTENIDO DEL PAQUETE
 
@@ -104,11 +104,11 @@ RUTA | TAMAÑO_BYTES | SHA-256
 05_verificacion/cotejo_factores_crt_2018_2022.csv | 68888 | 6b8739d4a026a09ec786572382ab5e6ef250e2b0e17cba60751d6009c95dbb19
 05_verificacion/evidencia_xml_n2o_fugitivo.json | 4163 | aa88c0931ecee16345b508fa9d4e608a727746bc7c8f4c15b2739d4cd74653cc
 05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt | 6574 | 14a4a31aa716e2d617209ab3fa29eb91f9a7cff861eda7b775927d61e6dc439f
-05_verificacion/revision_factores_crt_2018_2022.txt | 2659 | 1008c615231839b59840d9556ee38cda9ab446f24831d98565e7c6530c984334
+05_verificacion/revision_factores_crt_2018_2022.txt | 2662 | 6d049f5585fd1133873fe0b766066d5153501bb5310e8fe33a708e98a5b9681c
 CITATION.cff | 1656 | fa126e7c96e81127cd21be45e65feb63442385bfabd8d43c672cde26a523123c
 LICENSE | 2163 | 258bd8e8315b82862ff0c5e79820fd1d0d2d4705585eced43edfd9a478f504e6
 LICENSE_CODE | 1457 | 176eab08e9c28f9fe63fb83ee56683e68ade0fd67be9ec94e9731cc8680ca3ab
 README.md | 11945 | 80012481d63b4c155b0c45b4b3801dd93b9477b8de9fce5e61872cad2944a2c4
 codemeta.json | 1904 | 035209820d0c69c9f6088001f0e5b8e6de3b5f447f96c5a8793d81e6ada90b0b
 creditos.txt | 2355 | 14c59501dd4b00eb492a2a0e630f5f650733fd8080455961944d93b0dbb56f98
-readme.txt | 10118 | 0a6b1bae9ceef92ff9b262decb244e18fef7b6c253e52703fec8e9800cbae144
+readme.txt | 9936 | de0f2e007cfd0898fca1fc8ae4dd20614c38b4f52a1b67f38e4d80065442aefe
