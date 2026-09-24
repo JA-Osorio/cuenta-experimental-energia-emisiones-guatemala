@@ -38,8 +38,8 @@ publicación.
   transporte y evidencia XML del N2O fugitivo sin cuantificar.
 
 docs
-  Portal interactivo autocontenido para consulta y presentaciones en línea,
-  con resultados y archivos de apoyo incorporados.
+  Portal interactivo para consulta y presentaciones en línea. Sus descargas
+  remiten a los archivos versionados de este repositorio.
 
 2. REPRODUCCIÓN RÁPIDA
 
