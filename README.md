@@ -26,6 +26,17 @@ La descripción técnica completa y canónica del paquete se conserva en
 [`readme.txt`](readme.txt); esta portada resume el contenido y facilita la
 navegación.
 
+## Portal interactivo
+
+El [portal de consulta](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/)
+forma parte del material complementario de la investigación. Reúne las vistas
+de energía y emisiones de 2018 a 2024 y los archivos de consulta en una página
+que puede utilizarse para presentaciones.
+
+La versión publicada se encuentra en [`docs/`](docs/) y carga sus recursos desde
+el mismo repositorio. Los datos, la metodología y los archivos de reproducción
+se mantienen en las carpetas correspondientes.
+
 ## Autores
 
 | Autor | Afiliación | ORCID |
@@ -42,6 +53,7 @@ Los roles CRediT de autoría, colaboración y revisión técnica se documentan e
 
 | Componente | Contenido | Acceso directo |
 |---|---|---|
+| Portal | Consulta interactiva y material complementario para presentaciones | [Abrir portal](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/) |
 | Trazabilidad | Registro estructurado de las fuentes y su procedencia | [`registro_fuentes_psut_guatemala.xlsx`](00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx) |
 | Metodología | Marco general, compilación de la PSUT y cuenta de emisiones | [`01_metodologia/`](01_metodologia/) |
 | Resultados y diccionario | CSV finales y definiciones de campos, códigos y estados | [`02_resultados_y_diccionario/`](02_resultados_y_diccionario/) |
@@ -82,7 +94,7 @@ constan en el
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/blob/main/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
 
 El [cuaderno visor](04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
-es la forma más sencilla de explorar los resultados: está preparado para
+es una alternativa para explorar los resultados: está preparado para
 abrirse en **Google Colab** con el botón anterior, sin instalar nada, y
 acompaña las cifras con explicaciones que facilitan su lectura. Permite
 seleccionar cualquier año entre 2018 y 2024 y presenta una PSUT integrada, una
@@ -149,6 +161,7 @@ python3 -m unittest discover -s 04_reproduccion_python -p "test_*.py" -v
 ├── 03_modelo_hoja_calculo/       # Modelo tabular reproducible
 ├── 04_reproduccion_python/       # Insumo, scripts y cuaderno visor
 ├── 05_verificacion/              # Informe de reproducción
+├── docs/                         # Portal interactivo para GitHub Pages
 ├── CITATION.cff                  # Metadatos de citación
 ├── LICENSE                       # Datos y documentación: CC BY 4.0
 ├── LICENSE_CODE                  # Código: MIT

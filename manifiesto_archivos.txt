@@ -37,6 +37,10 @@ publicación.
   cotejo de factores con las CRT originales, conciliación de cobertura de
   transporte y evidencia XML del N2O fugitivo sin cuantificar.
 
+docs
+  Portal interactivo autocontenido para consulta y presentaciones en línea,
+  con resultados y archivos de apoyo incorporados.
+
 2. REPRODUCCIÓN RÁPIDA
 
 Desde la raíz de este paquete, el modelo puede reproducirse con:
@@ -108,7 +112,15 @@ RUTA | TAMAÑO_BYTES | SHA-256
 CITATION.cff | 1656 | fa126e7c96e81127cd21be45e65feb63442385bfabd8d43c672cde26a523123c
 LICENSE | 2163 | 258bd8e8315b82862ff0c5e79820fd1d0d2d4705585eced43edfd9a478f504e6
 LICENSE_CODE | 1457 | 176eab08e9c28f9fe63fb83ee56683e68ade0fd67be9ec94e9731cc8680ca3ab
-README.md | 11945 | 80012481d63b4c155b0c45b4b3801dd93b9477b8de9fce5e61872cad2944a2c4
+README.md | 12734 | ca22124bbc6a550714b6e21ab56b9b190040276c977dcdb1196b83142855c318
 codemeta.json | 1904 | 035209820d0c69c9f6088001f0e5b8e6de3b5f447f96c5a8793d81e6ada90b0b
 creditos.txt | 2355 | 14c59501dd4b00eb492a2a0e630f5f650733fd8080455961944d93b0dbb56f98
+docs/.nojekyll | 0 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+docs/index.html | 1294 | d2e53a3d3f56d78e1b67c70db7c26054ac7c5e3c7cb19a0354972e26b301c2df
+docs/portal-00.part | 220017 | 0221c2fae13207088940f66cff1255edc9fd75424bf4b830d361e8f0c62a7d6b
+docs/portal-01.part | 220000 | 3976c17de3e06d1ae520868c4412952b61a075ae6d0076ccf014d9d665e5692e
+docs/portal-02.part | 220000 | 0ec7f4ff60f5e4e996cad81556e48e21bfc4697188deacf107dcdc53b2eb6c99
+docs/portal-03.part | 220000 | c264fe1817ded1b06109f54ce5ce1ff08edeec65bc3b23274e527770ae83e89c
+docs/portal-04.part | 220000 | cf59c43f4714960a423bcddcb7c6d6f1dad84b598fe535c9f9d48f495a9dca82
+docs/portal-05.part | 205632 | 80c2c102076e9007da82ead3948ae8663bc95e977059f73bcd839293650c0827
 readme.txt | 9936 | de0f2e007cfd0898fca1fc8ae4dd20614c38b4f52a1b67f38e4d80065442aefe
