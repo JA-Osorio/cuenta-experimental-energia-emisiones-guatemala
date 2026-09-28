@@ -1,0 +1,56 @@
+{
+  "fuente": "Banco de Guatemala",
+  "titulo": "Producto Interno Bruto por el enfoque del gasto",
+  "unidad": "Millones de quetzales en medidas encadenadas de volumen con año de referencia 2013",
+  "fecha_consulta": "2026-09-28",
+  "url": "https://banguat.gob.gt/page/producto-interno-bruto-medido-por-el-enfoque-del-gasto-ano-de-referencia-2013",
+  "archivo_url": "https://banguat.gob.gt/sites/default/files/banguat/cuentasnac/PIB2013/resumidos/3.1_Gasto_constante_AR2013.xlsx",
+  "archivo": "3.1_Gasto_constante_AR2013.xlsx",
+  "sha256": "dce692b85d8effe7d023bc0ff4117f81d0f9831f050a3915014bf551c1d376f9",
+  "rango": "I18:O18",
+  "nota": "Se utiliza el total del PIB publicado, sin reconstruirlo mediante la suma de componentes encadenados. 2023 y 2024 son cifras preliminares.",
+  "series": [
+    {
+      "anio": 2018,
+      "pib_real_millones_Q": 495443.85463640117,
+      "estado_pib": "Sin marca preliminar en la fuente",
+      "celda": "I18"
+    },
+    {
+      "anio": 2019,
+      "pib_real_millones_Q": 515350.2830020945,
+      "estado_pib": "Sin marca preliminar en la fuente",
+      "celda": "J18"
+    },
+    {
+      "anio": 2020,
+      "pib_real_millones_Q": 506148.4359932605,
+      "estado_pib": "Sin marca preliminar en la fuente",
+      "celda": "K18"
+    },
+    {
+      "anio": 2021,
+      "pib_real_millones_Q": 546851.3942239612,
+      "estado_pib": "Sin marca preliminar en la fuente",
+      "celda": "L18"
+    },
+    {
+      "anio": 2022,
+      "pib_real_millones_Q": 569572.6618015887,
+      "estado_pib": "Sin marca preliminar en la fuente",
+      "celda": "M18"
+    },
+    {
+      "anio": 2023,
+      "pib_real_millones_Q": 589646.1257287838,
+      "estado_pib": "Preliminar",
+      "celda": "N18"
+    },
+    {
+      "anio": 2024,
+      "pib_real_millones_Q": 611554.9366889212,
+      "estado_pib": "Preliminar",
+      "celda": "O18"
+    }
+  ]
+}
