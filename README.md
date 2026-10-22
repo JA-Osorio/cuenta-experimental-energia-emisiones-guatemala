@@ -23,20 +23,15 @@ y las emisiones directas se estiman por gas. El marco conceptual es el
 > prolongación del resultado). El estado de cada registro se conserva en el
 > conjunto de datos.
 
-La descripción técnica completa y canónica del paquete se conserva en
-[`readme.txt`](readme.txt); esta portada resume el contenido y facilita la
-navegación.
+El archivo [`readme.txt`](readme.txt) describe la cobertura, las fuentes y la
+estructura de los datos.
 
 ## Portal interactivo
 
-El [portal de consulta](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/)
-forma parte del material complementario de la investigación. Reúne las vistas
-de energía y emisiones de 2018 a 2024 y los archivos de consulta en una página
-que puede utilizarse para presentaciones.
-
-La versión publicada se encuentra en [`docs/`](docs/) y carga sus recursos desde
-el mismo repositorio. Los datos, la metodología y los archivos de reproducción
-se mantienen en las carpetas correspondientes.
+El [portal interactivo](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/)
+permite explorar las series de energía y emisiones de 2018 a 2024, consultar
+los indicadores económicos y descargar los datos. La aplicación y los datos
+económicos complementarios se encuentran en [`docs/`](docs/).
 
 ## Autores
 
@@ -96,17 +91,13 @@ constan en el
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/blob/main/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
 
 El [cuaderno visor](04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
-es una alternativa para explorar los resultados: está preparado para
-abrirse en **Google Colab** con el botón anterior, sin instalar nada, y
-acompaña las cifras con explicaciones que facilitan su lectura. Permite
-seleccionar cualquier año entre 2018 y 2024 y presenta una PSUT integrada, una
-vista de emisiones, indicadores principales y complementarios, y once gráficas.
+permite seleccionar cualquier año entre 2018 y 2024 y consultar la PSUT
+integrada, las emisiones y los indicadores. Incluye once gráficas.
 
-El cuaderno consulta los dos CSV finales y **no reemplaza al generador**: no
-recalcula las cuentas ni escribe archivos. También puede ejecutarse en un
-entorno Jupyter local con las versiones indicadas en
-[`requirements.txt`](04_reproduccion_python/requirements.txt), o consultarse
-directamente en GitHub.
+Lee los dos CSV finales, sin recalcular las cuentas ni escribir archivos.
+Puede abrirse en **Google Colab**, ejecutarse en Jupyter con las versiones
+indicadas en [`requirements.txt`](04_reproduccion_python/requirements.txt)
+o consultarse directamente en GitHub.
 
 ## Reproducir las cuentas
 
