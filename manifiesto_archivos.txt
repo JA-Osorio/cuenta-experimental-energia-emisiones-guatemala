@@ -1,14 +1,12 @@
-MANIFIESTO DEL PAQUETE FINAL PARA COMPARTIR
+MANIFIESTO DE ARCHIVOS
 
 Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
 Fecha de preparación: 2026-10-22
 
 1. CONTENIDO DEL PAQUETE
 
-Este directorio contiene únicamente los archivos finales necesarios para
-consultar, citar, reproducir y verificar el producto. Se excluyeron borradores,
-versiones candidatas, previsualizaciones, registros de ejecución, archivos de
-caché, utilidades internas, notas sustituidas y copias duplicadas.
+Este manifiesto describe el contenido del repositorio y registra el tamaño
+y la huella SHA-256 de sus archivos.
 
 Los archivos ubicados en la raíz presentan el producto, documentan los créditos
 CRediT, establecen las licencias y proporcionan los metadatos de citación y
