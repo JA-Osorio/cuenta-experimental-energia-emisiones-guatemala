@@ -4,6 +4,7 @@
 [![Código: MIT](https://img.shields.io/badge/c%C3%B3digo-MIT-2EA44F.svg)](LICENSE_CODE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21924042.svg)](https://doi.org/10.5281/zenodo.21924042)
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/blob/main/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
+[![Abrir el portal interactivo](https://img.shields.io/badge/Portal_interactivo-ABRIR-168A68.svg)](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/)
 
 Este repositorio presenta una cuenta de flujos físicos de energía y emisiones
 al aire para Guatemala, con cobertura anual de 2018 a 2024. La oferta y la
@@ -51,15 +52,16 @@ Los roles CRediT de autoría, colaboración y revisión técnica se documentan e
 
 ## Qué contiene
 
-| Componente | Contenido | Acceso directo |
-|---|---|---|
-| Portal | Consulta interactiva y material complementario para presentaciones | [Abrir portal](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/) |
-| Trazabilidad | Registro estructurado de las fuentes y su procedencia | [`registro_fuentes_psut_guatemala.xlsx`](00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx) |
-| Metodología | Marco general, compilación de la PSUT y cuenta de emisiones | [`01_metodologia/`](01_metodologia/) |
-| Resultados y diccionario | CSV finales y definiciones de campos, códigos y estados | [`02_resultados_y_diccionario/`](02_resultados_y_diccionario/) |
-| Modelo tabular | Libro de cálculo con fórmulas y trazabilidad | [`modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx`](03_modelo_hoja_calculo/modelo_psut_energia_emisiones_guatemala_2018_2024.xlsx) |
-| Reproducción | Insumo derivado, generador, validador y cuaderno visor | [`04_reproduccion_python/`](04_reproduccion_python/) |
-| Verificación | Evidencia de la reproducción independiente | [`informe_reproduccion_computacional_guatemala_2018_2024.txt`](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt) |
+| Carpeta | Qué contiene |
+|---|---|
+| [`00_trazabilidad_fuentes/`](00_trazabilidad_fuentes/) | Registro de las fuentes de información utilizadas para elaborar las cuentas. |
+| [`01_metodologia/`](01_metodologia/) | Metodología y procedimientos de cálculo de la cuenta de energía y de las emisiones al aire. |
+| [`02_resultados_y_diccionario/`](02_resultados_y_diccionario/) | Resultados en CSV y diccionario que explica las variables, unidades y códigos. |
+| [`03_modelo_hoja_calculo/`](03_modelo_hoja_calculo/) | Modelo de las cuentas en Excel, con sus fórmulas de cálculo. |
+| [`04_reproduccion_python/`](04_reproduccion_python/) | Datos de entrada, programas y cuaderno para reproducir y explorar los resultados en Python. |
+| [`05_verificacion/`](05_verificacion/) | Informes y resultados de las comprobaciones de cálculo, factores de emisión y cobertura de las fuentes. |
+| [`docs/`](docs/) | Portal interactivo para explorar energía, emisiones e indicadores económicos y descargar los datos. [Abrir portal](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/). |
+| [`tests/`](tests/) | Comprobaciones automáticas de la lectura de datos y su incorporación al portal. |
 
 Los dos conjuntos finales son:
 
@@ -160,8 +162,9 @@ python3 -m unittest discover -s 04_reproduccion_python -p "test_*.py" -v
 ├── 02_resultados_y_diccionario/  # CSV finales y diccionario
 ├── 03_modelo_hoja_calculo/       # Modelo tabular reproducible
 ├── 04_reproduccion_python/       # Insumo, scripts y cuaderno visor
-├── 05_verificacion/              # Informe de reproducción
-├── docs/                         # Portal interactivo para GitHub Pages
+├── 05_verificacion/              # Informes, factores de emisión y controles
+├── docs/                         # Portal de energía, emisiones e indicadores
+├── tests/                        # Comprobaciones de lectura de datos del portal
 ├── CITATION.cff                  # Metadatos de citación
 ├── LICENSE                       # Datos y documentación: CC BY 4.0
 ├── LICENSE_CODE                  # Código: MIT

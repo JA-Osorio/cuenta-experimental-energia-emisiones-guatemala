@@ -1,7 +1,7 @@
 MANIFIESTO DEL PAQUETE FINAL PARA COMPARTIR
 
 Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
-Fecha de preparación: 2026-09-23
+Fecha de preparación: 2026-10-22
 
 1. CONTENIDO DEL PAQUETE
 
@@ -112,22 +112,23 @@ RUTA | TAMAÑO_BYTES | SHA-256
 CITATION.cff | 1656 | fa126e7c96e81127cd21be45e65feb63442385bfabd8d43c672cde26a523123c
 LICENSE | 2163 | 258bd8e8315b82862ff0c5e79820fd1d0d2d4705585eced43edfd9a478f504e6
 LICENSE_CODE | 1457 | 176eab08e9c28f9fe63fb83ee56683e68ade0fd67be9ec94e9731cc8680ca3ab
-README.md | 12734 | ca22124bbc6a550714b6e21ab56b9b190040276c977dcdb1196b83142855c318
+README.md | 13012 | 4972d95a136632f7147a6425a01e85cb065ceacd0b2bed200d6fdf1fcae929f4
 codemeta.json | 1904 | 035209820d0c69c9f6088001f0e5b8e6de3b5f447f96c5a8793d81e6ada90b0b
 creditos.txt | 2355 | 14c59501dd4b00eb492a2a0e630f5f650733fd8080455961944d93b0dbb56f98
 docs/.nojekyll | 0 | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-docs/index.html | 1294 | d2e53a3d3f56d78e1b67c70db7c26054ac7c5e3c7cb19a0354972e26b301c2df
+docs/data/economia/3.1_Gasto_constante_AR2013.xlsx | 16771 | dce692b85d8effe7d023bc0ff4117f81d0f9831f050a3915014bf551c1d376f9
+docs/data/economia/indicadores_economia_energia_2018_2024.csv | 4929 | bfbad1223ffcdaa07988dfba8d071798fb6920fec5e115cf626d27f780acde57
+docs/data/economia/metodologia_economia_energia.txt | 2536 | 64f71a40ec1296b02adea2d15baff064511272ce983643baf681d1f3e6167d77
+docs/data/economia/pib_real_2018_2024.csv | 1259 | 1648ebaf752e0782996e030708622f29ea8106e437c18a1190f4e59f8c2b78a4
+docs/data/economia/pib_real_2018_2024.json | 1871 | afabdb96c5ee7b6ecfb18121c2e20113b890ed48e4cca57a22699984c8def5c4
+docs/data/economia/reproducir_indicadores.py | 3036 | 819beb490f455e0d9c91acabf643501df6389508226aececd578f8c2d77d0ff5
+docs/datos-vigentes.js | 7709 | 16029d6f8ec130b46ae946c5e2ffbe58a9b1ee88718e67665f1ece055ec4006c
+docs/index.html | 1951 | ceb77d4b5cf6a07e74de9eee48258633f4d021d564357d76be08dbdb5386d398
 docs/portal-00.part | 220017 | cf4828d2466eb77901fc013a44a8de9e3403dcfdca7cf901b494d46a550dcd74
 docs/portal-01.part | 220000 | feb5d27ea50b109391daed70a38aed3ddce1a8b42103385ed30678335cf6f1c4
 docs/portal-02.part | 220000 | 6a5fc672af9cc66278dfc75d6eddc3e60f2e1f7c486dcbd5bd74ff41205b8d1f
 docs/portal-03.part | 220000 | 009844be38e179bccdb9b0fb5f222dc7333e7173dc7f6381de4cd90046c98060
-docs/portal-04.part | 220000 | c0da76e3fde3de777f5fa751a5b213014e8a37a8d69c315627074821c2afe669
-docs/portal-05.part | 221843 | 044c0e04c2fcc4b4eebf45b185c9baa87b6043d9a04e903d87ff66d87fc8ec47
+docs/portal-04.part | 219964 | 3dd30b86dc03b025293fc29f8039441c9ff8f21bb1125a550a0d8d416b826335
+docs/portal-05.part | 221786 | e77962bb2f44b8114319ebc56c0c3646728e220a421c03a9799c927e9b77b92d
 readme.txt | 9936 | de0f2e007cfd0898fca1fc8ae4dd20614c38b4f52a1b67f38e4d80065442aefe
-
-docs/data/economia/pib_real_2018_2024.csv | 1259 | 1648ebaf752e0782996e030708622f29ea8106e437c18a1190f4e59f8c2b78a4
-docs/data/economia/metodologia_economia_energia.txt | 2536 | 64f71a40ec1296b02adea2d15baff064511272ce983643baf681d1f3e6167d77
-docs/data/economia/pib_real_2018_2024.json | 1871 | afabdb96c5ee7b6ecfb18121c2e20113b890ed48e4cca57a22699984c8def5c4
-docs/data/economia/reproducir_indicadores.py | 3036 | 819beb490f455e0d9c91acabf643501df6389508226aececd578f8c2d77d0ff5
-docs/data/economia/3.1_Gasto_constante_AR2013.xlsx | 16771 | dce692b85d8effe7d023bc0ff4117f81d0f9831f050a3915014bf551c1d376f9
-docs/data/economia/indicadores_economia_energia_2018_2024.csv | 4929 | bfbad1223ffcdaa07988dfba8d071798fb6920fec5e115cf626d27f780acde57
+tests/portal-datos-vigentes.test.cjs | 5173 | 1c9bcc2fe617665497996ad4a1ee6c298befd1cb91cedb0beab03cda48e94e60
