@@ -65,6 +65,9 @@ test("un cambio en los CSV llega al portal sin modificar el paquete de visualiza
   assert.ok(!result.html.includes("raw.githubusercontent.com/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/main/"));
   assert.ok(result.html.includes("raw.githubusercontent.com/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/" + revision + "/"));
   assert.ok(result.html.includes("(0,Ca.useState)(Co[Co.length-1])"));
+  assert.ok(result.html.includes("/tree/main"));
+  assert.ok(result.html.includes('children:le.consulta||"Consulta pendiente"'));
+  assert.ok(!result.html.includes("21 de septiembre de 2026"));
   const script = result.html.slice(result.html.indexOf("<script>") + 8, result.html.lastIndexOf("</script>"));
   assert.doesNotThrow(() => new vm.Script(script));
 });

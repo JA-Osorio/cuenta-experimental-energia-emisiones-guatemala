@@ -123,10 +123,6 @@
       "Hi=le.economia;var PA=Hi,Ea=Co.map");
     html = replaceOnce(html, "(0,Ca.useState)(2024)",
       "(0,Ca.useState)(Co[Co.length-1])");
-    html = replaceOnce(html, 'children:"Instant\\xE1nea consultada"',
-      'children:"Datos consultados"');
-    html = replaceOnce(html, 'children:"21 de septiembre de 2026"',
-      "children:le.consulta");
     html = replaceOnce(html, '"617 registros \\xB7 CSV"',
       'le.psut.length+" registros \\xB7 CSV"');
     html = replaceOnce(html, '"374 registros \\xB7 CSV"',

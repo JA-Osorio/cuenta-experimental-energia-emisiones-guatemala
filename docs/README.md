@@ -3,8 +3,9 @@
 Al abrir el portal, datos-vigentes.js consulta la revisión actual de main y
 carga desde esa misma revisión las dos cuentas CSV, el JSON del PIB y las seis
 partes de la aplicación. Las gráficas, los indicadores y las descargas quedan
-vinculados a la revisión consultada, que se muestra en «Fuente de esta
-visualización». «Datos consultados» indica la fecha de la consulta.
+vinculados a la revisión consultada. «Fuente de esta visualización» conduce
+a la versión vigente de main; las descargas conservan la revisión de los
+datos consultados. «Datos consultados» indica la fecha de la consulta.
 
 Los cambios publicados en los CSV se reflejan al volver a abrir o actualizar
 la página. No es necesario reconstruir la copia de datos incluida en el
