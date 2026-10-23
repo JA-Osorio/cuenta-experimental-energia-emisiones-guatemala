@@ -63,29 +63,6 @@ Los dos conjuntos finales son:
 - [`psut_energia_guatemala_2018_2024.csv`](02_resultados_y_diccionario/psut_energia_guatemala_2018_2024.csv), con 617 registros de oferta y utilización de energía en terajulios;
 - [`cuenta_emisiones_aire_guatemala_2018_2024.csv`](02_resultados_y_diccionario/cuenta_emisiones_aire_guatemala_2018_2024.csv), con 374 registros de emisiones y estados de cálculo.
 
-## Resultados principales
-
-Totales anuales cuantificados de emisiones:
-
-| Año | Emisiones (kt CO₂e) | Condición |
-|---:|---:|---|
-| 2018 | 28 606,66 | Información anual y factores de referencia `PRX` |
-| 2019 | 30 043,05 | Información anual y factores de referencia `PRX` |
-| 2020 | 27 165,77 | Información anual y factores de referencia `PRX` |
-| 2021 | 30 232,18 | Información anual y factores de referencia `PRX` |
-| 2022 | 28 649,59 | Información anual y factores de referencia `PRX` |
-| 2023 | 31 171,50 | 100 % dependiente de aproximaciones `PRX` |
-| 2024 | 33 553,41 | 100 % dependiente de aproximaciones `PRX` |
-
-El CO₂ equivalente cuantificado se calcula como
-`CO₂e = CO₂ fósil + 28 × CH₄ + 265 × N₂O`; el CO₂ biogénico se presenta como
-partida informativa y no se suma al CO₂ fósil. Cuando falta el factor de un gas,
-su emisión queda vacía y el CO₂e suma los componentes cuantificados. La nota del
-registro identifica los gases sin cuantificar. La reproducción independiente
-aprobó los 55 controles estructurales y numéricos definidos; los detalles
-constan en el
-[informe de reproducción](05_verificacion/informe_reproduccion_computacional_guatemala_2018_2024.txt).
-
 ## Cuaderno visor
 
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/blob/main/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
