@@ -32,18 +32,6 @@ permite explorar las series de energía y emisiones de 2018 a 2024, consultar
 los indicadores económicos y descargar los datos. La aplicación y los datos
 económicos complementarios se encuentran en [`docs/`](docs/).
 
-## Autores
-
-| Autor | Afiliación | ORCID |
-|---|---|---|
-| [Juan Alejandro Osorio](https://github.com/JA-Osorio) | Universidad Rafael Landívar | [0009-0001-4260-772X](https://orcid.org/0009-0001-4260-772X) |
-| [Patricia Villatoro](https://github.com/patriciavillatoro7) | Universidad Rafael Landívar | [0000-0002-5109-2393](https://orcid.org/0000-0002-5109-2393) |
-| [Noe Salguero](https://github.com/noesm7) | Universidad Rafael Landívar | [0009-0004-5017-6538](https://orcid.org/0009-0004-5017-6538) |
-| [José Carlos Soberanis](https://github.com/Fxhnd13) | Universidad de San Carlos de Guatemala | [0009-0007-0279-4472](https://orcid.org/0009-0007-0279-4472) |
-
-Los roles CRediT de autoría, colaboración y revisión técnica se documentan en
-[`creditos.txt`](creditos.txt).
-
 ## Qué contiene
 
 | Carpeta | Qué contiene |
