@@ -1,4 +1,4 @@
-# Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+# Cuadro físico de oferta y utilización de energía y tabla de emisiones al aire de Guatemala, 2018–2024
 
 [![Datos: CC BY 4.0](https://img.shields.io/badge/datos-CC%20BY%204.0-1682FC.svg)](LICENSE)
 [![Código: MIT](https://img.shields.io/badge/c%C3%B3digo-MIT-2EA44F.svg)](LICENSE_CODE)
@@ -6,12 +6,11 @@
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/blob/main/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
 [![Abrir el portal interactivo](https://img.shields.io/badge/Portal_interactivo-ABRIR-168A68.svg)](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/)
 
-Este repositorio presenta una cuenta de flujos físicos de energía y emisiones
-al aire para Guatemala, con cobertura anual de 2018 a 2024. La oferta y la
-utilización de productos energéticos se organizan en una **tabla física de
-oferta y utilización (PSUT)**, los flujos se vinculan con industrias y hogares,
-y las emisiones directas se estiman por gas. El marco conceptual es el
-**SEEA‑Energy** de Naciones Unidas.
+Este repositorio reúne los materiales de la investigación sobre la compilación inicial de energía y emisiones al aire de Guatemala, para el período 2018–2024. Incluye los datos, el modelo de cálculo, los programas y la documentación que permiten consultar y reproducir los resultados.
+
+El trabajo desarrolla un **cuadro físico de oferta y utilización de energía (COU-F), vinculado con una tabla de emisiones al aire**. La construcción parte de los balances energéticos nacionales y de la información del inventario de emisiones, conserva las categorías que identifican las fuentes y documenta las correspondencias, los cálculos y las aproximaciones utilizadas.
+
+Esta construcción constituye una primera etapa para desarrollar las cuentas de energía y emisiones al aire. Establece una base reproducible para avanzar en la desagregación por actividad económica, el ajuste al principio de residencia y la incorporación de información adicional.
 
 > [!WARNING]
 > **Los resultados tienen carácter experimental y no constituyen una
@@ -49,10 +48,10 @@ Los roles CRediT de autoría, colaboración y revisión técnica se documentan e
 
 | Carpeta | Qué contiene |
 |---|---|
-| [`00_trazabilidad_fuentes/`](00_trazabilidad_fuentes/) | Registro de las fuentes de información utilizadas para elaborar las cuentas. |
-| [`01_metodologia/`](01_metodologia/) | Metodología y procedimientos de cálculo de la cuenta de energía y de las emisiones al aire. |
+| [`00_trazabilidad_fuentes/`](00_trazabilidad_fuentes/) | Registro de las fuentes de información utilizadas para elaborar el cuadro de energía y la tabla de emisiones. |
+| [`01_metodologia/`](01_metodologia/) | Metodología y procedimientos de cálculo del cuadro de energía y de la tabla de emisiones al aire. |
 | [`02_resultados_y_diccionario/`](02_resultados_y_diccionario/) | Resultados en CSV y diccionario que explica las variables, unidades y códigos. |
-| [`03_modelo_hoja_calculo/`](03_modelo_hoja_calculo/) | Modelo de las cuentas en Excel, con sus fórmulas de cálculo. |
+| [`03_modelo_hoja_calculo/`](03_modelo_hoja_calculo/) | Modelo del cuadro de energía y de la tabla de emisiones en Excel, con sus fórmulas de cálculo. |
 | [`04_reproduccion_python/`](04_reproduccion_python/) | Datos de entrada, programas y cuaderno para reproducir y explorar los resultados en Python. |
 | [`05_verificacion/`](05_verificacion/) | Informes y resultados de las comprobaciones de cálculo, factores de emisión y cobertura de las fuentes. |
 | [`docs/`](docs/) | Portal interactivo para explorar energía, emisiones e indicadores económicos y descargar los datos. [Abrir portal](https://ja-osorio.github.io/cuenta-experimental-energia-emisiones-guatemala/). |
@@ -68,15 +67,14 @@ Los dos conjuntos finales son:
 [![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/blob/main/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
 
 El [cuaderno visor](04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb)
-permite seleccionar cualquier año entre 2018 y 2024 y consultar la PSUT
-integrada, las emisiones y los indicadores. Incluye once gráficas.
+permite seleccionar cualquier año entre 2018 y 2024 y consultar el COU-F, las emisiones y los indicadores. Incluye once gráficas.
 
-Lee los dos CSV finales, sin recalcular las cuentas ni escribir archivos.
+Lee los dos CSV finales, sin recalcular los resultados ni escribir archivos.
 Puede abrirse en **Google Colab**, ejecutarse en Jupyter con las versiones
 indicadas en [`requirements.txt`](04_reproduccion_python/requirements.txt)
 o consultarse directamente en GitHub.
 
-## Reproducir las cuentas
+## Reproducir los resultados
 
 El generador y el validador utilizan exclusivamente la biblioteca estándar de
 Python (se requiere **Python 3.10 o posterior**). Una ejecución conforme
@@ -146,15 +144,15 @@ datos de fuente primaria no se redistribuyen.
 
 ## Metodología y alcance
 
-La cuenta mantiene la resolución observada en las fuentes: no crea aperturas
+La compilación mantiene la resolución observada en las fuentes: no crea aperturas
 sectoriales mediante ponderadores externos cuando no existe una desagregación
 reproducible. Distingue extracción y combustión, atribuye las emisiones de la
 electricidad a su generación y preserva como estados diferentes el cero, la
 ausencia de dato, lo no estimado y lo incluido en otra categoría.
 
 - [Metodología general](01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt)
-- [Metodología de la PSUT de energía](01_metodologia/nt_01_metodologia_psut_energia_2018_2024.txt)
-- [Metodología de la cuenta de emisiones](01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt)
+- [Metodología del cuadro físico de oferta y utilización de energía](01_metodologia/nt_01_metodologia_psut_energia_2018_2024.txt)
+- [Metodología de la tabla de emisiones](01_metodologia/nt_02_metodologia_cuenta_emisiones_aire_2018_2024.txt)
 - [Registro de trazabilidad de fuentes](00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx)
 
 Los factores se consultan en la hoja `DATOS_MODELO` del Excel o en el
