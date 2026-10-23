@@ -1,0 +1,33 @@
+name: Respaldo en GitLab
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: respaldo-gitlab
+  cancel-in-progress: false
+
+jobs:
+  respaldo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Copiar ramas y etiquetas a Energía
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GIT_TERMINAL_PROMPT: "0"
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GITLAB_TOKEN"
+          git clone --bare "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" respaldo.git
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0=http.https://gitlab.com/.extraheader
+          export GIT_CONFIG_VALUE_0="Authorization: Basic $(printf 'oauth2:%s' "$GITLAB_TOKEN" | base64 -w0)"
+          git -C respaldo.git push --atomic \
+            https://gitlab.com/cuentas_ambientales/energia.git \
+            'refs/heads/*:refs/heads/*' 'refs/tags/*:refs/tags/*'
