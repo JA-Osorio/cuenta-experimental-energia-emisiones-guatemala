@@ -43,7 +43,9 @@ publicar-portal:
       html = html.split(raw).join('./archivos/')
         .replace('${le.repository}/tree/main', '${le.repository}/-/tree/${le.commit}')
         .replace('GitHub \\xB7 versi\\xF3n actual', 'GitLab \\xB7 '+sha.slice(0, 7))
-        .replace('Fuente GitHub ', 'Fuente GitLab ');
+        .replace('Fuente GitHub ', 'Fuente GitLab ')
+        .replace('https://colab.research.google.com/github/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/blob/${le.commit}/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb', '${le.repository}/-/blob/${le.commit}/04_reproduccion_python/cuaderno_psut_energia_emisiones_guatemala_2018_2024.ipynb')
+        .replace('Abrir cuaderno en Colab', 'Consultar cuaderno en GitLab');
       if (html.includes(raw) || html.includes('api.github.com'))
         throw new Error('La publicación todavía depende de GitHub para cargar datos.');
       new vm.Script(html.slice(html.indexOf('<script>') + 8, html.lastIndexOf('</script>')));
