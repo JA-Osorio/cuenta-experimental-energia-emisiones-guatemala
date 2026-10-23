@@ -1,7 +1,7 @@
 MANIFIESTO DE ARCHIVOS
 
 Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
-Fecha de preparación: 2026-10-22
+Fecha de preparación: 2026-10-23
 
 1. CONTENIDO DEL PAQUETE
 
@@ -85,6 +85,7 @@ preparación. Por diseño, este manifiesto no se incluye en su propio inventario
 porque su huella cambiaría al incorporarla dentro del mismo archivo.
 
 RUTA | TAMAÑO_BYTES | SHA-256
+.gitlab-ci.yml | 2705 | 82389aa384131ab8ce45e42ed2960c6c8619ebd2a19d9ac04b1aef291c3b8943
 .zenodo.json | 1853 | cddf68af692feeee78800cb270b3b437383ad193e319311c8c03248418f8a3f8
 00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx | 59673 | 44c16997bbe1b3ba6283c69f39c9583dbcbd8f09a411ea6be5bef68c1532f785
 01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt | 25923 | a1014c4fe7ca8121ede1c14d9c0dd53746929f098d754602853d6cf4c1782db9

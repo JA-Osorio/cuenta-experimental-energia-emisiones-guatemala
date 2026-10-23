@@ -1,0 +1,54 @@
+publicar-portal:
+  image: node:24-bookworm-slim
+  stage: deploy
+  resource_group: portal
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  script:
+    - node --test tests/portal-datos-vigentes.test.cjs
+    - |
+      node <<'NODE'
+      const fs = require('node:fs');
+      const path = require('node:path');
+      const vm = require('node:vm');
+      const { prepare, hydrate } = require('./docs/datos-vigentes.js');
+      const read = file => fs.readFileSync(file, 'utf8');
+      const sha = process.env.CI_COMMIT_SHA;
+      const repository = process.env.CI_PROJECT_URL;
+      const metadata = {
+        sha,
+        commit: { committer: { date: process.env.CI_COMMIT_TIMESTAMP } }
+      };
+      const snapshot = prepare(
+        read('02_resultados_y_diccionario/psut_energia_guatemala_2018_2024.csv'),
+        read('02_resultados_y_diccionario/cuenta_emisiones_aire_guatemala_2018_2024.csv'),
+        JSON.parse(read('docs/data/economia/pib_real_2018_2024.json')),
+        metadata
+      );
+      snapshot.repository = repository;
+      let html = hydrate(Array.from({ length: 6 }, (_, i) =>
+        read(`docs/portal-${String(i).padStart(2, '0')}.part`)).join(''), snapshot);
+      const raw = `https://raw.githubusercontent.com/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/${sha}/`;
+      const downloads = new Set(Array.from(html.matchAll(
+        new RegExp(raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^"\\s<>]+)', 'g')
+      ), match => match[1]));
+      if (downloads.size === 0) throw new Error('El portal no contiene descargas.');
+      for (const file of downloads) {
+        if (path.isAbsolute(file) || file.split('/').includes('..'))
+          throw new Error(`Ruta de descarga inválida: ${file}`);
+        const destination = path.join('public/archivos', file);
+        fs.mkdirSync(path.dirname(destination), { recursive: true });
+        fs.copyFileSync(file, destination);
+      }
+      html = html.split(raw).join('./archivos/')
+        .replace('${le.repository}/tree/main', '${le.repository}/-/tree/${le.commit}')
+        .replace('GitHub \\xB7 versi\\xF3n actual', 'GitLab \\xB7 '+sha.slice(0, 7))
+        .replace('Fuente GitHub ', 'Fuente GitLab ');
+      if (html.includes(raw) || html.includes('api.github.com'))
+        throw new Error('La publicación todavía depende de GitHub para cargar datos.');
+      new vm.Script(html.slice(html.indexOf('<script>') + 8, html.lastIndexOf('</script>')));
+      fs.writeFileSync('public/index.html', html);
+      console.log(`Portal ${sha}: ${snapshot.psut.length} registros de energía, ${snapshot.emissions.length} de emisiones y ${downloads.size} descargas.`);
+      NODE
+  pages:
+    publish: public
