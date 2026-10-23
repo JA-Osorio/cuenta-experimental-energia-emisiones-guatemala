@@ -1,6 +1,7 @@
 NOTA METODOLÓGICA NT-00
 
-Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+Cuadro físico de oferta y utilización de energía y tabla de emisiones al aire
+de Guatemala, 2018–2024
 
 METODOLOGÍA GENERAL
 
@@ -15,20 +16,21 @@ en creditos.txt.
 
 1. OBJETO Y DISEÑO METODOLÓGICO
 
-La investigación integró la información energética y de emisiones disponible para el período 2018–2024 en dos resultados relacionados: una tabla física de oferta y utilización de energía (PSUT, por sus siglas en inglés) y una cuenta experimental de emisiones al aire. El procedimiento se basó en la armonización de fuentes institucionales, la definición explícita de las fronteras contables, la conversión de los datos energéticos a una unidad común, la conciliación de la oferta y la utilización por producto y año, y la vinculación de las actividades resultantes con factores o emisiones observadas.
+La investigación integró la información energética y de emisiones disponible para el período 2018–2024 en dos resultados relacionados: un cuadro físico de oferta y utilización de energía (COU-F) y una tabla de emisiones al aire. El procedimiento se basó en la armonización de fuentes institucionales, la definición explícita de las fronteras contables, la conversión de los datos energéticos a una unidad común, la conciliación de la oferta y la utilización por producto y año, y la vinculación de las actividades resultantes con factores o emisiones observadas.
 
-Se adoptó un diseño de compilación contable. Los totales físicos se conservaron al nivel de desagregación publicado por la fuente principal y solo se aplicaron transformaciones reproducibles. Los valores observados, los cálculos, las aproximaciones y las categorías sin cuantificación se diferenciaron durante todo el proceso. La trazabilidad se estableció mediante identificadores que relacionan cada observación con la regla aplicada, el flujo PSUT resultante y, cuando corresponde, la emisión calculada.
+Se adoptó un diseño de compilación contable. Los totales físicos se conservaron al nivel de desagregación publicado por la fuente principal y solo se aplicaron transformaciones reproducibles. Los valores observados, los cálculos, las aproximaciones y las categorías sin cuantificación se diferenciaron durante todo el proceso. La trazabilidad se estableció mediante identificadores que relacionan cada observación con la regla aplicada, el flujo COU-F resultante y, cuando corresponde, la emisión calculada.
 
+Esta construcción constituye una primera etapa para desarrollar las cuentas de energía y emisiones al aire. Conserva los sectores del balance y establece una base reproducible para avanzar en la desagregación por actividad económica, el ajuste al principio de residencia y la incorporación de información adicional.
 
 2. MARCO CONCEPTUAL Y FRONTERAS
 
 La organización de los flujos se fundamentó en el Sistema de Contabilidad Ambiental y Económica, Marco Central; el Sistema de Contabilidad Ambiental y Económica para la Energía; y las Recomendaciones Internacionales para las Estadísticas de Energía. La CIIU Rev. 4 se utilizó como referencia para interpretar las actividades económicas, sin sustituir los agregados físicos efectivamente observados en los balances energéticos.
 
-La PSUT distingue tres grupos de flujos: insumos naturales de energía, productos energéticos y residuales energéticos. Los insumos naturales registran la energía que entra desde el ambiente; los productos energéticos registran su producción, transformación, comercio, acumulación y utilización; y los residuales representan la energía que abandona el sistema económico. El ambiente se reconoce como origen de insumos naturales y receptor de residuales; el resto del mundo registra importaciones y exportaciones; y la acumulación conserva los cambios de existencias.
+El COU-F distingue tres grupos de flujos: insumos naturales de energía, productos energéticos y residuales energéticos. Los insumos naturales registran la energía que entra desde el ambiente; los productos energéticos registran su producción, transformación, comercio, acumulación y utilización; y los residuales representan la energía que abandona el sistema económico. El ambiente se reconoce como origen de insumos naturales y receptor de residuales; el resto del mundo registra importaciones y exportaciones; y la acumulación conserva los cambios de existencias.
 
 La serie utiliza una base territorial. No se aplicó un ajuste por residencia al transporte porque las fuentes no permiten separar de forma consistente el consumo de residentes fuera del territorio, el consumo de no residentes dentro del territorio y los búnkeres internacionales. El agregado TR_BEN conserva, por tanto, la cobertura territorial informada en los Balances Energéticos Nacionales.
 
-La cuenta de emisiones comprende CO₂, CH₄ y N₂O provenientes de la combustión energética, emisiones fugitivas cuantificables y emisiones agrícolas no energéticas seleccionadas. Se excluyeron UTCUTS/LULUCF, las emisiones indirectas atribuidas al usuario de electricidad, el ciclo de vida de los productos, los gases fluorados, los residuos y los procesos industriales no incorporados. El CO₂ de la biomasa se presenta como partida informativa y no se suma al CO₂ equivalente; el CH₄ y el N₂O de su combustión sí se incluyen. Los resultados no sustituyen el Balance Energético Nacional ni el inventario nacional de gases de efecto invernadero.
+La tabla de emisiones comprende CO₂, CH₄ y N₂O provenientes de la combustión energética, emisiones fugitivas cuantificables y emisiones agrícolas no energéticas seleccionadas. Se excluyeron UTCUTS/LULUCF, las emisiones indirectas atribuidas al usuario de electricidad, el ciclo de vida de los productos, los gases fluorados, los residuos y los procesos industriales no incorporados. El CO₂ de la biomasa se presenta como partida informativa y no se suma al CO₂ equivalente; el CH₄ y el N₂O de su combustión sí se incluyen. Los resultados no sustituyen el Balance Energético Nacional ni el inventario nacional de gases de efecto invernadero.
 
 
 3. FUENTES Y JERARQUÍA DE EVIDENCIA
@@ -61,11 +63,11 @@ Se utilizaron cuatro estados metodológicos. OBS identifica un valor numérico t
 Estos estados metodológicos se distinguen de los controles técnicos del archivo base. En PSUT_LARGA, OK confirma que un flujo directo encontró una observación de origen, CAL identifica un flujo obtenido por identidad y FORMULA señala un cierre STAT; en QA, OK expresa que un control fue superado. OK y FORMULA no reemplazan OBS, CAL, PRX o NO ni describen por sí solos la calidad estadística del dato.
 
 
-5. MÉTODO DE ELABORACIÓN DE LA PSUT DE ENERGÍA
+5. MÉTODO DE ELABORACIÓN DEL COU-F DE ENERGÍA
 
 Cada observación energética se asignó a un producto, un grupo de flujo, un lado contable, un bloque funcional y una unidad. La secuencia general fue:
 
-observación del balance → conversión a TJ → clasificación del producto → asignación a oferta o utilización → aplicación del signo → flujo PSUT
+observación del balance → conversión a TJ → clasificación del producto → asignación a oferta o utilización → aplicación del signo → flujo COU-F
 
 Las cifras se representaron como magnitudes positivas en el lado contable correspondiente. El signo original se conservó en la base y el campo ajuste indicó si el valor se mantuvo, se cambió de signo o se tomó en valor absoluto. Esta regla evitó interpretar como cantidades físicas negativas los insumos de transformación, las exportaciones o las variaciones de existencias.
 
@@ -94,9 +96,9 @@ uso_energetico_interno_aparente(GAS,2019) = oferta_GAS(2019) − Σ_s usos_obser
 El resultado fue 10 976,3682 TJ y se registró en NO_ASIG. Los usos observados no se reescalaron ni se atribuyó la diferencia a una actividad sin evidencia. Una vez incorporados los usos aparentes, STAT se calculó como el saldo final. La evaluación de STAT consideró el número de celdas que intervienen en el cierre y la tolerancia de 0,02905 TJ por celda; las diferencias superiores a ese margen se trataron como un problema de clasificación o fuente, no como redondeo.
 
 
-6. MÉTODO DE ELABORACIÓN DE LA CUENTA DE EMISIONES AL AIRE
+6. MÉTODO DE ELABORACIÓN DE LA TABLA DE EMISIONES AL AIRE
 
-La cuenta de emisiones se derivó de los flujos PSUT que representan una actividad emisora. La extracción o el suministro de un producto no se interpretaron automáticamente como combustión. Cada regla identificó el flujo de origen, el módulo, la categoría IPCC, el grupo de factor y el tratamiento del CO₂. Los módulos se mantuvieron separados para combustión, emisiones fugitivas y emisiones agrícolas no energéticas.
+La tabla de emisiones se derivó de los flujos COU-F que representan una actividad emisora. La extracción o el suministro de un producto no se interpretaron automáticamente como combustión. Cada regla identificó el flujo de origen, el módulo, la categoría IPCC, el grupo de factor y el tratamiento del CO₂. Los módulos se mantuvieron separados para combustión, emisiones fugitivas y emisiones agrícolas no energéticas.
 
 Se seleccionan factores por combustible y uso en 22 combinaciones. En transporte, DOIL y GLP utilizan factores específicos anuales de las CRT, con estado OBS. GAS combina las emisiones y la actividad de gasolina de aviación y de motor, con estado PRX por la transferencia de esa mezcla al BEN. Las otras 19 combinaciones utilizan parámetros constantes BTR/IPCC con estado PRX. La refinación y las fugitivas utilizan factores derivados de las CRT.
 
@@ -116,7 +118,7 @@ El cálculo se realiza por gas: si falta su factor numérico, su emisión perman
 
 La electricidad utilizada por hogares o actividades económicas recibió emisión directa igual a cero, porque las emisiones de los combustibles empleados para generarla permanecen en ENER. El mismo tratamiento se aplicó a las fuentes renovables sin combustión en el punto de uso. Los flujos NOEN se excluyeron de combustión.
 
-En la refinación se distinguió el petróleo crudo procesado de la actividad de combustión. Para 2018–2022 se calculó un coeficiente anual entre la actividad de combustión observada en las Tablas Comunes de Reporte y el crudo registrado en la PSUT. El coeficiente de 2022 se aplicó en 2023 y 2024 con estado PRX. Las emisiones fugitivas utilizaron factores anuales de 2018–2022 y el factor de 2022 para los dos años siguientes.
+En la refinación se distinguió el petróleo crudo procesado de la actividad de combustión. Para 2018–2022 se calculó un coeficiente anual entre la actividad de combustión observada en las Tablas Comunes de Reporte y el crudo registrado en el COU-F. El coeficiente de 2022 se aplicó en 2023 y 2024 con estado PRX. Las emisiones fugitivas utilizaron factores anuales de 2018–2022 y el factor de 2022 para los dos años siguientes.
 
 El CO₂ de bagazo, biogás y leña se clasificó como BIOGENICO. Su resultado se registró en co2_biogenico_memo_kt y no en co2_directo_kt. El CH₄ y el N₂O de estas actividades se calcularon con los factores correspondientes y se incorporaron al CO₂ equivalente.
 
@@ -143,15 +145,15 @@ co2e_kt = co2_directo_kt + 28 × ch4_kt + 265 × n2o_kt
 Esta suma incluye únicamente los componentes cuantificados; si ninguno tiene valor numérico, co2e_kt permanece vacío. Un componente ausente no se interpreta como cero ni la suma acredita cobertura completa. En las siete filas de fugitivas de petróleo, N₂O carece de factor numérico y queda vacío; el CO₂e parcial suma CO₂ y CH₄. El CO₂ biogénico informativo quedó fuera de esta identidad.
 
 
-7. TRAZABILIDAD E INTEGRACIÓN ENTRE LAS CUENTAS
+7. TRAZABILIDAD E INTEGRACIÓN ENTRE EL CUADRO Y LA TABLA DE EMISIONES
 
 La trazabilidad energética sigue la cadena:
 
-fuente y localizador → registro BALANCE → source_record_id → regla MAPEO_PSUT → flujo PSUT
+fuente y localizador → registro BALANCE → source_record_id → regla MAPEO_PSUT → flujo COU-F
 
 La trazabilidad de emisiones sigue la cadena:
 
-flujo PSUT → REGLA_EMISION_ENERGIA → actividad emisora → categoría y grupo de factor → año del factor → emisión por gas → CO₂ equivalente
+flujo COU-F → REGLA_EMISION_ENERGIA → actividad emisora → categoría y grupo de factor → año del factor → emisión por gas → CO₂ equivalente
 
 Las uniones se realizan mediante identificadores y claves, no por la posición de las filas. El vínculo permite comprobar el valor original, la unidad, la conversión, el signo, la clasificación contable, el factor y el tratamiento del CO₂. Las emisiones agrícolas observadas conservan una ruta independiente desde la categoría y el gas de la fuente hasta el resultado anual.
 
@@ -162,7 +164,7 @@ La implementación de las reglas descritas se encuentra en el archivo modelo_psu
 
 DATOS_MODELO reúne las observaciones y las reglas declarativas. tipo_registro diferencia BALANCE, MAPEO_PSUT, REGLA_EMISION_ENERGIA, FACTOR_EMISION_OBS, EMISION_AGRICULTURA_OBS, ACTIVIDAD_REFINACION_OBS, VAB_AGRICULTURA, PARAMETRO y los catálogos. registro_id identifica cada fila; clave_union enlaza año, categoría, grupo de factor y gas; source_record_id conserva el origen energético. Los campos anio, anio_fuente, estado, fuente_id, fuente_pagina y clave_notacion documentan procedencia y tratamiento. producto, flow_group, lado, bloque, unidad_sectorial, metodo, ajuste, valor_original, unidad_original y valor_tj expresan la transformación energética. categoria_ipcc, grupo_factor, gas, valor_factor, tratamiento_co2, emision_kt_gas y valor_vab contienen los insumos de emisiones.
 
-PARAMETROS contiene las constantes y las series auxiliares empleadas en las fórmulas: factor_kbep_tj, redondeo_kbep, tolerancias, kg_por_kt, gwp_ch4 y gwp_n2o. En la misma hoja se presentan el VAB agrícola, su índice con base 2022 y el coeficiente anual que relaciona el crudo de la PSUT con la combustión de refinación.
+PARAMETROS contiene las constantes y las series auxiliares empleadas en las fórmulas: factor_kbep_tj, redondeo_kbep, tolerancias, kg_por_kt, gwp_ch4 y gwp_n2o. En la misma hoja se presentan el VAB agrícola, su índice con base 2022 y el coeficiente anual que relaciona el crudo del COU-F con la combustión de refinación.
 
 PSUT_LARGA materializa la asignación energética. registro_mapeo es la clave del flujo y source_record_id lo relaciona con DATOS_MODELO. anio, producto, flow_group, lado, bloque y unidad_sectorial fijan sus coordenadas; metodo y ajuste explican la operación; TJ contiene el valor resultante; tipo_STAT distingue redondeo de un residuo estadístico; y estado_fuente identifica flujos directos, calculados o formulados.
 
@@ -179,16 +181,16 @@ La resolución sectorial está condicionada por los agregados de los Balances En
 
 Los factores por combustible evitan aplicar el promedio de una mezcla a productos distintos. Los parámetros BTR/IPCC siguen siendo aproximaciones a las propiedades y condiciones de uso del país; el factor de GAS en transporte depende de la mezcla anual de motor y aviación. La extensión temporal de los factores y el uso del VAB para agricultura también son aproximaciones. La precisión decimal no reduce esa incertidumbre.
 
-El control de estados mostró que el 100 % del CO₂e cuantificado en 2023 y 2024 depende de un estado_factor PRX o de un estado_resultado PRX. En los registros energéticos, la actividad corresponde al año registrado en la PSUT y la aproximación recae en los parámetros constantes o en la prolongación del factor de 2022; en agricultura, recae en la prolongación del resultado mediante VAB. Por ello, los totales de esos años incorporan aproximaciones en toda su magnitud cuantificada, sin que esto convierta en imputadas las actividades energéticas anuales.
+El control de estados mostró que el 100 % del CO₂e cuantificado en 2023 y 2024 depende de un estado_factor PRX o de un estado_resultado PRX. En los registros energéticos, la actividad corresponde al año registrado en el COU-F y la aproximación recae en los parámetros constantes o en la prolongación del factor de 2022; en agricultura, recae en la prolongación del resultado mediante VAB. Por ello, los totales de esos años incorporan aproximaciones en toda su magnitud cuantificada, sin que esto convierta en imputadas las actividades energéticas anuales.
 
 Las categorías con clave de notación permanecen sin valor numérico. Las exclusiones de la cuenta delimitan la cobertura y no deben interpretarse como emisiones iguales a cero. Las combinaciones NO sin valor numérico conservan el localizador de tabla o regla interna; esa condición no autoriza sustituir la ausencia por cero.
 
 
 10. VALIDACIÓN
 
-La PSUT se validó por producto y año. Se comprobó la igualdad entre oferta y utilización después de incorporar los usos aparentes autorizados, la correspondencia entre residuales suministrados y recibidos, la ausencia de duplicación entre extracción, producción y uso, y la separación entre NO_ASIG y STAT. El umbral interno de cierre fue 0,00000001 TJ; las comparaciones de flujos utilizaron 0,000001 TJ.
+El COU-F se validó por producto y año. Se comprobó la igualdad entre oferta y utilización después de incorporar los usos aparentes autorizados, la correspondencia entre residuales suministrados y recibidos, la ausencia de duplicación entre extracción, producción y uso, y la separación entre NO_ASIG y STAT. El umbral interno de cierre fue 0,00000001 TJ; las comparaciones de flujos utilizaron 0,000001 TJ.
 
-Los controles internos de la cuenta de emisiones revisaron las correspondencias declaradas entre actividad, categoría y factor; la identificación del año del factor; la separación del CO₂ biogénico; la inclusión del CH₄ y el N₂O cuantificados de biomasa en CO₂e; el tratamiento de emisión directa cero; la exclusión de NOEN de combustión; y la conservación de las claves de notación. La tolerancia numérica de comparación fue 0,000000001 kt. La reproducción interna y el cotejo con las CRT y las tablas BTR/IPCC son verificaciones distintas; ninguno demuestra por sí solo la representatividad del factor o la equivalencia de fronteras.
+Los controles internos de la tabla de emisiones revisaron las correspondencias declaradas entre actividad, categoría y factor; la identificación del año del factor; la separación del CO₂ biogénico; la inclusión del CH₄ y el N₂O cuantificados de biomasa en CO₂e; el tratamiento de emisión directa cero; la exclusión de NOEN de combustión; y la conservación de las claves de notación. La tolerancia numérica de comparación fue 0,000000001 kt. La reproducción interna y el cotejo con las CRT y las tablas BTR/IPCC son verificaciones distintas; ninguno demuestra por sí solo la representatividad del factor o la equivalencia de fronteras.
 
 Los controles de QA confirmaron que los siete usos aparentes de NOEN están asignados a NO_ASIG, que no existe ningún flujo NOEN en STAT, que GAS corresponde a gasolinas en el caso de 2019 y que no se generaron residuos estadísticos materiales. Los cálculos conservaron la precisión completa; las tablas y gráficas presentan como máximo dos decimales.
 

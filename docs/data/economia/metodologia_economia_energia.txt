@@ -1,6 +1,6 @@
 ECONOMÍA Y ENERGÍA · GUATEMALA, 2018–2024
 
-Alcance: indicadores nacionales de relación entre PIB real y uso final ampliado de energía (UFA). Son indicadores complementarios de esta cuenta experimental.
+Alcance: indicadores nacionales de relación entre PIB real y uso final ampliado de energía (UFA). Son indicadores complementarios del cuadro físico de oferta y utilización de energía (COU-F).
 
 Fórmulas por año:
 - Intensidad del uso final de energía = UFA (TJ) / PIB real (millones de Q).
@@ -9,7 +9,7 @@ Fórmulas por año:
 - Índice UFA = UFA del año / UFA de 2018 × 100.
 Las razones son recíprocas. Los cálculos se realizan antes del redondeo.
 
-Energía: PSUT de Osorio, Villatoro, Salguero y Soberanis (2026), revisión 57439f2920851336b271f5788b859f518dfb1bf2.
+Energía: COU-F de Osorio, Villatoro, Salguero y Soberanis (2026), revisión 57439f2920851336b271f5788b859f518dfb1bf2.
 https://github.com/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala
 UFA incluye el uso identificado en hogares, transporte, industria y servicios y el uso energético no asignado. Excluye transformación, consumo propio energético y usos no energéticos. Incluye 10,976.3682 TJ de uso energético no asignado en 2019.
 
@@ -17,8 +17,8 @@ PIB: Banco de Guatemala. Producto Interno Bruto por el enfoque del gasto. Millon
 Fecha de consulta: 28 de septiembre de 2026.
 https://banguat.gob.gt/page/producto-interno-bruto-medido-por-el-enfoque-del-gasto-ano-de-referencia-2013
 Archivo suministrado: 3.1_Gasto_constante_AR2013.xlsx. Primera hoja, celdas I18:O18 (2018–2024). Se conserva el archivo original y su hash SHA-256 en pib_real_2018_2024.json.
-2023 y 2024: cifras preliminares. No se utiliza 2025 porque queda fuera del período de la PSUT. Se extrae el total del PIB publicado; no se reconstruye sumando componentes de volumen encadenado, que no son aditivos.
+2023 y 2024: cifras preliminares. No se utiliza 2025 porque queda fuera del período del COU-F. Se extrae el total del PIB publicado; no se reconstruye sumando componentes de volumen encadenado, que no son aditivos.
 
 Interpretación: estas razones agregadas incluyen energía utilizada por hogares y actividades; no representan eficiencia técnica ni productividad de un factor aislado. Sus variaciones también responden a cambios de estructura económica y composición energética. No son el indicador ODS 7.3.1 de energía primaria por PIB en PPA. No se calculan intensidades sectoriales: los agregados BEN requieren una correspondencia con las actividades económicas. No se utilizan emisiones ni el VAB agrícola para estos indicadores.
 
-Reproducción: el portal calcula estas fórmulas sobre la PSUT y el JSON del PIB. La tabla y el CSV comparten las mismas series, y el CSV agrega unidades, estado preliminar, fuentes y fecha de consulta. El script reproducir_indicadores.py reconstruye el CSV a partir de los dos archivos fuente.
+Reproducción: el portal calcula estas fórmulas sobre el COU-F y el JSON del PIB. La tabla y el CSV comparten las mismas series, y el CSV agrega unidades, estado preliminar, fuentes y fecha de consulta. El script reproducir_indicadores.py reconstruye el CSV a partir de los dos archivos fuente.

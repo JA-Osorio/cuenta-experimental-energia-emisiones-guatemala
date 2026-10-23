@@ -1,6 +1,7 @@
 NOTA METODOLÓGICA NT-02
 
-Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+Cuadro físico de oferta y utilización de energía y tabla de emisiones al aire
+de Guatemala, 2018–2024
 
 METODOLOGÍA DE ELABORACIÓN
 
@@ -16,24 +17,25 @@ en creditos.txt.
 
 PRESENTACIÓN
 
-La cuenta experimental de emisiones al aire enlaza la tabla física de oferta y
-utilización de energía (PSUT) con emisiones directas de CO2, CH4 y N2O. La
-actividad energética procede del balance energético incorporado a la PSUT; las
+La tabla de emisiones al aire enlaza el cuadro físico de oferta y
+utilización de energía (COU-F) con emisiones directas de CO2, CH4 y N2O. La
+actividad energética procede del balance energético incorporado al COU-F; las
 correspondencias, factores y datos complementarios proceden del archivo base; y
 los resultados se calculan por registro antes de agregarse por año y unidad.
 
 La cobertura comprende 2018–2024. Para 2018–2022 se emplean datos anuales de las
 Tablas Comunes de Reporte (CRT) y parámetros por combustible del BTR1 y del IPCC. Para 2023 y 2024 se aplican reglas explícitas de
 prolongación cuando la fuente utilizada no aporta observaciones para esos años.
-La cuenta distingue valores observados, cálculos, aproximaciones y claves de
+La tabla distingue valores observados, cálculos, aproximaciones y claves de
 notación, y conserva la relación entre cada resultado, su actividad y su factor o
 emisión de origen.
 
-La cuenta no sustituye el inventario nacional de gases de efecto invernadero. Su
+La tabla no sustituye el inventario nacional de gases de efecto invernadero. Su
 función es organizar, con una frontera contable común, las emisiones que pueden
-vincularse de forma verificable con los flujos energéticos de la PSUT y con los
+vincularse de forma verificable con los flujos energéticos del COU-F y con los
 procesos agrícolas incorporados.
 
+La tabla de emisiones acompaña esta primera etapa de construcción del COU-F y conserva la desagregación y la cobertura que permiten las fuentes utilizadas.
 
 1. OBJETO, COBERTURA Y FRONTERA
 
@@ -163,11 +165,11 @@ PARAMETROS reúne, mediante fórmulas, los valores utilizados por el cálculo:
 - kg_por_kt = 1 000 000;
 - GWP_CH4 = 28;
 - GWP_N2O = 265;
-- tolerancia QA de la PSUT = 0,000001 TJ; y
+- tolerancia QA del COU-F = 0,000001 TJ; y
 - tolerancia QA de emisiones = 0,000000001 kt.
 
 Las filas 16–23 contienen el VAB agrícola de 2018–2024 y su índice con 2022 = 1.
-Las filas 26–33 contienen, para cada año, el petróleo crudo procesado en la PSUT y
+Las filas 26–33 contienen, para cada año, el petróleo crudo procesado en el COU-F y
 el coeficiente de actividad de refinación. PARAMETROS no reemplaza a las fuentes:
 recupera de DATOS_MODELO los valores que intervienen en las fórmulas.
 
@@ -250,10 +252,10 @@ QA contiene los controles de integridad, conteo e identidad. No introduce datos
 ni resultados adicionales: verifica la cadena de cálculo.
 
 
-4. CORRESPONDENCIA ENTRE LA PSUT Y LAS CATEGORÍAS DE EMISIÓN
+4. CORRESPONDENCIA ENTRE EL COU-F Y LAS CATEGORÍAS DE EMISIÓN
 
 Los registros REGLA_EMISION_ENERGIA de DATOS_MODELO establecen la correspondencia
-entre cada flujo de la PSUT y su tratamiento en la cuenta. La unión se realiza
+entre cada flujo del COU-F y su tratamiento en la tabla. La unión se realiza
 con source_record_id y se verifica con anio, lado, bloque, unidad_sectorial y
 metodo. La regla aporta categoria_ipcc, grupo_factor, tratamiento_co2, incluir y,
 cuando corresponde, clave_notacion.
@@ -273,7 +275,7 @@ La correspondencia principal es:
 - B, fugitivas de gas natural: 1.B.2.b.ii.
 
 La etiqueta oficial fuente “1.A.2 — Industrias manufactureras y construcción” se
-aplica al agregado IND_BEN. No constituye una desagregación adicional de la PSUT.
+aplica al agregado IND_BEN. No constituye una desagregación adicional del COU-F.
 
 Los grupos COMB_BCANA, COMB_BIOGAS, COMB_COQUE, COMB_CRBN, COMB_DOIL,
 COMB_FOIL, COMB_GAS, COMB_GLP, COMB_KER y COMB_LENA identifican los combustibles
@@ -362,7 +364,7 @@ BCANA a otra biomasa sólida primaria. Para CRBN, el BTR1 adopta 98 300 kg CO2/T
 por dictamen del MEM, usando el factor de antracita para otro carbón bituminoso;
 no es un factor nacional medido. KER corresponde a queroseno de aviación en
 transporte y a otro queroseno en usos estacionarios, según la correspondencia
-BTR1. Aplicar el factor al consumo ya presente en la PSUT no añade un flujo de
+BTR1. Aplicar el factor al consumo ya presente en el COU-F no añade un flujo de
 búnkeres ni resuelve por sí solo la frontera nacional/internacional.
 
 Para los factores derivados de las CRT, el factor implícito responde a:
@@ -392,7 +394,7 @@ BTR/IPCC y GAS ponderado en transporte ya son PRX desde 2018; repetir el valor
 en una clave anual no lo convierte en una observación de ese año. Los ceros
 metodológicos CERO_DIRECTO conservan estado CAL.
 
-La actividad sigue correspondiendo al año registrado en la PSUT. Mantener un
+La actividad sigue correspondiendo al año registrado en el COU-F. Mantener un
 factor supone que continúa siendo aplicable; no convierte los resultados de
 2023–2024 en observaciones del inventario.
 
@@ -439,7 +441,7 @@ mantienen en ENER. No se aplica un factor de red a los consumidores, porque ello
 duplicaría las emisiones ya atribuidas a la generación.
 
 La energía hídrica, eólica, solar y la geoenergía tampoco reciben emisiones de
-combustión directa en esta cuenta. El cero indica la ausencia de combustión en el
+combustión directa en esta tabla. El cero indica la ausencia de combustión en el
 flujo tratado; no representa una evaluación de ciclo de vida.
 
 
@@ -508,7 +510,7 @@ resultante es 1,0145952154877 kt.
 
 12. USOS NO ENERGÉTICOS
 
-NOEN corresponde a usos no energéticos. En la PSUT, la utilización interna
+NOEN corresponde a usos no energéticos. En el COU-F, la utilización interna
 aparente se calcula como:
 
 uso_NOEN_aparente(t)
@@ -765,7 +767,7 @@ Los controles se ejecutan sobre las tablas con precisión completa.
 - DATOS_MODELO contiene 3 671 registros y 39 campos.
 - PSUT_LARGA contiene 617 registros.
 - EMISIONES_LARGA contiene 374 registros.
-- La cuenta contiene siete años, de 2018 a 2024.
+- La tabla contiene siete años, de 2018 a 2024.
 - Cada clave_emision es única.
 - No existen errores de referencia, división entre cero, nombre o valor en las
   fórmulas del libro.
@@ -775,7 +777,7 @@ Los controles se ejecutan sobre las tablas con precisión completa.
 QA comprueba:
 
 - 617 filas en PSUT_LARGA;
-- 86 filas de PSUT para 2024;
+- 86 filas de COU-F para 2024;
 - dos registros STAT en 2024;
 - siete registros NO_ASIG de NOEN en 2018–2024;
 - 1 217,0207 TJ de uso aparente de NOEN en 2024;
@@ -830,7 +832,7 @@ El total anual de CO2e es:
 En 2023 y 2024, todos los registros con co2e_kt positivo cumplen al menos una
 de estas condiciones: estado_factor = PRX o estado_resultado = PRX. La suma de
 esos registros equivale al 100 % del CO2e cuantificado de cada año. En
-combustión y fugitivas, la actividad pertenece al año corriente de la PSUT y el
+combustión y fugitivas, la actividad pertenece al año corriente del COU-F y el
 parámetro constante o el factor prolongado desde 2022 es PRX; en agricultura,
 el resultado prolongado mediante VAB es PRX. Por esta razón, un registro energético puede conservar
 estado_resultado = CAL —la multiplicación es reproducible— y depender al mismo

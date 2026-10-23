@@ -1,6 +1,7 @@
 NOTA METODOLÓGICA NT-01
 
-Cuenta experimental de energía y emisiones al aire de Guatemala, 2018–2024
+Cuadro físico de oferta y utilización de energía y tabla de emisiones al aire
+de Guatemala, 2018–2024
 
 METODOLOGÍA DE COMPILACIÓN
 
@@ -15,8 +16,8 @@ en creditos.txt.
 
 1. OBJETO Y RESULTADO
 
-Esta nota documenta el procedimiento aplicado para obtener la tabla física de
-oferta y utilización de energía (PSUT) de 2018–2024 a partir de los balances
+Esta nota documenta el procedimiento aplicado para obtener el cuadro físico de
+oferta y utilización de energía (COU-F) de 2018–2024 a partir de los balances
 energéticos nacionales publicados por el Ministerio de Energía y Minas. Describe
 la extracción y homologación de los datos, su conversión a terajulios, las reglas
 de clasificación y mapeo, los flujos calculados y los controles utilizados para
@@ -26,13 +27,14 @@ El resultado principal es una tabla larga de 617 flujos. Cada fila identifica el
 año, producto, grupo de flujo, lado contable, bloque, unidad sectorial, registro
 de origen, método, ajuste y valor en terajulios. La misma tabla alimenta la matriz
 anual de consulta y proporciona la actividad energética empleada posteriormente
-en la cuenta de emisiones al aire.
+en la tabla de emisiones al aire.
 
 Las cantidades físicas proceden de los balances energéticos nacionales. Las
 fuentes complementarias se utilizaron para interpretar tratamientos específicos
 o comprobar su coherencia, pero no sustituyeron los totales del balance ni se
 emplearon para crear desagregaciones físicas no observadas.
 
+El COU-F constituye una primera etapa de compilación. Conserva los sectores del balance; la desagregación por actividad económica y el ajuste al principio de residencia corresponden a desarrollos posteriores.
 
 2. FUENTE FÍSICA Y COBERTURA
 
@@ -51,7 +53,7 @@ cuantificar esas partidas de forma homogénea para todos los años.
 
 2.2 Cobertura temporal
 
-La cuenta comprende siete años calendario: 2018, 2019, 2020, 2021, 2022, 2023 y
+El COU-F comprende siete años calendario: 2018, 2019, 2020, 2021, 2022, 2023 y
 2024. La estructura contable es común a toda la serie, aunque la presencia de un
 producto o una operación depende de lo publicado en cada BEN.
 
@@ -124,7 +126,7 @@ Se utilizaron los siguientes códigos:
 - SOLAR: energía solar.
 
 ORIM, orimulsión, permanece en el catálogo de entrada para reproducir la
-estructura de la fuente, pero no genera un flujo en la PSUT porque las
+estructura de la fuente, pero no genera un flujo en el COU-F porque las
 observaciones disponibles son nulas y no existe un mapeo que deba materializarse
 en la salida.
 
@@ -141,11 +143,11 @@ cuantificable; no se convierte en cero. La ausencia de una combinación en la
 salida significa que no existe una regla sustentada para producirla.
 
 
-4. ESTRUCTURA CONTABLE DE LA PSUT
+4. ESTRUCTURA CONTABLE DEL COU-F
 
 4.1 Grupos de flujo
 
-La cuenta utiliza tres grupos:
+El COU-F utiliza tres grupos:
 
 - Energy from natural inputs: energía que pasa del ambiente a la economía;
 - Energy products: productos que se suministran y utilizan dentro de la economía
@@ -186,7 +188,7 @@ El bloque identifica la función contable de la fila:
 - Q: recepción de residuales por el ambiente; y
 - SD: diferencia estadística atribuible al redondeo.
 
-El bloque F pertenece al eje contable de la PSUT y designa exclusivamente el
+El bloque F pertenece al eje contable del COU-F y designa exclusivamente el
 consumo final de los hogares.
 
 4.4 Unidades que reciben flujos
@@ -262,7 +264,7 @@ c) cambio de signo
 TJ = -valor_tj
 
 Se aplica al cambio de existencias para traducir la convención del BEN a la
-convención de acumulación de la PSUT. El resultado puede ser positivo o negativo.
+convención de acumulación del COU-F. El resultado puede ser positivo o negativo.
 
 d) discrepancia estadística
 
@@ -800,8 +802,8 @@ Al incorporar STAT:
 
 oferta_total(p,t) - utilizacion_total(p,t) = 0
 
-La tolerancia de cierre posterior a STAT es 0,00000001 TJ. El control general de
-la PSUT utiliza una tolerancia de 0,000001 TJ.
+La tolerancia de cierre posterior a STAT es 0,00000001 TJ. El control general del
+COU-F utiliza una tolerancia de 0,000001 TJ.
 
 
 17. CORRESPONDENCIA CON EL ARCHIVO BASE
@@ -823,7 +825,7 @@ incorporados durante la homologación.
 Parámetros | PARAMETROS | A4:B12 | B4 recupera factor_kbep_tj = 5,81 desde
 DATOS_MODELO; B5 contiene redondeo_kbep = 0,005; B6 calcula 0,02905 TJ; B7
 contiene la tolerancia de cierre de 0,00000001 TJ; B11 contiene la tolerancia de
-comparación PSUT de 0,000001 TJ.
+comparación COU-F de 0,000001 TJ.
 
 Regla de mapeo | DATOS_MODELO | filas con tipo_registro = MAPEO_PSUT; B–D,
 J–R y AM | Cada una de las 617 reglas identifica source_record_id, producto,
@@ -997,7 +999,7 @@ o convertiría una utilización material en una diferencia estadística.
 
 22. ALCANCE INTERPRETATIVO
 
-La PSUT permite determinar:
+El COU-F permite determinar:
 
 - qué productos energéticos entran a la economía;
 - qué productos se producen internamente;
@@ -1007,7 +1009,7 @@ La PSUT permite determinar:
 - cuánto se importa, exporta o acumula; y
 - qué pérdidas energéticas se registran.
 
-La PSUT no permite determinar sin información adicional:
+El COU-F no permite determinar sin información adicional:
 
 - el consumo de cada rama dentro del agregado Industria;
 - el consumo operativo de las actividades mineras por separado;
