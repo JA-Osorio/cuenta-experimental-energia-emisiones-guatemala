@@ -85,7 +85,7 @@ preparación. Por diseño, este manifiesto no se incluye en su propio inventario
 porque su huella cambiaría al incorporarla dentro del mismo archivo.
 
 RUTA | TAMAÑO_BYTES | SHA-256
-.github/workflows/respaldo-gitlab.yml | 963 | 48a1806a0a1fac0aff46cb2e7d6e6ca64a5646ab49a9af51e4168ab53f35f28e
+.github/workflows/respaldo-gitlab.yml | 3792 | af10865953758a1ccd2f681adb4384a2b44532611492afbb11a3c927dcfa3e76
 .gitlab-ci.yml | 2705 | 82389aa384131ab8ce45e42ed2960c6c8619ebd2a19d9ac04b1aef291c3b8943
 .zenodo.json | 1853 | cddf68af692feeee78800cb270b3b437383ad193e319311c8c03248418f8a3f8
 00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx | 59673 | 44c16997bbe1b3ba6283c69f39c9583dbcbd8f09a411ea6be5bef68c1532f785

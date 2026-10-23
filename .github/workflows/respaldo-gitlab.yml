@@ -25,6 +25,47 @@ jobs:
           set -euo pipefail
           test -n "$GITLAB_TOKEN"
           git clone --bare "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" respaldo.git
+          destino=https://gitlab.com/cuentas_ambientales/energia.git
+          git -C respaldo.git fetch "$destino" main:refs/remotes/institucion/main
+          fuente=$(git -C respaldo.git rev-parse refs/heads/main)
+          institucional=$(git -C respaldo.git rev-parse refs/remotes/institucion/main)
+          comun=$(git -C respaldo.git merge-base "$fuente" "$institucional")
+          diferencias=$(git -C respaldo.git diff --name-only "$comun" "$institucional" -- . ':(exclude)README.md' ':(exclude)manifiesto_archivos.txt')
+          if test -n "$diferencias"; then
+            echo "Hay cambios institucionales fuera del README y su manifiesto. Revise esos cambios antes de sincronizar."
+            exit 1
+          fi
+          export GIT_INDEX_FILE="$RUNNER_TEMP/respaldo-index"
+          git -C respaldo.git read-tree "$fuente"
+          git -C respaldo.git show "$institucional:README.md" > "$RUNNER_TEMP/README.md"
+          git -C respaldo.git show "$fuente:manifiesto_archivos.txt" > "$RUNNER_TEMP/manifiesto_archivos.txt"
+          python3 <<'PYTHON'
+          import hashlib, os, re
+          from pathlib import Path
+          carpeta = Path(os.environ['RUNNER_TEMP'])
+          contenido = (carpeta / 'README.md').read_bytes()
+          manifiesto = carpeta / 'manifiesto_archivos.txt'
+          linea = f"README.md | {len(contenido)} | {hashlib.sha256(contenido).hexdigest()}"
+          texto, cantidad = re.subn(r'^README\.md \|.*$', linea, manifiesto.read_text(), flags=re.MULTILINE)
+          if cantidad != 1:
+              raise ValueError('No se encontró una única entrada del README en el manifiesto.')
+          manifiesto.write_text(texto)
+          PYTHON
+          for archivo in README.md manifiesto_archivos.txt; do
+            objeto=$(git -C respaldo.git hash-object -w "$RUNNER_TEMP/$archivo")
+            git -C respaldo.git update-index --add --cacheinfo "100644,$objeto,$archivo"
+          done
+          arbol=$(git -C respaldo.git write-tree)
+          if test "$arbol" = "$(git -C respaldo.git rev-parse "$fuente^{tree}")" && git -C respaldo.git merge-base --is-ancestor "$institucional" "$fuente"; then
+            revision=$fuente
+          elif test "$arbol" = "$(git -C respaldo.git rev-parse "$institucional^{tree}")" && git -C respaldo.git merge-base --is-ancestor "$fuente" "$institucional"; then
+            revision=$institucional
+          else
+            git -C respaldo.git config user.name 'github-actions[bot]'
+            git -C respaldo.git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            revision=$(git -C respaldo.git commit-tree "$arbol" -p "$institucional" -p "$fuente" -m "Actualización institucional desde GitHub ${fuente:0:7}")
+          fi
+          git -C respaldo.git update-ref refs/heads/main "$revision" "$fuente"
           export GIT_CONFIG_COUNT=1
           export GIT_CONFIG_KEY_0=http.https://gitlab.com/.extraheader
           export GIT_CONFIG_VALUE_0="Authorization: Basic $(printf 'oauth2:%s' "$GITLAB_TOKEN" | base64 -w0)"
