@@ -86,7 +86,7 @@ porque su huella cambiaría al incorporarla dentro del mismo archivo.
 
 RUTA | TAMAÑO_BYTES | SHA-256
 .github/workflows/respaldo-gitlab.yml | 3792 | af10865953758a1ccd2f681adb4384a2b44532611492afbb11a3c927dcfa3e76
-.gitlab-ci.yml | 3120 | 01a6e818e83af4b3ca27474f90cd5dff6c2cf4e2d76a97e900c78147ad43103c
+.gitlab-ci.yml | 4630 | 8de4ebb3e9116ae42cfeed72406b8584b23e12a0ac183855438cbdcce069b973
 .zenodo.json | 1853 | cddf68af692feeee78800cb270b3b437383ad193e319311c8c03248418f8a3f8
 00_trazabilidad_fuentes/registro_fuentes_psut_guatemala.xlsx | 59673 | 44c16997bbe1b3ba6283c69f39c9583dbcbd8f09a411ea6be5bef68c1532f785
 01_metodologia/nt_00_metodologia_general_energia_emisiones_2018_2024.txt | 26259 | 2c4c437bbcfdccb3d00d8f78be0ca8d535f08cfbc55dce471bbf37565b9fd5de

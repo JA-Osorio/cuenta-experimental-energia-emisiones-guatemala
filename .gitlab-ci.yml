@@ -28,6 +28,25 @@ publicar-portal:
       snapshot.repository = repository;
       let html = hydrate(Array.from({ length: 6 }, (_, i) =>
         read(`docs/portal-${String(i).padStart(2, '0')}.part`)).join(''), snapshot);
+      const citation = 'Osorio, J. A., Villatoro, P., Salguero, N., & Soberanis, J. C. (2026). Cuadro físico de oferta y utilización de energía y tabla de emisiones al aire de Guatemala, 2018–2024 [Conjunto de datos]. Repositorio institucional. ' + repository + '/-/tree/' + sha;
+      const replaceOne = (pattern, replacement) => {
+        let count = 0;
+        html = html.replace(pattern, (...args) => {
+          count++;
+          return typeof replacement === 'function' ? replacement(...args) : replacement;
+        });
+        if (count !== 1) throw new Error('No se encontró un único elemento de la presentación institucional.');
+      };
+      replaceOne(/citation:"(?:[^"\\]|\\.)*"(?=};var le=)/g,
+        () => 'citation:' + JSON.stringify(citation));
+      replaceOne(/\(0,g\.jsxs\)\("section",\{className:"credits",children:\[.*?\]\}\)(?=\]\}\),e!=="datos")/g, 'null');
+      replaceOne('Metadatos del archivo CITATION.cff', 'Referencia del repositorio institucional');
+      replaceOne('https://doi.org/10.5281/zenodo.21924043', repository + '/-/tree/' + sha);
+      replaceOne('Zenodo \\xB7 versi\\xF3n 1.0.0', 'GitLab \\xB7 ' + sha.slice(0, 7));
+      replaceOne(/("\/data\/cita\.txt":\{data:")[^"]+("[}\s,])/g,
+        (_, before, after) => before + Buffer.from(citation + '\n').toString('base64') + after);
+      if (/zenodo/i.test(html) || html.includes('className:"credits"'))
+        throw new Error('La presentación institucional conserva referencias que debían retirarse.');
       const raw = `https://raw.githubusercontent.com/JA-Osorio/cuenta-experimental-energia-emisiones-guatemala/${sha}/`;
       const downloads = new Set(Array.from(html.matchAll(
         new RegExp(raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^"\\s<>]+)', 'g')
